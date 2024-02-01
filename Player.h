@@ -115,6 +115,8 @@ class Player : public Character {
 	std::string ActiveJob;
 	const int ptWorth = 8.33;
 	bool chooseAtk;
+	std::vector<Skills>listofSkills;
+	int numofAtks;
 
 public:
 	Player();
@@ -133,6 +135,7 @@ public:
 	void addJob(std::string);
 	void setActiveJob(std::string);
 	void setGold(int);
+	void setNumAtks();
 
 	//getter
 	int getLvl()const;
@@ -159,7 +162,9 @@ public:
 	void loadAtks();
 	void removeAtks();
 	Skills& permRemoveAtk();
-	
+	void addSkill(Skills&&);
+	int getNumofAtks()const;
+	std::map<std::string, int>attack();
 
 	//overloads
 	//Player& operator=(const Player&);

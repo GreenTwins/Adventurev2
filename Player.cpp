@@ -226,6 +226,59 @@ void Player::CustomizeStats(int amt, int loc) {
 
 
 }
+void Player::setNumAtks() {
+	numofAtks = listofSkills.size();
+}
+int Player::getNumofAtks()const {
+	return numofAtks;
+}
+void Player::addSkill(Skills&& o) {
+	listofSkills.push_back(std::move(o));
+}
+std::map<std::string, int>Player::attack() {
+	int diceRoll = rand() % (getNumofAtks()) + 1;
+	Skills* ptr = &listofSkills[diceRoll];
+	//check for javelin throws and times for reloads
+	std::string atkName = ptr->getSkillName();
+	int atkDmg = ptr->getatkAmt();
+	std::string desc = ptr->getSkillEffect();
+	if (ptr->getRequirementType() == "Stamina") {
+		int staminapayment = ptr->getRequirementPayment();
+		if (staminapayment < getStamina()) {
+			setStamina(getStamina() - staminapayment);
+		}
+		else {
+			std::cout << getName() << " attempted to use " << atkName << " but doesnt have the stamina required for completing...\n";
+			atkName = " ";
+			atkDmg = 0;
+		}
+	}
+	else {
+		int manapayment = ptr->getRequirementPayment();
+		if (manapayment < getMP()) {
+			setMP(getMP() - manapayment);
+		}
+		else {
+			std::cout << getName() << " attempted to use " << atkName << " but doesnt have the mana required for completing...\n";
+			atkName = " ";
+			atkDmg = 0;
+		}
+	}
+	if (ptr->getSkillType() == "Toggle") {
+		ptr->updateSkillType("Active");
+		//atk is set to 0 but string is set to effect which is read on the otherside
+		atkDmg = 0;
+		atkName = "Effect";
+	}
+
+
+	ptr = nullptr;
+	delete ptr;
+	std::map<std::string, int>atk;
+	atk.emplace(atkName, atkDmg);
+	return atk;
+}
+
 
 void Player::displayAllStats()const {
 	int padding = (45 - 5) / 2; // (total width - title width) / 2

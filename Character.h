@@ -20,7 +20,7 @@ class Character {
     int maxFatigue;
     float prec;
     float maxPrec;
-    int numofAtks;
+  
    
     std::vector<int>dodge;
     std::map<std::string, float>upperBody;
@@ -38,7 +38,7 @@ public:
     Character();
     Character(std::string, std::string);
     ~Character();
-    std::vector<Skills>listofSkills;
+
     //getters
     std::string getBodyType() const;
     std::string getName() const;
@@ -59,7 +59,7 @@ public:
     int getEnd()const;
     int getInt()const;
     int getDex()const;
-    int getNumofAtks()const;
+  
 
 
     // Setters
@@ -82,10 +82,10 @@ public:
     void setInt(int);
     void setDex(int);
     void setEnD(int);
-    void setNumAtks();
+    
     //attacks
-    void addSkill(Skills&&);
-    std::map<std::string, int>attack();
+    
+  
 
 
     struct bodyPart {
