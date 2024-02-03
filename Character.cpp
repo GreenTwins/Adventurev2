@@ -50,7 +50,39 @@ Character::Character(std::string a, std::string type) {
 	lowerBody.clear();
 
 }
-
+Character::Character(Character&& o)noexcept {
+	HP =         o.HP;
+	maxHP =      o.maxHP;
+	MP =         o.MP;
+	maxMP =      o.maxMP;
+	maxStamina = o.maxStamina;
+	maxPrec =    o.maxPrec;
+	maxFatigue = o.maxFatigue;
+	stamina =    o.stamina;
+	fatigue =    o.fatigue;
+	prec =       o.prec;
+	dodge =      o.dodge;
+	upperBody =  o.upperBody;
+	lowerBody =  o.lowerBody;
+	Str =        o.Str;
+	Def =        o.Def;
+	Spd =        o.Spd;
+	Int =        o.Int;
+	dex =        o.dex;
+	enD =        o.enD;
+	hasWings =   o.hasWings;
+	hasLegs =    o.hasLegs;
+	Head =       o.Head;
+	Torso =      o.Torso;
+	LeftArm =    o.LeftArm;
+	LeftLeg =    o.LeftLeg;
+	RightArm =   o.RightArm;
+	RightLeg =   o.RightLeg;
+	Trunk =      o.Trunk;
+	Tail =       o.Tail;
+	Thorax =     o.Thorax;
+	Abdomen =    o.Abdomen;
+}
 Character::~Character() {
 	dodge.clear();
 }

@@ -16,10 +16,14 @@ Player::Player(std::string a) :Character{ a, "Humanoid" } {
 		init();
 	}
 	setBodyType("Humanoid");
-
 	//load all skills
-	for (auto& atks : Class->listofAllSkills) {
+	//int count = 0;
+	/*for (auto& atks : Class->listofAllSkills) {
 		addSkill(std::move(atks));
+		count += 1;
+	}*/
+	for (int i = 0; i < Class->listofAllSkills.size(); ++i) {
+		addSkill(std::move(Class->listofAllSkills[i]));
 	}
 	setNumAtks(); 
 }
@@ -44,6 +48,7 @@ Player& Player::operator=(Player&& other) noexcept {
 	if (this != &other) {
 		// Move-assign members from 'other' to 'this'
 		// Example:
+		setName(other.getName());
 		dodge = std::move(other.dodge);
 		dodgingSkill = other.dodgingSkill;
 		level = other.level;
@@ -54,10 +59,22 @@ Player& Player::operator=(Player&& other) noexcept {
 		subClass = std::move(other.subClass);
 		Job = std::move(other.Job);
 		ActiveJob = std::move(other.ActiveJob);
-		const_cast<int&>(ptWorth) = other.ptWorth;
+		const_cast<float&>(ptWorth) = other.ptWorth;
 		chooseAtk = other.chooseAtk;
-		// Move-assign base class members
-		Character::operator=(std::move(other));
+		listofSkills = std::move(other.listofSkills);
+		numofAtks = other.numofAtks;
+		setStr(other.getStr());
+		setDef(other.getDef());
+		setSpd(other.getSpd());
+		setInt(other.getInt());
+		setDex(other.getDex());
+		setEnD(other.getEnd());
+		setPrec(other.getPrec());
+		setStamina(other.getStamina());
+		setFatigue(other.getFatigue());
+		setHP(other.getHP());
+		setMP(other.getMP());
+
 	}
 	return *this;
 }
@@ -282,38 +299,6 @@ std::map<std::string, int>Player::attack() {
 
 void Player::displayAllStats()const {
 	int padding = (45 - 5) / 2; // (total width - title width) / 2
-
-	// Display basic information
-	//std::cout << std::string(45, '-') << "\n";
-	//std::cout << std::setw(padding) << "" << "STATS\n";
-	//std::cout << std::left << std::setw(20) << "Name: " << std::right << std::setw(25) << getName() << "\n";
-	//std::cout << std::left << std::setw(20) << "Class: " << std::right << std::setw(25) << getClass() << "\n";
-	//std::cout << std::left << std::setw(20) << "SubClass: " << std::right << std::setw(25) << getSubClass() << "\n";
-	//std::cout << std::left << std::setw(20) << "Job: " << std::right << std::setw(25) << getActiveJob() << "\n";
-	//std::cout << std::left << std::setw(20) << "Lvl: " << std::right << std::setw(25) << getLvl() << "\n";
-	//std::cout << std::left << std::setw(20) << "XP: " << std::right << std::setw(25) << getXP() << "\n";
-	//std::cout << std::left << std::setw(20) << "Gold: " << std::right << std::setw(25) << getGold() << "\n";
-	//std::cout << std::string(45, '-') << "\n";
-
-	//// Display detailed stats
-	//std::cout << std::left << std::setw(20) << "HP: " << std::right << std::setw(25) << getHP() << "\n";
-	//std::cout << std::left << std::setw(20) << "MP: " << std::right << std::setw(25) << getMP() << "\n";
-	//std::cout << std::left << std::setw(20) << "Stamina: " << std::right << std::fixed << std::setprecision(2) << std::setw(15) << getStamina() << "\n";
-	//std::cout << std::left << std::setw(20) << "Fatigue: " << std::right << std::setw(25) << getFatigue() << "\n";
-	//std::cout << std::left << std::setw(20) << "Precision: " << std::right << std::fixed << std::setprecision(2) << std::setw(15) << getPrec() << "%\n";
-
-	//// Display secondary stats
-	//std::cout << std::string(45, '-') << "\n";
-	//std::cout << std::left << std::setw(20) << "Str: " << std::right << std::setw(25) << getStr() << "\n";
-	//std::cout << std::left << std::setw(20) << "Def: " << std::right << std::setw(25) << getDef() << "\n";
-	//std::cout << std::left << std::setw(20) << "Spd: " << std::right << std::setw(25) << getSpd() << "\n";
-	//std::cout << std::left << std::setw(20) << "Int: " << std::right << std::setw(25) << getInt() << "\n";
-	//std::cout << std::left << std::setw(20) << "Endur: " << std::right << std::setw(25) << getEnd() << "\n";
-	//std::cout << std::left << std::setw(20) << "Dex: " << std::right << std::setw(25) << getDex() << "\n";
-	//std::cout << std::string(45, '-') << "\n";
-
-
-
 	std::cout << std::string(45, '-') << "\n";
 	std::cout << std::setw(padding) << "" << "STATS\n";
 	std::cout << std::left << std::setw(5) << "Name:" << getName() << std::setw(25-getName().length()-5) << std::right << " "   << "HP:" << getHP() << "\n";
@@ -838,12 +823,14 @@ void Warrior::subClassSelection() {
 		}
 	}
 	else if (subclassN == "Hunter") {
+		_maxSkills = 2;
 		std::cout << "\n A unique subclass has been chosen!\n";
 		std::cout << "While Hunters do not have an initial multiple skills to choose from,";
 		std::cout << " they have the ability to use any weapon equipped as well as absorb skills from humanoid opponents beaten\n";
 
 		std::vector<Skills> hunterSkills = {
-			{"Bone break", "stamina", 2, "Attack", "using brute strength to put down your opponent", 0, (rand() % 6 + 1), "Specific"}
+			{"Bone break", "stamina", 2, "Attack", "using brute strength to put down your opponent", 0, (rand() % 6 + 1), "Specific"},
+			{"Gluttony", "MP", 40, "Toggle", "Take 1 skill from opponent, success based on Hunter vs Hunted perc.", 0, 0, "Special"}
 		};
 
 		for (int i = 0; i < hunterSkills.size(); ++i) {
@@ -881,9 +868,9 @@ void Warrior::subClassSelection() {
 	int skillchoice;
 	std::string done;
 	int subclassSkillsize = Skilldisplayer.size();
-	std::cout << "You can choose up to"<<_maxSkills  <<" skills you want added:[type 'done' if you no longer want to add skills]\n";
+	std::cout << "You can choose up to "<<_maxSkills  <<" skills you want added:[type 'done' if you no longer want to add skills]\n";
 
-	while (listofAllSkills.size() < _maxSkills) {
+	while (listofAllSkills.size() <= _maxSkills) {
 		std::string input;
 		std::cin >> input;
 
@@ -907,8 +894,34 @@ void Warrior::subClassSelection() {
 		}
 	}
 }
+bool Warrior::gluttonyActive(float enPerc, float perc) {
+	float success = 0.0f;
+	if (enPerc > 0.1f) {
+		enPerc = 1.00f;
+		perc += 0.20f;//a bonus for tiring out opponent
+	}
+	success = enPerc * perc;
+	if (success > 1.0f) {
+		success == 1.0f;
+	}
+	return stealSkill(success);
+}
+bool Warrior::stealSkill(float success) {
+	std::srand(std::time(nullptr));
 
+	// Generate a random number between 0 and 1
+	float randomNum = static_cast<float>(std::rand()) / RAND_MAX;
 
+	// Check if the random number is less than or equal to the rate of success
+	if (randomNum <= success) {
+		// Stealing successful
+		return true;
+	}
+	else {
+		// Stealing failed
+		return false;
+	}
+}
 
 void Assassin::distributeClassSpecific(int lvl) {
 	// Add Assassin-specific information

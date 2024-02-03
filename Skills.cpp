@@ -37,14 +37,6 @@ Skills::Skills(Skills&& o)noexcept {
 	atkAmt = o.atkAmt;
 	applicationType = o.applicationType;
 
-	o.skillName = " ";
-	o.requirementType = " ";
-	o.requirementPayment = 0;
-	o.SkillType = " ";
-	o.skillEffect = " ";
-	o.skillEffectAmt = 0;
-	o.atkAmt = 0;
-	o.applicationType = " ";
 }
 
 Skills & Skills::operator=(Skills && other) noexcept {

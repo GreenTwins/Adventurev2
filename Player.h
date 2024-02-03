@@ -85,7 +85,10 @@ public:
 	std::vector<std::string>subClasses = { "Swordsmen","Hunter" ,"Tank" };
 	void distributeClassSpecific(int) override;
 	void subClassSelection()override;
-	
+
+	//hunter speciic
+	bool stealSkill(float);
+	bool gluttonyActive(float,float);
 };
 
 class Assassin : public playerClass {
@@ -113,7 +116,7 @@ class Player : public Character {
 	std::string subClass;
 	std::vector<std::string> Job;
 	std::string ActiveJob;
-	const int ptWorth = 8.33;
+	const float ptWorth = 8.33;
 	bool chooseAtk;
 	std::vector<Skills>listofSkills;
 	int numofAtks;

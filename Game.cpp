@@ -252,6 +252,91 @@ int Map::inGameInputs(std::vector<int>a) {
 	return movement;
 }
 
+
+void Map::loadPathway(int n) {//a list of which path has an enemy present
+	srand(time(NULL));
+	int reachThreeCount = 1;
+	for (int i = 1; i <= n; ++i) {
+		bool hasEnemy = rand() % 2;
+		if (reachThreeCount % 3 == 0) {
+			hasEnemy = true;
+		}
+		pathwayy.insert(std::pair<int, bool>(i, hasEnemy));
+		if (!hasEnemy) {
+			reachThreeCount++;
+		}
+
+	}
+}
+void Map::makeMove(int currLocation) {
+	if (currLocation == end) {
+		return;
+	}
+	if (currLocation == -1) {
+		return;
+	}
+	makeMove(availableMoves(currLocation));
+
+}
+int Map::availableMoves(int a) {
+	srand(time(NULL));
+	currentPlacement = a;
+
+	if (pathwayy[a]) {//this gets the .second of the map which is whether there is an enemy
+		//std::cout << "There is an enemy in the room" << std::endl;
+		int listsize = Game::getinstance().enemyList.size();
+		int randomEnemy = rand() % listsize + 1;
+
+		/*Enemy newEnemy(currentDungeonNum);
+		if (randomEnemy >= listsize) {
+			newEnemy = Game::getinstance().enemyList[randomEnemy - 1];
+		}
+		else {
+			newEnemy = Game::getinstance().enemyList[randomEnemy];
+		}
+		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";*/
+
+
+		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
+		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
+		//std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemyPtr);
+
+		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
+
+		/*if (!(*battleResultPtr)) {
+			return -1;
+		}*/
+		//std::string profLvl = Game::getinstance().playersCurrentWeapon->getproficiencyLvl();
+		//int prof = Game::getinstance().playersCurrentWeapon->getproficiency();
+
+		//if (Game::getinstance().playerN.checkweaponProficiency(profLvl, prof)) {
+		//	if (profLvl == "Master") {
+		//		Game::getinstance().playersCurrentWeapon->setWeaponLvl(Game::getinstance().playersCurrentWeapon->getWeaponLvl() + 1); //lvl increase after prev is mastered
+		//	}
+
+		//	Game::getinstance().playersCurrentWeapon->setproficiencyLvl(profLvl);
+		//	Game::getinstance().playersCurrentWeapon->setproficiency(prof);
+		//	Game::getinstance().playersCurrentWeapon->setWeaponDmg(Game::getinstance().playersCurrentWeapon->getWeaponDmg() + 1);
+		//}
+		//std::cout << "You're achievement: +" << newEnemy.getGold() << " gold and +" << newEnemy.getXP() << " XP" << std::endl;
+		//totalXP += newEnemy.getXP();
+		//totalGold += newEnemy.getGold();
+	}
+	//InGameDecisions(std::cin);
+	std::vector<int>availableMoveList;
+	std::cout << "The following pathways are available from here: ";
+	for (auto neighbor : mapp[a]) {
+		std::cout << "[ " << neighbor << " ";
+		availableMoveList.push_back(neighbor);
+	}
+	std::cout << "]";
+
+	int temp = inGameInputs(availableMoveList);
+	availableMoveList.clear();
+	nextPlacement = temp;
+	upDateTracker();
+	return temp;
+}
 /******************************************************************************************************
 GAME CLASS init,cleaner, getters and setters
 
@@ -359,7 +444,7 @@ GAME CLASS player association
 *******************************************************************************************************/
 void Game::createPlayer(std::string n) {
 	Player p(n);
-	playerN = std::move(p);
+	playerN =std::move(p);
 	newChar = true;
-	playerN.init();
 }
+

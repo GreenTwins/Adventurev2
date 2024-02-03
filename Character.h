@@ -37,6 +37,7 @@ class Character {
 public:
     Character();
     Character(std::string, std::string);
+    Character(Character&&)noexcept;
     ~Character();
 
     //getters
