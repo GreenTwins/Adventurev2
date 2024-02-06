@@ -3,6 +3,7 @@
 #include "Character.h"
 #include <memory>
 #include <unordered_map>
+#include "Skills.h"
 #pragma once
 //you can also do inner classes and have playerClass inside of Player in order to share data
 
@@ -116,10 +117,10 @@ class Player : public Character {
 	std::string subClass;
 	std::vector<std::string> Job;
 	std::string ActiveJob;
-	const float ptWorth = 8.33;
+	const double ptWorth = 8.33;
 	bool chooseAtk;
 	std::vector<Skills>listofSkills;
-	int numofAtks;
+	size_t numofAtks;
 
 public:
 	Player();
@@ -166,7 +167,7 @@ public:
 	void removeAtks();
 	Skills& permRemoveAtk();
 	void addSkill(Skills&&);
-	int getNumofAtks()const;
+	size_t getNumofAtks()const;
 	std::map<std::string, int>attack();
 
 	//overloads

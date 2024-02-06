@@ -27,6 +27,20 @@ Skills::Skills(const Skills& o) {
 	atkAmt = o.atkAmt;
 	applicationType = o.applicationType;
 }
+Skills& Skills::operator=(const Skills& other) {
+	if (this != &other) {
+		// Copy the state of 'other' to 'this'
+		skillName = other.skillName;
+		requirementType = other.requirementType;
+		requirementPayment = other.requirementPayment;
+		SkillType = other.SkillType;
+		skillEffect = other.skillEffect;
+		skillEffectAmt = other.skillEffectAmt;
+		atkAmt = other.atkAmt;
+		applicationType = other.applicationType;
+	}
+	return *this;
+}
 Skills::Skills(Skills&& o)noexcept {
 	skillName = o.skillName;
 	requirementType = o.requirementType;
@@ -57,7 +71,9 @@ Skills & Skills::operator=(Skills && other) noexcept {
 Skills::~Skills() {
 
 }
-
+bool Skills::operator==(const Skills& o)const {
+	return (this->skillName == o.skillName);
+}
 void Skills::updateSkillName(std::string sN) {
 	skillName = sN;
 }

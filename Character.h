@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Skills.h"
+
 
 class Character {
     std::string BodyType;
@@ -90,10 +90,10 @@ public:
 
 
     struct bodyPart {
-        int HP;
+        float HP;
         int def;
         bool hasArmor;
-        int armorDef;
+        float armorDef;
         //or is it holding a weapon
         bool hasWeapon;
     };

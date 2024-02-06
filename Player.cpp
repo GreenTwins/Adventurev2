@@ -59,7 +59,7 @@ Player& Player::operator=(Player&& other) noexcept {
 		subClass = std::move(other.subClass);
 		Job = std::move(other.Job);
 		ActiveJob = std::move(other.ActiveJob);
-		const_cast<float&>(ptWorth) = other.ptWorth;
+		const_cast<double&>(ptWorth) = other.ptWorth;
 		chooseAtk = other.chooseAtk;
 		listofSkills = std::move(other.listofSkills);
 		numofAtks = other.numofAtks;
@@ -246,7 +246,7 @@ void Player::CustomizeStats(int amt, int loc) {
 void Player::setNumAtks() {
 	numofAtks = listofSkills.size();
 }
-int Player::getNumofAtks()const {
+size_t Player::getNumofAtks()const {
 	return numofAtks;
 }
 void Player::addSkill(Skills&& o) {
@@ -520,6 +520,7 @@ void Player::loadAtks() {
 			if ((atk.getSkillType() == "Attack")||(atk.getSkillType()=="Toggle")) {
 				//listofSkills.push_back(std::move(atk));
 				addSkill(std::move(atk));
+				Class->listofAllSkills.erase(std::remove(Class->listofAllSkills.begin(), Class->listofAllSkills.end(), atk));
 			}
 		}
 		return;
@@ -704,7 +705,7 @@ void Mage::subClassSelection() {
 
 	int skillchoice;
 	std::string done;
-	int subclassSkillsize = Skilldisplayer.size();
+	size_t subclassSkillsize = Skilldisplayer.size();
 	std::cout << "You can choose up to"<<_maxSkills  <<" skills you want added:[type 'done' if you no longer want to add skills]\n";
 
 	while (listofAllSkills.size() < _maxSkills) {
@@ -867,7 +868,7 @@ void Warrior::subClassSelection() {
 
 	int skillchoice;
 	std::string done;
-	int subclassSkillsize = Skilldisplayer.size();
+	size_t subclassSkillsize = Skilldisplayer.size();
 	std::cout << "You can choose up to "<<_maxSkills  <<" skills you want added:[type 'done' if you no longer want to add skills]\n";
 
 	while (listofAllSkills.size() <= _maxSkills) {
@@ -902,7 +903,7 @@ bool Warrior::gluttonyActive(float enPerc, float perc) {
 	}
 	success = enPerc * perc;
 	if (success > 1.0f) {
-		success == 1.0f;
+		success = 1.0f;
 	}
 	return stealSkill(success);
 }
@@ -1014,7 +1015,7 @@ void Assassin::subClassSelection() {
 
 	int skillchoice;
 	std::string done;
-	int subclassSkillsize = Skilldisplayer.size();
+	size_t subclassSkillsize = Skilldisplayer.size();
 	std::cout << "You can choose up to" << _maxSkills << " skills you want added:[type 'done' if you no longer want to add skills]\n";
 
 	while (listofAllSkills.size() < _maxSkills) {

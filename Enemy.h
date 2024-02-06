@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Skills.h"
 #pragma once
 
 #ifndef _ENEMY_H_

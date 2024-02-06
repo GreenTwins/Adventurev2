@@ -20,7 +20,9 @@ public:
 		const std::string&, const std::string&, float, int, const std::string&);
 	Skills(const Skills&);
 	Skills(Skills&&)noexcept;
+	Skills& operator=(const Skills&);
 	Skills& operator=(Skills&&) noexcept;
+	bool operator==(const Skills& o)const;
 	~Skills();
 
 	//available setters

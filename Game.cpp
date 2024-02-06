@@ -284,8 +284,8 @@ int Map::availableMoves(int a) {
 
 	if (pathwayy[a]) {//this gets the .second of the map which is whether there is an enemy
 		//std::cout << "There is an enemy in the room" << std::endl;
-		int listsize = Game::getinstance().enemyList.size();
-		int randomEnemy = rand() % listsize + 1;
+		//int listsize = Game::getinstance().enemyList.size();
+		//int randomEnemy = rand() % listsize + 1;
 
 		/*Enemy newEnemy(currentDungeonNum);
 		if (randomEnemy >= listsize) {
@@ -345,7 +345,7 @@ GAME CLASS init,cleaner, getters and setters
 Game::Game() {
 	/*MainMenu& master = MainMenu::getInstance();
 	master.display();*/
-	enemyList.clear();
+	//enemyList.clear();
 	locations.clear();
 	//BossReq.push_back("Troll"); not used
 	uploadWorldMap();
@@ -420,11 +420,11 @@ int Game::TravelonWorldMap() {
 	}
 	std::cout << "Travelling to new region....\n";
 	//get the name
-	/*for (auto location : world_map) {
+	for (auto location : world_map) {
 		for (auto location_name : location) {
 			std::cout << "You've arrived at: " << location_name.first << "\n";
 		}
-	}*/
+	}
 	return travelLocation;
 }
 void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {

@@ -94,9 +94,10 @@ int Enemy::getatkNum()const {
 }
 Skills&& Enemy::removeSkills(std::string& choice) {
 	Skills removedSkill;
-	for (int i = 0; i < listofSkills.size(); ++i) {
-		if (listofSkills[i].getSkillName() == choice) {
-			removedSkill = std::move(listofSkills[i]);
+	for (auto& it : listofSkills) {
+		if (it.getSkillName() == choice) {
+			removedSkill = std::move(it);
+			listofSkills.erase(std::remove(listofSkills.begin(), listofSkills.end(), it));
 			break;
 		}
 	}
