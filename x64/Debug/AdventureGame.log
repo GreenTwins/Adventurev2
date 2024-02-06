@@ -1,2 +1,6 @@
-﻿  main.cpp
+﻿  Game.cpp
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(258,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(283,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(437,14): warning C4101: 'result': unreferenced local variable
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(505,7): warning C4101: 'option': unreferenced local variable
   AdventureGame.vcxproj -> C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\x64\Debug\AdventureGame.exe

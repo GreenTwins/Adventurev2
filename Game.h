@@ -146,3 +146,27 @@ public:
 
 
 #endif
+/******************************************************************************************************
+MAIN MENU CLASS
+
+Holds the overview of the concept of "Main Menu", containing all overarching game functions such as
+New game instance, load game instance and save game instance
+
+
+*******************************************************************************************************/
+#pragma once
+#ifndef _MAIN_MENU_H_
+#define _MAIN_MENU_H_
+class MainMenu {
+	MainMenu();
+	~MainMenu();
+	MainMenu& operator=(const MainMenu&) = delete;
+	MainMenu(MainMenu& o) = delete;
+public:
+	static MainMenu& getInstance();
+	void Save();
+	bool display()const;
+};
+
+
+#endif

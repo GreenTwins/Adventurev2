@@ -121,6 +121,8 @@ class Player : public Character {
 	bool chooseAtk;
 	std::vector<Skills>listofSkills;
 	size_t numofAtks;
+	int location;
+	int ID;
 
 public:
 	Player();
@@ -140,8 +142,11 @@ public:
 	void setActiveJob(std::string);
 	void setGold(int);
 	void setNumAtks();
+	void setLocation(int);
+	void setID(int);
 
 	//getter
+	int getID()const;
 	int getLvl()const;
 	int getXP()const;
 	int getGold()const;
@@ -154,6 +159,9 @@ public:
 	void CustomizeStats(int, int);
 	void compileAllStats();
 	float calculatePrec(int, int&, int, int, int);
+	int getLocation()const;
+	
+	
 	void classSelection();
 	void loadClassSkills();
 	

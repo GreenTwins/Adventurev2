@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include "SQLCONN.h"
 /******************************************************************************************************
 MAP CLASS init,cleaner, getters and setters
 
@@ -437,7 +438,100 @@ void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
 		std::cout << "Database failed to connect" << std::endl;
 	}
 }
+/******************************************************************************************************
+GAME CLASS game loading and instances
 
+******************************************************************************************************* */
+
+bool Game::loadGame() {
+	int choice{ 0 };
+	std::string playername;
+	bool conn_success = false;
+	std::cout << "Are you loading from a server or local storage?: ";
+	std::cout << "1.) Server" << "\t" << "2.) Local Storage" << std::endl;
+	std::cin >> choice;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');//clear anything remaining in the stream so we can get playername data
+	switch (choice) {
+	case 1:
+	{
+		//check SQL server
+		SQLCONN& connection = SQLCONN::createInstance();
+		if (connection.connect()) {
+			//gather avail chars in dB & display
+			if (connection.displayNames()) {
+				fromSQL(true);
+				int choice;
+				std::cout << "\n Which character would you like to load?:  ";
+				std::cin >> choice;
+				if (choice <= connection.playerList.size()) {
+					std::cout << connection.playerList[choice - 1] << std::endl;
+					playerN.setName(connection.playerList[choice - 1]);
+					conn_success = true;
+				}
+				else {
+					std::cout << "You didnt choose a given number" << std::endl;
+				}
+				//let user choose char
+				//loadPlayer();
+
+			}
+			else {
+				std::cout << "There is no data to load" << std::endl;
+			}
+
+			connection.disconnect();
+		}
+
+
+		//load data into Player class
+
+		break;
+	}
+	case 2: {
+		//check local storage
+		break;
+	}
+	default:
+		std::cout << "Please choose a correct option" << std::endl;
+		break;
+	}
+
+	return conn_success;
+}
+bool Game::PrePlay() {
+	GameInit = true;
+	bool tryAgain = true;
+	bool success = false;
+	char option;
+	currentDunLvl = 1;
+	currentDunNum = 1;
+	playerN.setLocation(currentDunLvl);
+	//while (tryAgain) {
+	//	getLocationName(1);//starting new
+	//	Map newMap;
+	//	std::cout << "creating paths" << std::endl;
+	//	newMap.createPaths(currentDunLvl);
+	//	Game::getinstance().loadEnemies(1, 1, Game::enemyList);
+	//	std::cout << Game::getinstance().enemyList.size();
+	//	if (play(newMap)) {
+	//		//go back to island
+	//		GameInit = false;
+	//		success = true;
+	//		tryAgain = false;
+	//	}
+	//	//got back to main menu or try again
+	//	else {
+	//		std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
+	//		std::cin >> option;
+	//		if (option == 'Q' || option == 'q') {
+	//			tryAgain = false;
+	//		}
+	//		Game::getinstance().playerN.refillHP();
+	//	}
+	//}
+	//return success;
+	return true;
+}
 /******************************************************************************************************
 GAME CLASS player association
 
@@ -446,5 +540,75 @@ void Game::createPlayer(std::string n) {
 	Player p(n);
 	playerN =std::move(p);
 	newChar = true;
+}
+
+//MAIN MENU
+
+/******************************************************************************************************
+MAIN MENU CLASS init,cleaner, getters and setters
+
+*******************************************************************************************************/
+MainMenu::MainMenu() {}
+MainMenu::~MainMenu() {}
+
+MainMenu& MainMenu::getInstance() {
+	static MainMenu instance;
+	return instance;
+}
+
+
+/******************************************************************************************************
+MAIN MENU CLASS only visible function: display() shows the new game, load game and save game options
+
+Each option chosen will determine how the user interacts with the framework
+
+The end result should be to determine if you go to the game console
+*******************************************************************************************************/
+bool MainMenu::display()const {
+	int option = 0;
+	bool GoToConsole = true;
+	std::string name;
+	std::cout << "---MAIN MENU---" << std::endl;
+	std::cout << "\t 1.) NEW GAME" << std::endl;
+	std::cout << "\t 2.) LOAD GAME" << std::endl;
+
+
+	std::cout << "\n What would you like to do?: ";
+	std::cin >> option;
+	Game& gameInstance = Game::getinstance();
+	switch (option) {
+
+	case 1: {
+		std::cout << " What name will you bestow upon your new character?: ";
+		std::cin >> name;
+
+
+		gameInstance.createPlayer(name);
+		if (!gameInstance.PrePlay()) {
+			GoToConsole = false;
+		}
+	}
+		  break;
+	case 2: {
+		SQLCONN& sqlInstance = SQLCONN::createInstance();
+		if (!gameInstance.loadGame()) {
+			//make sure there actually is saved data
+			//if there is user selects from available players
+			GoToConsole = false;
+		}
+		//load chosen player
+		if (!sqlInstance.loadPlayerData(gameInstance.playerN.getName())) {
+			std::cout << "Error loading player \n";
+			GoToConsole = false;
+		}
+
+	}
+		  break;
+	default:
+		std::cout << "Please enter valid number" << std::endl;
+		break;
+	}
+
+	return GoToConsole;
 }
 

@@ -476,6 +476,9 @@ void Player::setLvl(int l) {
 void Player::setXP(int x) {
 	XP = x;
 }
+void Player::setID(int id) {
+	ID = id;
+}
 void Player::addJob(std::string j) {
 	Job.push_back(j);
 }
@@ -491,7 +494,9 @@ void Player::setClass(std::string c) {
 void Player::setSubClass(std::string sc) {
 	Class->setSubClassName(sc);
 }
-
+void Player::setLocation(int loc) {
+	location = loc;
+}
 
 int Player::getXP()const {
 	return XP;
@@ -499,7 +504,9 @@ int Player::getXP()const {
 int Player::getLvl()const {
 	return level;
 }
-
+int Player::getID()const {
+	return ID;
+}
 std::string Player::getActiveJob()const {
 	return ActiveJob;
 }
@@ -512,7 +519,9 @@ std::string Player::getClass()const {
 std::string Player::getSubClass()const {
 	return Class->getSubClassName();
 }
-
+int Player::getLocation()const {
+	return location;
+}
 
 void Player::loadAtks() {
 	if (!chooseAtk) {
