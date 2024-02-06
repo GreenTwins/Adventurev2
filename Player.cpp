@@ -12,22 +12,19 @@ Player::Player() {
 Player::Player(std::string a) :Character{ a, "Humanoid" } {
 	setName(a);
 	chooseAtk = false;
-	if (!loaded) {
+	/*if (!loaded) {
 		init();
-	}
+	}*/
 	setBodyType("Humanoid");
 	//load all skills
-	//int count = 0;
-	/*for (auto& atks : Class->listofAllSkills) {
-		addSkill(std::move(atks));
-		count += 1;
-	}*/
+
+}
+void Player::preLoadAllSkills() {
 	for (int i = 0; i < Class->listofAllSkills.size(); ++i) {
 		addSkill(std::move(Class->listofAllSkills[i]));
 	}
-	setNumAtks(); 
+	setNumAtks();
 }
-
 Player::Player(Player && other)
 	: Character(std::move(other)),  // Call base class move constructor
 	dodge(std::move(other.dodge)),

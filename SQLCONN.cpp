@@ -404,16 +404,21 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 		p1.setStr(Strength);
 		p1.setDef(Def);
 		p1.setSpd(Spd);
+		p1.setInt(Intel);
+		p1.setDex(dext);
+		p1.setEnD(endur);
+		p1.setHasLegs(hasLegs);
+		p1.setHasWings(hasWings);
 		
+		std::string convertedbodyType = reinterpret_cast<char*>(bodyType);
+		std::string convertedplayerJob = reinterpret_cast<char*>(playerJob);
+		std::string convertedclassName = reinterpret_cast<char*>(className);
+		std::string convertedsubClassName = reinterpret_cast<char*>(subClassName);
 
-
-
-		std::string convertedSkill1 = reinterpret_cast<char*>(bodyType);
-		std::string convertedSkill2 = reinterpret_cast<char*>(playerJob);
-		std::string convertedSkill3 = reinterpret_cast<char*>(className);
-		std::string convertedSkill4 = reinterpret_cast<char*>(subClassName);
-
-
+		p1.setBodyType(convertedbodyType); //this is redundant if body type is humanoid as its the default set it new Player call
+		p1.setActiveJob(convertedplayerJob);
+		p1.setClass(convertedclassName);
+		p1.setSubClass(convertedsubClassName);
 		
 		p1.setLvl(level);
 		p1.setGold(Gold);

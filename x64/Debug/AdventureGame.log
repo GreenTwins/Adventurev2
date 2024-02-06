@@ -1,6 +1,57 @@
-﻿  Game.cpp
+﻿  Character.cpp
+  Enemy.cpp
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Enemy.cpp(15,13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Game.cpp
 C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(258,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(283,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(437,14): warning C4101: 'result': unreferenced local variable
 C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Game.cpp(505,7): warning C4101: 'option': unreferenced local variable
+  main.cpp
+  Player.cpp
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(114,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(117,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(121,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(124,26): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(126,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(138,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(154,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(592,57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(734,39): warning C4101: 'e': unreferenced local variable
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(745,17): warning C4244: '=': conversion from 'const _Ty2' to 'int', possible loss of data
+          with
+          [
+              _Ty2=float
+          ]
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(767,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(897,39): warning C4101: 'e': unreferenced local variable
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(917,22): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(938,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(1044,39): warning C4101: 'e': unreferenced local variable
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.36.32532\include\utility(247,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(688,26): message : see reference to function template instantiation 'std::pair<const std::string,float>::pair<const char(&)[12],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Other1=const char (&)[12],
+              _Other2=int
+          ]
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Player.cpp(688,25): message : see the first reference to 'std::pair<const std::string,float>::pair' in 'Mage::subClassSelection'
+  Skills.cpp
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Skills.cpp(84,19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Skills.cpp(87,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Skills.cpp(101,9): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Skills.cpp(110,9): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
+  SQLCONN.cpp
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\SQLCONN.cpp(188,56): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\SQLCONN.cpp(163,6): warning C4101: 'currentLocation': unreferenced local variable
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\SQLCONN.cpp(162,43): warning C4101: 'dodge': unreferenced local variable
+  Generating Code...
+C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\AdventureGame\Enemy.cpp(104): warning C4172: returning address of local variable or temporary: removedSkill
   AdventureGame.vcxproj -> C:\Users\aaron\source\CPP\adventure\Game_v2\AdventureGame\x64\Debug\AdventureGame.exe

@@ -158,6 +158,12 @@ int Character::getInt()const {
 int Character::getDex()const {
 	return dex;
 }
+bool Character::withWings()const {
+	return hasWings;
+}
+bool Character::withLegs()const {
+	return hasLegs;
+}
 // Setters
 void Character::setBodyType(std::string bodyType) {
 	BodyType = bodyType;
@@ -270,7 +276,12 @@ void Character::setBodyType(std::string bodyType) {
 		return;
 	}
 }
-
+void Character::setHasLegs(bool legs) {
+	hasWings = legs;
+}
+void Character::setHasWings(bool wings) {
+	hasWings = wings;
+}
 void Character::setName(std::string name) {
 	Name = name;
 }

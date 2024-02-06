@@ -538,6 +538,8 @@ GAME CLASS player association
 *******************************************************************************************************/
 void Game::createPlayer(std::string n) {
 	Player p(n);
+	p.init();
+	p.preLoadAllSkills();
 	playerN =std::move(p);
 	newChar = true;
 }

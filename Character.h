@@ -60,7 +60,8 @@ public:
     int getEnd()const;
     int getInt()const;
     int getDex()const;
-  
+    bool withWings()const;
+    bool withLegs()const;
 
 
     // Setters
@@ -83,7 +84,9 @@ public:
     void setInt(int);
     void setDex(int);
     void setEnD(int);
-    
+    void setHasLegs(bool);
+    void setHasWings(bool);
+  
     //attacks
     
   

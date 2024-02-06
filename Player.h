@@ -175,6 +175,7 @@ public:
 	void removeAtks();
 	Skills& permRemoveAtk();
 	void addSkill(Skills&&);
+	void preLoadAllSkills();
 	size_t getNumofAtks()const;
 	std::map<std::string, int>attack();
 
