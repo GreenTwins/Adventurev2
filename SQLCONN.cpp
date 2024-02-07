@@ -431,3 +431,304 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 	return true;
 
 }
+
+
+bool SQLCONN::loadPlayerHitbox(int ID) {
+	if (!connect()) {
+		return false;
+	}
+	SQLHSTMT hStmt;
+
+	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+
+	SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM body_Part WHERE player_ID = ?";
+	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+		std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	SQLINTEGER sqlID = ID;
+	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_C_LONG, 0, 0, &sqlID, 0, NULL);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	ret = SQLExecute(hStmt);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_MAX_MESSAGE_LENGTH, &length);
+		std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	std::cout << "fetching...." << std::endl;
+	while (SQLFetch(hStmt) == SQL_SUCCESS) {
+		SQLINTEGER defense, armorDef, bodyPartID;
+		SQLFLOAT bodyPartHP;
+		SQLCHAR bodyPartName[255];
+		bool hasArmor, hasWeapon;
+
+		SQLGetData(hStmt, 1, SQL_C_CHAR, &bodyPartName, sizeof(bodyPartName), NULL);
+		SQLGetData(hStmt, 2, SQL_C_FLOAT, &bodyPartHP, 0, NULL);
+		SQLGetData(hStmt, 3, SQL_C_LONG, &defense, 0, NULL);
+		SQLGetData(hStmt, 4, SQL_C_BIT, &hasArmor, 0, NULL);
+		SQLGetData(hStmt, 5, SQL_C_LONG, &armorDef, 0, NULL);
+		SQLGetData(hStmt, 6, SQL_C_BIT, &hasWeapon, 0, NULL);
+		SQLGetData(hStmt, 7, SQL_C_LONG, &bodyPartID, 0, NULL);
+
+		std::string convertedbodyPartName = reinterpret_cast<char*>(bodyPartName);
+		
+		if (convertedbodyPartName == "Head") {
+			Game::getinstance().playerN.Head.HP = bodyPartHP;
+			Game::getinstance().playerN.Head.armorDef = armorDef;
+			Game::getinstance().playerN.Head.hasArmor = hasArmor;
+			Game::getinstance().playerN.Head.def = defense;
+			Game::getinstance().playerN.Head.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "RightArm") {
+			Game::getinstance().playerN.RightArm.HP = bodyPartHP;
+			Game::getinstance().playerN.RightArm.armorDef = armorDef;
+			Game::getinstance().playerN.RightArm.hasArmor = hasArmor;
+			Game::getinstance().playerN.RightArm.def = defense;
+			Game::getinstance().playerN.RightArm.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "RightLeg") {
+			Game::getinstance().playerN.RightLeg.HP = bodyPartHP;
+			Game::getinstance().playerN.RightLeg.armorDef = armorDef;
+			Game::getinstance().playerN.RightLeg.hasArmor = hasArmor;
+			Game::getinstance().playerN.RightLeg.def = defense;
+			Game::getinstance().playerN.RightLeg.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "LeftArm") {
+			Game::getinstance().playerN.LeftArm.HP = bodyPartHP;
+			Game::getinstance().playerN.LeftArm.armorDef = armorDef;
+			Game::getinstance().playerN.LeftArm.hasArmor = hasArmor;
+			Game::getinstance().playerN.LeftArm.def = defense;
+			Game::getinstance().playerN.LeftArm.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "LeftLeg") {
+			Game::getinstance().playerN.LeftLeg.HP = bodyPartHP;
+			Game::getinstance().playerN.LeftLeg.armorDef = armorDef;
+			Game::getinstance().playerN.LeftLeg.hasArmor = hasArmor;
+			Game::getinstance().playerN.LeftLeg.def = defense;
+			Game::getinstance().playerN.LeftLeg.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "Torso") {
+			Game::getinstance().playerN.Torso.HP = bodyPartHP;
+			Game::getinstance().playerN.Torso.armorDef = armorDef;
+			Game::getinstance().playerN.Torso.hasArmor = hasArmor;
+			Game::getinstance().playerN.Torso.def = defense;
+			Game::getinstance().playerN.Torso.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "Abdomen") {
+			Game::getinstance().playerN.Abdomen.HP = bodyPartHP;
+			Game::getinstance().playerN.Abdomen.armorDef = armorDef;
+			Game::getinstance().playerN.Abdomen.hasArmor = hasArmor;
+			Game::getinstance().playerN.Abdomen.def = defense;
+			Game::getinstance().playerN.Abdomen.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "Tail") {
+			Game::getinstance().playerN.Tail.HP = bodyPartHP;
+			Game::getinstance().playerN.Tail.armorDef = armorDef;
+			Game::getinstance().playerN.Tail.hasArmor = hasArmor;
+			Game::getinstance().playerN.Tail.def = defense;
+			Game::getinstance().playerN.Tail.hasWeapon = hasWeapon;
+		}
+		else if (convertedbodyPartName == "Thorax") {
+			Game::getinstance().playerN.Thorax.HP = bodyPartHP;
+			Game::getinstance().playerN.Thorax.armorDef = armorDef;
+			Game::getinstance().playerN.Thorax.hasArmor = hasArmor;
+			Game::getinstance().playerN.Thorax.def = defense;
+			Game::getinstance().playerN.Thorax.hasWeapon = hasWeapon;
+		}
+		else {
+			Game::getinstance().playerN.Trunk.HP = bodyPartHP;
+			Game::getinstance().playerN.Trunk.armorDef = armorDef;
+			Game::getinstance().playerN.Trunk.hasArmor = hasArmor;
+			Game::getinstance().playerN.Trunk.def = defense;
+			Game::getinstance().playerN.Trunk.hasWeapon = hasWeapon;
+		}
+
+		}
+	
+	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+	disconnect();
+	return true;
+}
+
+bool SQLCONN::playerSkillsLoading(int ID) {
+	if (!connect()) {
+		return false;
+	}
+	SQLHSTMT hStmt;
+
+	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+
+	SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM Skills_Table WHERE player_ID = ?";
+	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+		std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	SQLINTEGER sqlID = ID;
+	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_C_LONG, 0, 0, &sqlID, 0, NULL);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	ret = SQLExecute(hStmt);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_MAX_MESSAGE_LENGTH, &length);
+		std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	std::cout << "fetching...." << std::endl;
+	while (SQLFetch(hStmt) == SQL_SUCCESS) {
+		SQLINTEGER ReqPayment, EffectAmt, atkAmt, skillID, playerID;
+		SQLFLOAT bodyPartHP;
+		SQLCHAR skillName[255], ReqTypes[255], skillTypes[255], skillEffect[255], appType[255];
+		bool hasArmor, hasWeapon;
+
+		SQLGetData(hStmt, 1, SQL_C_LONG, &skillID, 0, NULL);
+		SQLGetData(hStmt, 2, SQL_C_CHAR, &skillName, sizeof(skillName), NULL);
+		SQLGetData(hStmt, 3, SQL_C_CHAR, &ReqTypes, sizeof(ReqTypes), NULL);
+		SQLGetData(hStmt, 4, SQL_C_LONG, &ReqPayment, 0, NULL);
+		SQLGetData(hStmt, 5, SQL_C_CHAR, &skillTypes, sizeof(skillTypes), NULL);
+		SQLGetData(hStmt, 6, SQL_C_CHAR, &skillEffect, sizeof(skillEffect), NULL);
+		SQLGetData(hStmt, 7, SQL_C_LONG, &EffectAmt, 0, NULL);
+		SQLGetData(hStmt, 8, SQL_C_LONG, &atkAmt, 0, NULL);
+		SQLGetData(hStmt, 9, SQL_C_CHAR, &appType, sizeof(appType), NULL);
+	
+
+		const std::string& convertedskillName = reinterpret_cast<char*>(skillName);
+		const std::string& convertedReqTypes = reinterpret_cast<char*>(ReqTypes);
+		const std::string& convertedskillTypes = reinterpret_cast<char*>(skillTypes);
+		const std::string& convertedskillEffect = reinterpret_cast<char*>(skillEffect);
+		const std::string& convertedappType = reinterpret_cast<char*>(appType);
+
+		
+
+		Skills newSkill;
+		newSkill.updateSkillName(convertedskillName);
+		newSkill.updateSkillType(convertedskillTypes);
+		newSkill.updateReqType(convertedReqTypes);
+		newSkill.updateSkillEffect(convertedskillEffect);
+		newSkill.setapplicationType(convertedappType);
+
+		newSkill.updateSkillEffectAmt(EffectAmt);
+		newSkill.updaterequirementPayment(ReqPayment);
+		newSkill.updateatkAmt(atkAmt);
+		newSkill.setSkillID(skillID);
+
+		Game::getinstance().playerN.addSkill(std::move(newSkill));
+
+	}
+	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+	disconnect();
+	return true;
+}
+
+bool SQLCONN::saveplayerHitBox() {
+	if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}
+	if (!connect()) {
+		return false;
+	}
+	
+	SQLHSTMT hStmt;
+	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+
+	std::string bodyPartName;
+	int Def, armorDef, bodyPartID;
+	bool hasWeapon, hasArmor;
+	float HP;
+	int playerID = Game::getinstance().playerN.getID();
+	int upperbodysize = 0;
+	int lowerbodysize = 0;
+	for(auto& body: Game::getinstance().playerN.upperHitBox) {
+		bodyPartName = body.bodyName;
+		Def = body.def;
+		armorDef = body.armorDef;
+		hasWeapon = body.hasWeapon;
+		hasArmor = body.hasArmor;
+		HP = body.HP;
+
+		SQLWCHAR* sqlQuery = nullptr;
+		SQLRETURN ret;
+		//if new char then new entry
+
+		sqlQuery = (SQLWCHAR*)L"INSERT INTO body_Type (bodyPartName, bodyPartHP, defense, hasArmor, armorDef, hasWeapon, player_ID )"
+			L"VALUES (?,?,?,?,?,?,?)";
+
+		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+			SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+			SQLINTEGER nativeError;
+			SQLSMALLINT length;
+			SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+			std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+			SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+			return false;
+		}
+
+		SQLLEN itemNameLength = static_cast<SQLLEN>(bodyPartName.length());
+		
+
+		ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)bodyPartName.c_str(), itemNameLength, &itemNameLength);
+		ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_FLOAT, SQL_FLOAT, 0, 0, &HP, 0, NULL);
+		ret = SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &Def, 0, NULL);
+		ret = SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_BIT, SQL_BIT, 0, 0, &hasArmor, 0, NULL);
+		ret = SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &armorDef, 0, NULL);
+		ret = SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_BIT, SQL_BIT, 0, 0, &hasWeapon, 0, NULL);
+		ret = SQLBindParameter(hStmt, 8, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &playerID, 0, NULL);
+		
+	
+	
+		
+
+		ret = SQLExecute(hStmt);
+		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+			SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
+			SQLINTEGER nativeError;
+			SQLSMALLINT length;
+			SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+			std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+			SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+			disconnect();
+			return false;
+		}
+		std::cout << "Hitbox " << bodyPartName << " saved!\n";
+	}
+	
+
+
+
+	return true;
+}

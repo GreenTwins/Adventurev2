@@ -89,7 +89,18 @@ void Skills::updaterequirementPayment(int rP) {
 void Skills::updateatkAmt(int aA) {
 	atkAmt = aA;
 }
-
+void Skills::updateSkillEffect(std::string sE) {
+	skillEffect = sE;
+}
+void Skills::updateReqType(std::string rT) {
+	requirementType = rT;
+}
+void Skills::setapplicationType(std::string aT) {
+	applicationType = aT;
+}
+void Skills::setSkillID(int id) {
+	skillID = id;
+}
 std::string Skills::getSkillName()const {
 	return skillName;
 }
@@ -112,4 +123,10 @@ int Skills::getSkillEffectAmt()const {
 int Skills::getatkAmt()const {
 
 	return atkAmt;
+}
+std::string Skills::getAppType()const {
+	return applicationType;
+}
+int Skills::getSkillID()const {
+	return skillID;
 }

@@ -14,6 +14,7 @@ class Skills {
 	float skillEffectAmt;
 	int atkAmt;
 	std::string applicationType;
+	int skillID;
 public:
 	Skills();
 	Skills(const std::string&, const std::string&, float,
@@ -27,21 +28,25 @@ public:
 
 	//available setters
 	void updateSkillName(std::string);
+	void updateSkillEffect(std::string);
 	void updateSkillType(std::string);
 	void updateSkillEffectAmt(int);
 	void updaterequirementPayment(int);
 	void updateatkAmt(int);
+	void updateReqType(std::string);
 	void setapplicationType(std::string);
+	void setSkillID(int);
 
 	//getters
 	std::string getSkillName()const;
 	std::string getRequirementType()const;
+	std::string getAppType()const;
 	int getRequirementPayment()const;
 	std::string getSkillType()const;
 	std::string getSkillEffect()const;
 	int getSkillEffectAmt()const;
 	int getatkAmt()const;
-
+	int getSkillID()const;
 
 
 };

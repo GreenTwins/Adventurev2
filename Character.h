@@ -23,8 +23,7 @@ class Character {
   
    
     std::vector<int>dodge;
-    std::map<std::string, float>upperBody;
-    std::map<std::string, float>lowerBody;
+
     int Str;
     int Def;
     int Spd;
@@ -62,6 +61,8 @@ public:
     int getDex()const;
     bool withWings()const;
     bool withLegs()const;
+    int getUpperBodysize()const;
+    int getLowerBodysize()const;
 
 
     // Setters
@@ -89,19 +90,22 @@ public:
   
     //attacks
     
-  
+    std::map<std::string, float>upperBody;
+    std::map<std::string, float>lowerBody;
 
 
     struct bodyPart {
         float HP;
+        std::string bodyName;
         int def;
         bool hasArmor;
-        float armorDef;
+        int armorDef;
         //or is it holding a weapon
         bool hasWeapon;
     };
     bodyPart Head, Torso, LeftArm, LeftLeg, RightArm, RightLeg, Trunk, Tail, Thorax, Abdomen;
-
+    std::vector<bodyPart>upperHitBox;
+    std::vector<bodyPart>lowerHitBox;
     //Take dmg
     void takeUpperBodyDmg(int);
     void takeLowerBodyDmg();

@@ -28,6 +28,10 @@ public:
 	bool InvSave();
 	std::vector<std::string>playerList;
 	bool loadPlayerData(const std::string& a);
+	bool saveplayerHitBox();
+	bool loadPlayerHitbox(int);
+	bool saveplayerSkills();
+	bool playerSkillsLoading(int);
 	/*bool loadPlayerInventory(int ID);
 	bool grabStoreData(int lvl);
 	bool getplayerID();

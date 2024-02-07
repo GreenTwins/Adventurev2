@@ -644,7 +644,7 @@ void Mage::subClassSelection() {
 			 {"Call to chaos", "MP", 15, "Attack",": a call from oblivion, fate chooses your spell", 0, (rand() % 8 + 1), " "},
 			 {"Magic Mark", "MP", 8, "Attack",": a curse is bestowed upon your enemy", 0, (rand() % 6 + 1), " "},
 			 {"Guiding Bolt", "MP", 10, "Attack",": from the heavens comes a gift of pain for your enemy", 0, (rand() % 6 + 1), " "},
-			 {"Magic Mark", "MP", 8, "Attack",": a curse is bestowed upon your enemy", 0, (rand() % 6 + 1), " "}
+			 
 		};
 
 		for (int i = 0; i < wizardSkills.size(); ++i) {
@@ -990,7 +990,7 @@ void Assassin::subClassSelection() {
 			{"Bloodlust", "MP", 1.00f*(rand()%20+1), "Toggle", "if HP is less than 15 set HP to 0",0,0," "},
 			{"Shadow hunter", "Stamina", 2, "Attack", "lurk in the shadows to strike the opponent", 0, (rand()%6+1), "Specific"},
 			{"precise kill", "Stamina", 1.00f * (rand()%6+1), "Attack", "locate pressure points to incapacitate", 0, (rand()%6+1), "Specific"},
-			{"Dance with poison", "MP", 3, "Toggle", "if HP is less than 50 set HP to -3",0,0," "},
+			{"Dance with poison", "MP", 3, "Toggle", "if HP is less than 50 set HP to -3",0,0,"Effect"},
 			{"Shadow Dash", "Stamina", 1.00f*(rand()%6+1), "Attack", "quick attack from darkness", 0, (rand()%6+1),"Specific"},
 			{"Cobra strike", "Stamina", 2, "Attack", "lethal attack", 0, 5, "Specific"}
 		};
