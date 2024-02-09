@@ -8,7 +8,7 @@
 #include <codecvt>
 #include <locale>
 #include <string>
-
+#include <cmath>
 
 
 
@@ -57,9 +57,9 @@ SQLCONN::~SQLCONN() {
 	if (sqlEnv != SQL_NULL_HENV) {
 		SQLFreeHandle(SQL_HANDLE_ENV, sqlEnv);
 	}
-	/*SQLFreeHandle(SQL_HANDLE_DBC, sqlconnectionhandle);
-	SQLFreeHandle(SQL_HANDLE_ENV, sqlenvhandle);*/
+	
 }
+
 SQLCONN& SQLCONN::createInstance() {
 	static SQLCONN instance;
 	return instance;
@@ -78,6 +78,60 @@ bool SQLCONN::connect() {
 		return false;
 	}
 	std::wcout << L"Connected to the database successfully!" << std::endl;
+	return true;
+}
+
+bool SQLCONN::getplayerID() {
+	disconnect();
+
+	if (!connect()) {
+		return false;
+	}
+	SQLINTEGER  playerID;
+	SQLHSTMT hStmt;
+	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+	SQLWCHAR* sqlQuery = nullptr;
+	SQLRETURN ret;
+	sqlQuery = (SQLWCHAR*)L"SELECT playerID FROM Player_Table WHERE playerName=?";
+	ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+		std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+
+	std::string name = Game::getinstance().playerN.getName();
+	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 255, 0, (SQLPOINTER*)name.c_str(), name.size(), NULL);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	ret = SQLExecute(hStmt);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+		SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
+		SQLSMALLINT length;
+		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_MAX_MESSAGE_LENGTH, &length);
+		std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+	if (SQLFetch(hStmt) == SQL_SUCCESS) {
+		SQLGetData(hStmt, 1, SQL_C_LONG, &playerID, 0, NULL);
+		Game::getinstance().playerN.setID(playerID);
+	}
+	//create error handle here
+	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+	disconnect();
 	return true;
 }
 bool SQLCONN::isConnectionActive() {
@@ -101,6 +155,116 @@ void NullTerminateString(SQLCHAR* str, SQLLEN length) {
 	if (length > 0 && str[length - 1] != '\0') {
 		str[length] = '\0';
 	}
+}
+bool SQLCONN::saveplayerSkills() {
+	if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}
+	if (!connect()) {
+		return false;
+	}
+	//load data into vars
+	int skillID, atkAmt, player_ID, boss_ID;
+	std::string skillName, ReqTypes, skillTypes, skillEffect, appType;
+	float ReqPayment, EffectAmt;
+
+	if (Game::getinstance().playerN.getID() == 0) {
+		if (!getplayerID()) {
+			std::cout << "\n Failed to get player ID \n";
+			return false;
+		}
+	}
+	player_ID = Game::getinstance().playerN.getID();
+
+	//if not new char then delete entry and make new one
+
+	std::vector<Skills>allSkills;
+	for (auto& Skill : Game::getinstance().playerN.listofSkills) {
+		allSkills.push_back(Skill);
+	}
+
+	for (auto& Skill : Game::getinstance().playerN.ClassSkills) {
+		allSkills.push_back(Skill);
+	}
+	
+	for (auto& skill : allSkills) {
+		skillName = skill.getSkillName();
+		ReqTypes = skill.getRequirementType();
+		skillTypes = skill.getSkillType();
+		skillEffect = skill.getSkillEffect();
+		appType = skill.getAppType();
+
+		atkAmt = skill.getatkAmt();
+		ReqPayment = skill.getRequirementPayment();
+		EffectAmt = skill.getSkillEffectAmt();
+
+		
+		SQLHSTMT hStmt;
+		SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+		SQLWCHAR* sqlQuery = nullptr;
+		SQLRETURN ret;
+		//check and see if theres already data available for the given name and....something else
+	
+			//save to sql
+			std::cout << "Saving new data..." << std::endl;
+
+			sqlQuery = (SQLWCHAR*)L"INSERT INTO Skills_Table (skillName, ReqTypes, ReqPayment, skillTypes, skillEffect, EffectAmt, atkAmt, appType, player_ID)"
+				L"VALUES (?,?,?,?,?,?,?,?,?)";
+
+			ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+			if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+				SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+				SQLINTEGER nativeError;
+				SQLSMALLINT length;
+				SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+				std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+				SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+				return false;
+			}
+
+			SQLLEN stringLength = SQL_NTS;
+			ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)skillName.c_str(), 0, &stringLength);
+			ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)ReqTypes.c_str(), 0, &stringLength);
+			ret = SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &ReqPayment, 0, NULL);
+			ret = SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)skillTypes.c_str(), 0, &stringLength);
+			ret = SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)skillEffect.c_str(), 0, &stringLength);
+			ret = SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &EffectAmt, 0, NULL);
+			ret = SQLBindParameter(hStmt, 7, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &atkAmt, 0, NULL);
+			ret = SQLBindParameter(hStmt, 8, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)appType.c_str(), 0, &stringLength);
+			ret = SQLBindParameter(hStmt, 9, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &player_ID, 0, NULL);
+		
+			
+
+
+
+
+		ret = SQLExecute(hStmt);
+		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+			SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
+			SQLINTEGER nativeError;
+			SQLSMALLINT length;
+			SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+			std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+			SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+			disconnect();
+			return false;
+		}
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		std::cout << "Skill: "<<skillName <<" saved!" << std::endl;
+	}
+
+	
+	
+	disconnect();
+
+	if (Game::getinstance().newChar) {
+		if (!Game::getinstance().playerN.getID()) {
+			return false;
+		}
+		Game::getinstance().newChar = false;
+	}
+
+	return true;
 }
 bool SQLCONN::displayNames() {
 	/*if (!connect()) {
@@ -159,8 +323,7 @@ bool SQLCONN::sqlSave() {
 	}
 	//load data into vars
 	std::string playerName, bodyType, playerJob, className, subClassName;
-	int HP, maxHP, MP, maxMP, Str, Def, Spd, dodge, level, Intel, dext, endur, fatigue, maxFatigue, gold, xp;
-	int currentLocation;
+	int HP, maxHP, MP, maxMP, Str, Def, Spd, dodge, level, Intel, dext, endur, fatigue, maxFatigue, gold, xp, currentLocation;
 	float stamina, maxStamina, perc, maxPerc;
 
 	playerName = Game::getinstance().playerN.getName();
@@ -188,7 +351,25 @@ bool SQLCONN::sqlSave() {
 	maxStamina = Game::getinstance().playerN.getMaxStamina();
 	perc = Game::getinstance().playerN.getPrec();
 	maxPerc = Game::getinstance().playerN.getMaxPrec();
+	currentLocation = Game::getinstance().playerN.getLocation();
 
+	//if (subClassName == "Gambler") {
+
+	//}
+	//if (auto* magePtr = dynamic_cast<Mage*>(Class.get())) {
+	//	if (magePtr->getSubClassName() == "Gambler") {
+	//		std::cout << std::left << index << ".)" << std::setw(25) << skill.getSkillName()  // Adjusted setw values
+	//			<< std::right << "Attack Amt" << " : " << magePtr->getGambleatk(skill.getSkillName()) << "\n";
+	//	}
+	//	else {
+	//		std::cout << std::left << index << ".)" << std::setw(25) << skill.getSkillName()  // Adjusted setw values
+	//			<< std::right << "Attack Amt" << " : " << skill.getatkAmt() << "\n";
+	//	}
+	//}
+	//else {
+	//	std::cout << std::left << index << ".)" << std::setw(25) << skill.getSkillName()  // Adjusted setw values
+	//		<< std::right << "Attack Amt" << " : " << skill.getatkAmt() << "\n";
+	//}
 
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
@@ -199,8 +380,8 @@ bool SQLCONN::sqlSave() {
 		//save to sql
 		std::cout << "Saving new data..." << std::endl;
 
-		sqlQuery = (SQLWCHAR*)L"INSERT INTO Player (playerName, bodyType, playerJob, className, subClassName, HP, maxHP, MP, maxMP, stamina,maxStamina,fatigue,maxFatigue,perc, maxPerc, Str, Def, Spd, Intel, dext, endur,level, gold,xp)"
-			L"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		sqlQuery = (SQLWCHAR*)L"INSERT INTO Player_Table (playerName, bodyType, playerJob, className, subClassName, HP, maxHP, MP, maxMP, stamina,maxStamina,fatigue,maxFatigue,percision, maxPercision, Strength, Def, Spd, Intel, dext, endur,level, Gold,XP,currentLocation)"
+			L"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
@@ -223,12 +404,12 @@ bool SQLCONN::sqlSave() {
 		ret = SQLBindParameter(hStmt, 7, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &maxHP, 0, NULL);
 		ret = SQLBindParameter(hStmt, 8, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &MP, 0, NULL);
 		ret = SQLBindParameter(hStmt, 9, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &maxMP, 0, NULL);
-		ret = SQLBindParameter(hStmt, 10, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &stamina, 0, NULL);
-		ret = SQLBindParameter(hStmt, 11, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &maxStamina, 0, NULL);
+		ret = SQLBindParameter(hStmt, 10, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT,  0, 0, &stamina, 0, NULL);
+		ret = SQLBindParameter(hStmt, 11, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &maxStamina, 0, NULL);
 		ret = SQLBindParameter(hStmt, 12, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &fatigue, 0, NULL);
 		ret = SQLBindParameter(hStmt, 13, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &maxFatigue, 0, NULL);
-		ret = SQLBindParameter(hStmt, 14, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &perc, 0, NULL);
-		ret = SQLBindParameter(hStmt, 15, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &maxPerc, 0, NULL);
+		ret = SQLBindParameter(hStmt, 14, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &perc, 0, NULL);
+		ret = SQLBindParameter(hStmt, 15, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &maxPerc, 0, NULL);
 		ret = SQLBindParameter(hStmt, 16, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &Str, 0, NULL);
 		ret = SQLBindParameter(hStmt, 17, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &Def, 0, NULL);
 		ret = SQLBindParameter(hStmt, 18, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &Spd, 0, NULL);
@@ -238,13 +419,13 @@ bool SQLCONN::sqlSave() {
 		ret = SQLBindParameter(hStmt, 22, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &level, 0, NULL);
 		ret = SQLBindParameter(hStmt, 23, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &gold, 0, NULL);
 		ret = SQLBindParameter(hStmt, 24, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &xp, 0, NULL);
-
+		ret = SQLBindParameter(hStmt, 25, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &currentLocation, 0, NULL);
 		
 
 	}
 	else {
 		
-		sqlQuery = (SQLWCHAR*)L"UPDATE Player SET playerName=?, bodyType=?, playerJob=?, className=?, subClassName=?, HP=?, maxHP=?, MP=?, maxMP=?, stamina=?, maxStamina=?, fatigue=? ,maxFatigue=? , percision=?, maxPercision=?, Strength=?, Def=?, Spd=?, Intel=?, dext=?, endur=?,level=?, Gold=?,XP=?WHERE playerName=?";
+		sqlQuery = (SQLWCHAR*)L"UPDATE Player_Table SET playerName=?, bodyType=?, playerJob=?, className=?, subClassName=?, HP=?, maxHP=?, MP=?, maxMP=?, stamina=?, maxStamina=?, fatigue=? ,maxFatigue=? , percision=?, maxPercision=?, Strength=?, Def=?, Spd=?, Intel=?, dext=?, endur=?,level=?, Gold=?,XP=?WHERE playerName=?";
 
 		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
@@ -302,8 +483,13 @@ bool SQLCONN::sqlSave() {
 	disconnect();
 
 	if (Game::getinstance().newChar) {
-		if (!Game::getinstance().playerN.getID()) {
-			return false;
+		if (Game::getinstance().playerN.getID() == 0) {
+			//get player ID. Player is auto saved once created and passes the first dungeon
+			if (!getplayerID()) {
+				std::cout << "\n Failed to get playerID\n";
+				return false;
+			}
+
 		}
 		Game::getinstance().newChar = false;
 	}
@@ -402,11 +588,15 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 		p1.setMP(MP);
 		p1.setMaxMp(maxMP);
 		p1.setStr(Strength);
+		p1.setStamina(stamina);
+		p1.setMaxStamina(maxStamina);
 		p1.setDef(Def);
 		p1.setSpd(Spd);
 		p1.setInt(Intel);
 		p1.setDex(dext);
 		p1.setEnD(endur);
+		p1.setPrec(precision);
+		p1.setMaxPrec(maxPrecision);
 		p1.setHasLegs(hasLegs);
 		p1.setHasWings(hasWings);
 		
@@ -424,6 +614,7 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 		p1.setGold(Gold);
 		p1.setXP(XP);
 
+		Game::getinstance().playerN = std::move(p1);
 	}
 	//load player inventory
 	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
@@ -434,6 +625,18 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 
 
 bool SQLCONN::loadPlayerHitbox(int ID) {
+	if (Game::getinstance().playerN.getID() == 0) {
+		//get player ID. Player is auto saved once created and passes the first dungeon
+		if (!getplayerID()) {
+			std::cout << "\n Failed to get playerID\n";
+			return false;
+		}
+
+	}
+	
+	if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}
 	if (!connect()) {
 		return false;
 	}
@@ -481,13 +684,15 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 		bool hasArmor, hasWeapon;
 
 		SQLGetData(hStmt, 1, SQL_C_CHAR, &bodyPartName, sizeof(bodyPartName), NULL);
-		SQLGetData(hStmt, 2, SQL_C_FLOAT, &bodyPartHP, 0, NULL);
+		SQLGetData(hStmt, 2, SQL_C_LONG, &bodyPartHP, 0, NULL);
 		SQLGetData(hStmt, 3, SQL_C_LONG, &defense, 0, NULL);
 		SQLGetData(hStmt, 4, SQL_C_BIT, &hasArmor, 0, NULL);
 		SQLGetData(hStmt, 5, SQL_C_LONG, &armorDef, 0, NULL);
 		SQLGetData(hStmt, 6, SQL_C_BIT, &hasWeapon, 0, NULL);
 		SQLGetData(hStmt, 7, SQL_C_LONG, &bodyPartID, 0, NULL);
 
+
+		NullTerminateString(bodyPartName, sizeof(bodyPartName));
 		std::string convertedbodyPartName = reinterpret_cast<char*>(bodyPartName);
 		
 		if (convertedbodyPartName == "Head") {
@@ -569,9 +774,21 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 }
 
 bool SQLCONN::playerSkillsLoading(int ID) {
+	if (Game::getinstance().playerN.getID() == 0) {
+		//get player ID. Player is auto saved once created and passes the first dungeon
+		if (!getplayerID()) {
+			std::cout << "\n Failed to get playerID\n";
+			return false;
+		}
+
+	}
+	if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}
 	if (!connect()) {
 		return false;
 	}
+	
 	SQLHSTMT hStmt;
 
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
@@ -646,45 +863,55 @@ bool SQLCONN::playerSkillsLoading(int ID) {
 		newSkill.updateatkAmt(atkAmt);
 		newSkill.setSkillID(skillID);
 
-		Game::getinstance().playerN.addSkill(std::move(newSkill));
-
+		if ((newSkill.getAppType() == "Effect")|| (newSkill.getSkillType() == "Passive")|| (newSkill.getAppType() == "enhance")) {
+			Game::getinstance().playerN.addClassSkill(std::move(newSkill));
+		}
+		else {
+			Game::getinstance().playerN.addSkill(std::move(newSkill));
+		}
+		
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 	}
-	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+	Game::getinstance().playerN.setNumAtks();
+	
 	disconnect();
 	return true;
 }
 
-bool SQLCONN::saveplayerHitBox() {
-	if (isConnectionActive()) {
-		SQLDisconnect(sqlConnection);
-	}
+ bool SQLCONN::saveplayerHitBox() {
+	 if (isConnectionActive()) {
+		 SQLDisconnect(sqlConnection);
+	 }
 	if (!connect()) {
 		return false;
 	}
 	
-	SQLHSTMT hStmt;
-	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
-
 	std::string bodyPartName;
-	int Def, armorDef, bodyPartID;
+	int defense, armorDef, bodyPartID, bodyPartHP;
 	bool hasWeapon, hasArmor;
-	float HP;
-	int playerID = Game::getinstance().playerN.getID();
-	int upperbodysize = 0;
-	int lowerbodysize = 0;
+	 
+
+	int player_ID = Game::getinstance().playerN.getID();
+	
+	
 	for(auto& body: Game::getinstance().playerN.upperHitBox) {
 		bodyPartName = body.bodyName;
-		Def = body.def;
+		defense = body.def;
 		armorDef = body.armorDef;
 		hasWeapon = body.hasWeapon;
 		hasArmor = body.hasArmor;
-		HP = body.HP;
+		bodyPartHP = std::round(body.HP);
+
+		int hasArmorValue = hasArmor ? 1 : 0; // Convert boolean to integer
+		int hasWeaponValue = hasWeapon ? 1 : 0; // Convert boolean to integer
+		
+		//if new char then new entry
+		SQLHSTMT hStmt;
+		SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
 		SQLWCHAR* sqlQuery = nullptr;
 		SQLRETURN ret;
-		//if new char then new entry
-
-		sqlQuery = (SQLWCHAR*)L"INSERT INTO body_Type (bodyPartName, bodyPartHP, defense, hasArmor, armorDef, hasWeapon, player_ID )"
+		sqlQuery = (SQLWCHAR*)L"INSERT INTO body_Part (bodyPartName, bodyPartHP, defense, hasArmor, armorDef, hasWeapon, player_ID )"
 			L"VALUES (?,?,?,?,?,?,?)";
 
 		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
@@ -702,12 +929,12 @@ bool SQLCONN::saveplayerHitBox() {
 		
 
 		ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)bodyPartName.c_str(), itemNameLength, &itemNameLength);
-		ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_FLOAT, SQL_FLOAT, 0, 0, &HP, 0, NULL);
-		ret = SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &Def, 0, NULL);
-		ret = SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_BIT, SQL_BIT, 0, 0, &hasArmor, 0, NULL);
+		ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &bodyPartHP, 0, NULL);
+		ret = SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &defense, 0, NULL);
+		ret = SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_BIT, SQL_BIT, 0, 0, &hasArmorValue, 0, NULL);
 		ret = SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &armorDef, 0, NULL);
-		ret = SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_BIT, SQL_BIT, 0, 0, &hasWeapon, 0, NULL);
-		ret = SQLBindParameter(hStmt, 8, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &playerID, 0, NULL);
+		ret = SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_BIT, SQL_BIT, 0, 0, &hasWeaponValue, 0, NULL);
+		ret = SQLBindParameter(hStmt, 7, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &player_ID, 0, NULL);
 		
 	
 	
@@ -725,10 +952,12 @@ bool SQLCONN::saveplayerHitBox() {
 			return false;
 		}
 		std::cout << "Hitbox " << bodyPartName << " saved!\n";
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 	}
 	
 
-
+	
+	disconnect();
 
 	return true;
 }

@@ -12,18 +12,19 @@ Player::Player() {
 Player::Player(std::string a) :Character{ a, "Humanoid" } {
 	setName(a);
 	chooseAtk = false;
-	/*if (!loaded) {
-		init();
-	}*/
+	
 	setBodyType("Humanoid");
-	//load all skills
-
+	
+	
 }
 void Player::preLoadAllSkills() {
 	for (int i = 0; i < Class->listofAllSkills.size(); ++i) {
 		addSkill(std::move(Class->listofAllSkills[i]));
 	}
 	setNumAtks();
+	for (int j = 0; j < Class->listofClassSpecificSkills.size(); ++j) {
+		addClassSkill(std::move(Class->listofClassSpecificSkills[j]));
+	}
 }
 Player::Player(Player && other)
 	: Character(std::move(other)),  // Call base class move constructor
@@ -38,7 +39,8 @@ Player::Player(Player && other)
 	ActiveJob(std::move(other.ActiveJob)),
 	ptWorth(other.ptWorth),
 	chooseAtk(other.chooseAtk),
-	loaded(other.loaded) {
+	loaded(other.loaded)
+{
 	// No need to call init() as the object is already initialized
 }
 Player& Player::operator=(Player&& other) noexcept {
@@ -59,6 +61,7 @@ Player& Player::operator=(Player&& other) noexcept {
 		const_cast<double&>(ptWorth) = other.ptWorth;
 		chooseAtk = other.chooseAtk;
 		listofSkills = std::move(other.listofSkills);
+		ClassSkills = std::move(other.ClassSkills);
 		numofAtks = other.numofAtks;
 		setStr(other.getStr());
 		setDef(other.getDef());
@@ -67,10 +70,15 @@ Player& Player::operator=(Player&& other) noexcept {
 		setDex(other.getDex());
 		setEnD(other.getEnd());
 		setPrec(other.getPrec());
+		setMaxPrec(other.getMaxPrec());
 		setStamina(other.getStamina());
+		setMaxStamina(other.getMaxStamina());
 		setFatigue(other.getFatigue());
 		setHP(other.getHP());
+		setMaxHP(other.getMaxHP());
 		setMP(other.getMP());
+		setMaxMp(other.getMaxMP());
+		setBodyType(other.getBodyType());
 
 	}
 	return *this;
@@ -119,12 +127,14 @@ void Player::compileAllStats() {
 	setMaxMp(MPamt + 50);
 	setFatigue(0);
 	float staminaamt = (((1.0f/3.0f) * (ptWorth *getDex()) + ((1.0f / 3.0f) * (ptWorth*getEnd()))));
-	//std::cout << staminaamt << "\n";
+	std::cout << staminaamt << "\n";
 	setStamina(10 + staminaamt);
 	setMaxStamina(getStamina());
 	int fatHolder = getFatigue();
 	float prec = calculatePrec(getStamina(), fatHolder, getMaxStamina(), getDex(), getInt());
+	std::cout << prec << "\n";
 	setPrec(prec);
+	setMaxPrec(prec);
 	setXP(0);
 	setLvl(1);
 	setGold(0);
@@ -248,6 +258,9 @@ size_t Player::getNumofAtks()const {
 }
 void Player::addSkill(Skills&& o) {
 	listofSkills.push_back(std::move(o));
+}
+void Player::addClassSkill(Skills&& o) {
+	ClassSkills.push_back(std::move(o));
 }
 std::map<std::string, int>Player::attack() {
 	int diceRoll = rand() % (getNumofAtks()) + 1;
@@ -486,6 +499,23 @@ void Player::setActiveJob(std::string aj) {
 	ActiveJob = aj;
 }
 void Player::setClass(std::string c) {
+	/*if (Class) {
+		Class->setClassName(c);
+	}
+	else {
+		Class = std::make_unique<playerClass>();
+		Class->setClassName(c);
+	}*/
+	if (c == "Mage") {
+		Class = std::make_unique<Mage>();
+		
+	}
+	else if (c == "Warrior") {
+		Class = std::make_unique<Warrior>();
+	}
+	else {
+		Class = std::make_unique<Assassin>();
+	}
 	Class->setClassName(c);
 }
 void Player::setSubClass(std::string sc) {

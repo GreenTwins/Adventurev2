@@ -51,37 +51,40 @@ Character::Character(std::string a, std::string type) {
 
 }
 Character::Character(Character&& o)noexcept {
-	HP =         o.HP;
-	maxHP =      o.maxHP;
-	MP =         o.MP;
-	maxMP =      o.maxMP;
-	maxStamina = o.maxStamina;
-	maxPrec =    o.maxPrec;
-	maxFatigue = o.maxFatigue;
-	stamina =    o.stamina;
-	fatigue =    o.fatigue;
-	prec =       o.prec;
-	dodge =      o.dodge;
-	upperBody =  o.upperBody;
-	lowerBody =  o.lowerBody;
-	Str =        o.Str;
-	Def =        o.Def;
-	Spd =        o.Spd;
-	Int =        o.Int;
-	dex =        o.dex;
-	enD =        o.enD;
-	hasWings =   o.hasWings;
-	hasLegs =    o.hasLegs;
-	Head =       o.Head;
-	Torso =      o.Torso;
-	LeftArm =    o.LeftArm;
-	LeftLeg =    o.LeftLeg;
-	RightArm =   o.RightArm;
-	RightLeg =   o.RightLeg;
-	Trunk =      o.Trunk;
-	Tail =       o.Tail;
-	Thorax =     o.Thorax;
-	Abdomen =    o.Abdomen;
+	HP =          o.HP;
+	maxHP =       o.maxHP;
+	MP =          o.MP;
+	maxMP =       o.maxMP;
+	maxStamina =  o.maxStamina;
+	maxPrec =     o.maxPrec;
+	maxFatigue =  o.maxFatigue;
+	stamina =     o.stamina;
+	fatigue =     o.fatigue;
+	prec =        o.prec;
+	dodge =       o.dodge;
+	upperBody =   o.upperBody;
+	lowerBody =   o.lowerBody;
+	Str =         o.Str;
+	Def =         o.Def;
+	Spd =         o.Spd;
+	Int =         o.Int;
+	dex =         o.dex;
+	enD =         o.enD;
+	hasWings =    o.hasWings;
+	hasLegs =     o.hasLegs;
+	Head =        o.Head;
+	Torso =       o.Torso;
+	LeftArm =     o.LeftArm;
+	LeftLeg =     o.LeftLeg;
+	RightArm =    o.RightArm;
+	RightLeg =    o.RightLeg;
+	Trunk =       o.Trunk;
+	Tail =        o.Tail;
+	Thorax =      o.Thorax;
+	Abdomen =     o.Abdomen;
+	BodyType =	  o.BodyType;
+	upperHitBox = o.upperHitBox;
+	lowerHitBox = o.lowerHitBox;
 }
 Character::~Character() {
 	dodge.clear();
@@ -190,7 +193,12 @@ void Character::setBodyType(std::string bodyType) {
 		LeftLeg.HP= 0.10f * (getHP());
 		RightLeg.HP= 0.10f * (getHP());
 
-		Head.def, Torso.def, LeftArm.def, RightArm.def, LeftLeg.def, LeftArm.def = getDef();
+		Head.def = getDef();
+		Torso.def = getDef(); 
+		LeftArm.def = getDef();
+		RightArm.def = getDef(); 
+		LeftLeg.def = getDef();
+		LeftArm.def = getDef();
 
 		Head.bodyName = "Head";
 		Torso.bodyName = "Torso";
@@ -222,7 +230,9 @@ void Character::setBodyType(std::string bodyType) {
 			Thorax.HP = 0.40f * (getHP());
 			Abdomen.HP = 0.24f * (getHP());
 			Thorax.bodyName = "Thorax";
-			Head.def, Thorax.def, Abdomen.def = getDef();
+			Head.def = getDef();
+			Thorax.def = getDef(); 
+			Abdomen.def = getDef();
 
 			lowerHitBox.push_back(RightLeg);
 			lowerHitBox.push_back(LeftLeg);
@@ -241,7 +251,8 @@ void Character::setBodyType(std::string bodyType) {
 			Head.HP = 0.40f * (getHP());
 			Abdomen.HP = 0.60f * (getHP());
 
-			Head.def, Abdomen.def = getDef();
+			Head.def = getDef(); 
+			Abdomen.def = getDef();
 
 			lowerHitBox.push_back(RightLeg);
 			lowerHitBox.push_back(LeftLeg);
@@ -289,7 +300,13 @@ void Character::setBodyType(std::string bodyType) {
 			upperHitBox.push_back(RightArm);
 			upperHitBox.push_back(LeftLeg);
 			upperHitBox.push_back(RightLeg);
-			Head.def, Thorax.def, LeftArm.def, RightArm.def, LeftLeg.def, LeftArm.def, Abdomen.def = getDef();
+			Head.def = getDef(); 
+			Thorax.def = getDef(); 
+			LeftArm.def = getDef(); 
+			RightArm.def = getDef(); 
+			LeftLeg.def = getDef(); 
+			LeftArm.def = getDef(); 
+			Abdomen.def = getDef();
 		}
 
 		Head.bodyName = "Head";
@@ -332,7 +349,13 @@ void Character::setBodyType(std::string bodyType) {
 				upperHitBox.push_back(LeftArm);
 				upperHitBox.push_back(RightArm);
 
-				Head.def, Trunk.def, LeftArm.def, RightArm.def, LeftLeg.def, LeftArm.def, Tail.def = getDef();
+				Head.def = getDef(); 
+				Trunk.def = getDef(); 
+				LeftArm.def = getDef(); 
+				RightArm.def = getDef(); 
+				LeftLeg.def = getDef(); 
+				LeftArm.def = getDef(); 
+				Tail.def = getDef();
 			}
 			else {
 				//no legs
@@ -347,7 +370,9 @@ void Character::setBodyType(std::string bodyType) {
 				lowerHitBox.push_back(Tail);
 				
 
-				Head.def, Trunk.def, Tail.def = getDef();
+				Head.def = getDef(); 
+				Trunk.def = getDef(); 
+				Tail.def = getDef();
 			}
 		
 		}
@@ -363,7 +388,8 @@ void Character::setBodyType(std::string bodyType) {
 
 		
 			
-			Head.def, Trunk.def = getDef();
+			Head.def = getDef();
+			Trunk.def = getDef();
 		}
 		else {
 			upperBody.emplace(std::make_pair<std::string, float>("Head", 0.30f));
@@ -397,7 +423,13 @@ void Character::setBodyType(std::string bodyType) {
 			upperHitBox.push_back(RightArm);
 		
 
-			Head.def, Trunk.def, LeftArm.def, RightArm.def, LeftLeg.def, LeftArm.def, Tail.def = getDef();
+			Head.def = getDef();
+			Trunk.def = getDef(); 
+			LeftArm.def = getDef(); 
+			RightArm.def = getDef(); 
+			LeftLeg.def = getDef(); 
+			LeftArm.def = getDef(); 
+			Tail.def = getDef();
 		}
 		
 

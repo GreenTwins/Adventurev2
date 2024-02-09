@@ -586,9 +586,9 @@ bool MainMenu::display()const {
 
 
 		gameInstance.createPlayer(name);
-		if (!gameInstance.PrePlay()) {
+		/*if (!gameInstance.PrePlay()) {
 			GoToConsole = false;
-		}
+		}*/
 	}
 		  break;
 	case 2: {
@@ -599,7 +599,7 @@ bool MainMenu::display()const {
 			GoToConsole = false;
 		}
 		//load chosen player
-		if (!sqlInstance.loadPlayerData(gameInstance.playerN.getName())) {
+		if ((!sqlInstance.loadPlayerData(gameInstance.playerN.getName()))|| (!sqlInstance.playerSkillsLoading(gameInstance.playerN.getID())|| (!sqlInstance.loadPlayerHitbox(gameInstance.playerN.getID())))) {
 			std::cout << "Error loading player \n";
 			GoToConsole = false;
 		}

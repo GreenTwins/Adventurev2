@@ -119,7 +119,7 @@ class Player : public Character {
 	std::string ActiveJob;
 	const double ptWorth = 8.33;
 	bool chooseAtk;
-	std::vector<Skills>listofSkills;
+	
 	size_t numofAtks;
 	int location;
 	int ID;
@@ -144,6 +144,8 @@ public:
 	void setNumAtks();
 	void setLocation(int);
 	void setID(int);
+	std::vector<Skills>listofSkills;
+	std::vector<Skills>ClassSkills;
 
 	//getter
 	int getID()const;
@@ -175,6 +177,7 @@ public:
 	void removeAtks();
 	Skills& permRemoveAtk();
 	void addSkill(Skills&&);
+	void addClassSkill(Skills&&);
 	void preLoadAllSkills();
 	size_t getNumofAtks()const;
 	std::map<std::string, int>attack();

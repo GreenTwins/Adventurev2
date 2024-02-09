@@ -2,6 +2,7 @@
 #include <string>
 //#include "Player.h"
 #include "Game.h"
+#include "SQLCONN.h"
 
 int main() {
 
@@ -40,7 +41,12 @@ int main() {
 		return -1;
 	}
 	Game::getinstance().playerN.displayAllStats();
-
+	if (Game::getinstance().newChar) {
+		SQLCONN::createInstance().sqlSave();
+		SQLCONN::createInstance().saveplayerSkills();
+		SQLCONN::createInstance().saveplayerHitBox();
+		Game::getinstance().newChar = false;
+	}
 	
 	
 	return 0;

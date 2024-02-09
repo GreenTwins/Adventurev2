@@ -26,6 +26,7 @@ public:
 	//bool getBoss(int loc, int dunNum, Boss& b);
 	bool sqlSave();
 	bool InvSave();
+	bool getplayerID();
 	std::vector<std::string>playerList;
 	bool loadPlayerData(const std::string& a);
 	bool saveplayerHitBox();
@@ -34,7 +35,6 @@ public:
 	bool playerSkillsLoading(int);
 	/*bool loadPlayerInventory(int ID);
 	bool grabStoreData(int lvl);
-	bool getplayerID();
 	bool deleteInventory(int ID);*/
 	bool isConnectionActive();
 };
