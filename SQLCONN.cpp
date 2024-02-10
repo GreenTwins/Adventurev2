@@ -82,11 +82,11 @@ bool SQLCONN::connect() {
 }
 
 bool SQLCONN::getplayerID() {
-	disconnect();
+	//disconnect();
 
-	if (!connect()) {
-		return false;
-	}
+	//if (!connect()) {
+	//	return false;
+	//}
 	SQLINTEGER  playerID;
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
@@ -131,7 +131,7 @@ bool SQLCONN::getplayerID() {
 	}
 	//create error handle here
 	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-	disconnect();
+	//disconnect();
 	return true;
 }
 bool SQLCONN::isConnectionActive() {
@@ -156,13 +156,15 @@ void NullTerminateString(SQLCHAR* str, SQLLEN length) {
 		str[length] = '\0';
 	}
 }
+
+
 bool SQLCONN::saveplayerSkills() {
-	if (isConnectionActive()) {
+	/*if (isConnectionActive()) {
 		SQLDisconnect(sqlConnection);
 	}
 	if (!connect()) {
 		return false;
-	}
+	}*/
 	//load data into vars
 	int skillID, atkAmt, player_ID, boss_ID;
 	std::string skillName, ReqTypes, skillTypes, skillEffect, appType;
@@ -255,7 +257,7 @@ bool SQLCONN::saveplayerSkills() {
 
 	
 	
-	disconnect();
+	//disconnect();
 
 	if (Game::getinstance().newChar) {
 		if (!Game::getinstance().playerN.getID()) {
@@ -315,12 +317,12 @@ bool SQLCONN::displayNames() {
 }
 
 bool SQLCONN::sqlSave() {
-	if (isConnectionActive()) {
-		SQLDisconnect(sqlConnection);
-	}
-	if (!connect()) {
-		return false;
-	}
+	//if (isConnectionActive()) {
+	//	SQLDisconnect(sqlConnection);
+	//}
+	//if (!connect()) {
+	//	return false;
+	//}
 	//load data into vars
 	std::string playerName, bodyType, playerJob, className, subClassName;
 	int HP, maxHP, MP, maxMP, Str, Def, Spd, dodge, level, Intel, dext, endur, fatigue, maxFatigue, gold, xp, currentLocation;
@@ -352,24 +354,6 @@ bool SQLCONN::sqlSave() {
 	perc = Game::getinstance().playerN.getPrec();
 	maxPerc = Game::getinstance().playerN.getMaxPrec();
 	currentLocation = Game::getinstance().playerN.getLocation();
-
-	//if (subClassName == "Gambler") {
-
-	//}
-	//if (auto* magePtr = dynamic_cast<Mage*>(Class.get())) {
-	//	if (magePtr->getSubClassName() == "Gambler") {
-	//		std::cout << std::left << index << ".)" << std::setw(25) << skill.getSkillName()  // Adjusted setw values
-	//			<< std::right << "Attack Amt" << " : " << magePtr->getGambleatk(skill.getSkillName()) << "\n";
-	//	}
-	//	else {
-	//		std::cout << std::left << index << ".)" << std::setw(25) << skill.getSkillName()  // Adjusted setw values
-	//			<< std::right << "Attack Amt" << " : " << skill.getatkAmt() << "\n";
-	//	}
-	//}
-	//else {
-	//	std::cout << std::left << index << ".)" << std::setw(25) << skill.getSkillName()  // Adjusted setw values
-	//		<< std::right << "Attack Amt" << " : " << skill.getatkAmt() << "\n";
-	//}
 
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
@@ -498,9 +482,14 @@ bool SQLCONN::sqlSave() {
 }
 
 bool SQLCONN::loadPlayerData(const std::string& a) {
+	/*if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}
 	if (!connect()) {
 		return false;
-	}
+	}*/
+
+	//using SQL transactions with my set up doesnt require individual connections and disconnections
 	SQLHSTMT hStmt;
 
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
@@ -618,13 +607,16 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 	}
 	//load player inventory
 	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-	disconnect();
+	//disconnect();
 	return true;
 
 }
 
 
-bool SQLCONN::loadPlayerHitbox(int ID) {
+bool SQLCONN::loadPlayerHitbox() {
+	/*if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}*/
 	if (Game::getinstance().playerN.getID() == 0) {
 		//get player ID. Player is auto saved once created and passes the first dungeon
 		if (!getplayerID()) {
@@ -634,12 +626,12 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 
 	}
 	
-	if (isConnectionActive()) {
+	/*if (isConnectionActive()) {
 		SQLDisconnect(sqlConnection);
 	}
 	if (!connect()) {
 		return false;
-	}
+	}*/
 	SQLHSTMT hStmt;
 
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
@@ -655,7 +647,7 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
 	}
-	SQLINTEGER sqlID = ID;
+	SQLINTEGER sqlID = Game::getinstance().playerN.getID();
 	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_C_LONG, 0, 0, &sqlID, 0, NULL);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
@@ -678,21 +670,20 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 	}
 	std::cout << "fetching...." << std::endl;
 	while (SQLFetch(hStmt) == SQL_SUCCESS) {
-		SQLINTEGER defense, armorDef, bodyPartID;
-		SQLFLOAT bodyPartHP;
+		SQLINTEGER defense, armorDef, bodyPartID, bodyPartHP;
 		SQLCHAR bodyPartName[255];
 		bool hasArmor, hasWeapon;
 
-		SQLGetData(hStmt, 1, SQL_C_CHAR, &bodyPartName, sizeof(bodyPartName), NULL);
-		SQLGetData(hStmt, 2, SQL_C_LONG, &bodyPartHP, 0, NULL);
-		SQLGetData(hStmt, 3, SQL_C_LONG, &defense, 0, NULL);
-		SQLGetData(hStmt, 4, SQL_C_BIT, &hasArmor, 0, NULL);
-		SQLGetData(hStmt, 5, SQL_C_LONG, &armorDef, 0, NULL);
-		SQLGetData(hStmt, 6, SQL_C_BIT, &hasWeapon, 0, NULL);
-		SQLGetData(hStmt, 7, SQL_C_LONG, &bodyPartID, 0, NULL);
+		SQLGetData(hStmt, 2, SQL_C_CHAR, &bodyPartName, sizeof(bodyPartName), NULL);
+		SQLGetData(hStmt, 3, SQL_C_LONG, &bodyPartHP, 0, NULL);
+		SQLGetData(hStmt, 4, SQL_C_LONG, &defense, 0, NULL);
+		SQLGetData(hStmt, 5, SQL_C_BIT, &hasArmor, 0, NULL);
+		SQLGetData(hStmt, 6, SQL_C_LONG, &armorDef, 0, NULL);
+		SQLGetData(hStmt, 7, SQL_C_BIT, &hasWeapon, 0, NULL);
+		SQLGetData(hStmt, 8, SQL_C_LONG, &bodyPartID, 0, NULL);
 
-
-		NullTerminateString(bodyPartName, sizeof(bodyPartName));
+		
+		//NullTerminateString(bodyPartName, sizeof(bodyPartName));
 		std::string convertedbodyPartName = reinterpret_cast<char*>(bodyPartName);
 		
 		if (convertedbodyPartName == "Head") {
@@ -759,7 +750,7 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 			Game::getinstance().playerN.Thorax.hasWeapon = hasWeapon;
 		}
 		else {
-			Game::getinstance().playerN.Trunk.HP = bodyPartHP;
+   			Game::getinstance().playerN.Trunk.HP = bodyPartHP;
 			Game::getinstance().playerN.Trunk.armorDef = armorDef;
 			Game::getinstance().playerN.Trunk.hasArmor = hasArmor;
 			Game::getinstance().playerN.Trunk.def = defense;
@@ -769,25 +760,24 @@ bool SQLCONN::loadPlayerHitbox(int ID) {
 		}
 	
 	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-	disconnect();
+	//disconnect();
 	return true;
 }
 
-bool SQLCONN::playerSkillsLoading(int ID) {
+bool SQLCONN::playerSkillsLoading() {
 	if (Game::getinstance().playerN.getID() == 0) {
 		//get player ID. Player is auto saved once created and passes the first dungeon
 		if (!getplayerID()) {
 			std::cout << "\n Failed to get playerID\n";
 			return false;
 		}
-
 	}
-	if (isConnectionActive()) {
+	/*if (isConnectionActive()) {
 		SQLDisconnect(sqlConnection);
 	}
 	if (!connect()) {
 		return false;
-	}
+	}*/
 	
 	SQLHSTMT hStmt;
 
@@ -804,7 +794,7 @@ bool SQLCONN::playerSkillsLoading(int ID) {
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
 	}
-	SQLINTEGER sqlID = ID;
+	SQLINTEGER sqlID = Game::getinstance().playerN.getID();
 	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_C_LONG, 0, 0, &sqlID, 0, NULL);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
@@ -870,21 +860,22 @@ bool SQLCONN::playerSkillsLoading(int ID) {
 			Game::getinstance().playerN.addSkill(std::move(newSkill));
 		}
 		
-		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		
 	}
+	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 	Game::getinstance().playerN.setNumAtks();
 	
-	disconnect();
+	//disconnect();
 	return true;
 }
 
  bool SQLCONN::saveplayerHitBox() {
-	 if (isConnectionActive()) {
+	/* if (isConnectionActive()) {
 		 SQLDisconnect(sqlConnection);
 	 }
 	if (!connect()) {
 		return false;
-	}
+	}*/
 	
 	std::string bodyPartName;
 	int defense, armorDef, bodyPartID, bodyPartHP;
@@ -957,7 +948,112 @@ bool SQLCONN::playerSkillsLoading(int ID) {
 	
 
 	
-	disconnect();
+	//disconnect();
 
 	return true;
 }
+
+
+ bool SQLCONN::saveAllData() {
+	 if (isConnectionActive()) {
+		 SQLDisconnect(sqlConnection);
+	 }
+	 if (!connect()) {
+		 return false;
+	 }
+
+	 SQLRETURN ret;
+	 SQLHSTMT hStmt;
+	 SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+
+	 // Begin transaction
+	 ret = SQLSetConnectAttr(sqlConnection, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, SQL_NTS);
+	 if (!SQL_SUCCEEDED(ret)) {
+		 std::cerr << "Failed to begin transaction" << std::endl;
+		 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		 disconnect();
+		 return false;
+	 }
+
+	 // Call your SQL functions within the transaction
+	 bool success = false;
+	 if (sqlSave() && saveplayerHitBox() && saveplayerSkills()) {
+		 success = true;
+	 }
+
+	 // Commit or rollback transaction based on success
+	 if (success) {
+		 ret = SQLEndTran(SQL_HANDLE_DBC, sqlConnection, SQL_COMMIT);
+		 if (!SQL_SUCCEEDED(ret)) {
+			 std::cerr << "Failed to commit transaction" << std::endl;
+			 success = false;
+		 }
+	 }
+	 else {
+		 ret = SQLEndTran(SQL_HANDLE_DBC, sqlConnection, SQL_ROLLBACK);
+		 if (!SQL_SUCCEEDED(ret)) {
+			 std::cerr << "Failed to rollback transaction" << std::endl;
+		 }
+	 }
+
+	 // End transaction
+	 ret = SQLSetConnectAttr(sqlConnection, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, SQL_NTS);
+
+	 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+	 disconnect();
+
+	 return success;
+
+
+ }
+ bool SQLCONN::loadAllData() {
+	 if (isConnectionActive()) {
+		 SQLDisconnect(sqlConnection);
+	 }
+	 if (!connect()) {
+		 return false;
+	 }
+
+	 SQLRETURN ret;
+	 SQLHSTMT hStmt;
+	 SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+
+	 // Begin transaction
+	 ret = SQLSetConnectAttr(sqlConnection, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, SQL_NTS);
+	 if (!SQL_SUCCEEDED(ret)) {
+		 std::cerr << "Failed to begin transaction" << std::endl;
+		 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		 disconnect();
+		 return false;
+	 }
+
+	 // Call your SQL functions within the transaction
+	 bool success = false;
+	 if (loadPlayerData(Game::getinstance().playerN.getName()) && loadPlayerHitbox() && playerSkillsLoading()) {
+		 success = true;
+	 }
+
+	 // Commit or rollback transaction based on success
+	 if (success) {
+		 ret = SQLEndTran(SQL_HANDLE_DBC, sqlConnection, SQL_COMMIT);
+		 if (!SQL_SUCCEEDED(ret)) {
+			 std::cerr << "Failed to commit transaction" << std::endl;
+			 success = false;
+		 }
+	 }
+	 else {
+		 ret = SQLEndTran(SQL_HANDLE_DBC, sqlConnection, SQL_ROLLBACK);
+		 if (!SQL_SUCCEEDED(ret)) {
+			 std::cerr << "Failed to rollback transaction" << std::endl;
+		 }
+	 }
+
+	 // End transaction
+	 ret = SQLSetConnectAttr(sqlConnection, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, SQL_NTS);
+
+	 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+	 disconnect();
+
+	 return success;
+ }
+

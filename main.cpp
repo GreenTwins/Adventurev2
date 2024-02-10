@@ -37,14 +37,19 @@ int main() {
 	//newGame.playerN.displayAllStats();
 
 	MainMenu& mainmenu = MainMenu::getInstance();
+	SQLCONN& sqlconn = SQLCONN::createInstance();
 	if (!mainmenu.display()) {
 		return -1;
 	}
 	Game::getinstance().playerN.displayAllStats();
 	if (Game::getinstance().newChar) {
-		SQLCONN::createInstance().sqlSave();
+		if (!sqlconn.saveAllData()) {
+			return -1;
+		}
+
+		/*SQLCONN::createInstance().sqlSave();
 		SQLCONN::createInstance().saveplayerSkills();
-		SQLCONN::createInstance().saveplayerHitBox();
+		SQLCONN::createInstance().saveplayerHitBox();*/
 		Game::getinstance().newChar = false;
 	}
 	

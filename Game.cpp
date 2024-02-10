@@ -568,6 +568,7 @@ The end result should be to determine if you go to the game console
 *******************************************************************************************************/
 bool MainMenu::display()const {
 	int option = 0;
+	int _numofOptions = 2;
 	bool GoToConsole = true;
 	std::string name;
 	std::cout << "---MAIN MENU---" << std::endl;
@@ -576,7 +577,18 @@ bool MainMenu::display()const {
 
 
 	std::cout << "\n What would you like to do?: ";
-	std::cin >> option;
+	do {
+		if (std::cin >> option) {
+			if (option <= 2) {
+				break;
+			}
+		}
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "\nInvalid choice. Try again";
+		
+	} while (true);
+	
 	Game& gameInstance = Game::getinstance();
 	switch (option) {
 
@@ -599,7 +611,7 @@ bool MainMenu::display()const {
 			GoToConsole = false;
 		}
 		//load chosen player
-		if ((!sqlInstance.loadPlayerData(gameInstance.playerN.getName()))|| (!sqlInstance.playerSkillsLoading(gameInstance.playerN.getID())|| (!sqlInstance.loadPlayerHitbox(gameInstance.playerN.getID())))) {
+		if (!sqlInstance.loadAllData()){
 			std::cout << "Error loading player \n";
 			GoToConsole = false;
 		}

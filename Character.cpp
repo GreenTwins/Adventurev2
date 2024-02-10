@@ -198,7 +198,7 @@ void Character::setBodyType(std::string bodyType) {
 		LeftArm.def = getDef();
 		RightArm.def = getDef(); 
 		LeftLeg.def = getDef();
-		LeftArm.def = getDef();
+		RightLeg.def = getDef();
 
 		Head.bodyName = "Head";
 		Torso.bodyName = "Torso";

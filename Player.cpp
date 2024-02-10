@@ -63,6 +63,7 @@ Player& Player::operator=(Player&& other) noexcept {
 		listofSkills = std::move(other.listofSkills);
 		ClassSkills = std::move(other.ClassSkills);
 		numofAtks = other.numofAtks;
+		loaded = other.loaded;
 		setStr(other.getStr());
 		setDef(other.getDef());
 		setSpd(other.getSpd());
@@ -350,9 +351,12 @@ void Player::displayAllStats()const {
 		}
 	};
 
-	for (int i = 0; i < listofSkills.size(); ++i) {
-		displaySkill(listofSkills[i], i + 1);
-	}
+		for (int i = 0; i < listofSkills.size(); ++i) {
+			displaySkill(listofSkills[i], i + 1);
+		}
+	
+	
+	
 	std::cout << std::string(45, '-') << "\n";
 
 	//Display skills
@@ -362,8 +366,15 @@ void Player::displayAllStats()const {
 		<< std::right << "Type" << " : " << skill.getSkillType() <<" Desc: "<<skill.getSkillEffect() <<"\n";
 	};
 	
-	for (int i = 0; i < Class->listofClassSpecificSkills.size(); ++i) {
-		displayClassSkill(Class->listofClassSpecificSkills[i], i + 1);
+	if (!loaded) {
+		for (int i = 0; i < Class->listofClassSpecificSkills.size(); ++i) {
+			displayClassSkill(Class->listofClassSpecificSkills[i], i + 1);
+		}
+	}
+	else {
+		for (int i = 0; i < ClassSkills.size(); ++i) {
+			displayClassSkill(ClassSkills[i], i + 1);
+		}
 	}
 
 	std::cout << std::string(45, '-') << "\n";

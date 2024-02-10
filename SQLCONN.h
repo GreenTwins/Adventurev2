@@ -24,15 +24,17 @@ public:
 	//gather all enemies from sql
 	void getEnemies(int loc, int dunNum, std::vector<Enemy>& e);
 	//bool getBoss(int loc, int dunNum, Boss& b);
+	bool saveAllData();
+	bool loadAllData();
 	bool sqlSave();
 	bool InvSave();
 	bool getplayerID();
 	std::vector<std::string>playerList;
 	bool loadPlayerData(const std::string& a);
 	bool saveplayerHitBox();
-	bool loadPlayerHitbox(int);
+	bool loadPlayerHitbox();
 	bool saveplayerSkills();
-	bool playerSkillsLoading(int);
+	bool playerSkillsLoading();
 	/*bool loadPlayerInventory(int ID);
 	bool grabStoreData(int lvl);
 	bool deleteInventory(int ID);*/
