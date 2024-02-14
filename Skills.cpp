@@ -7,7 +7,7 @@
 Skills::Skills() {
 
 }
-Skills::Skills(const std::string& sN, const std::string& rT, float rP, const std::string& sT, const std::string& sE, float sEA, int aA, const std::string& aT) {
+Skills::Skills(const std::string& sN, const std::string& rT, float rP, const std::string& sT, const std::string& sE, float sEA, int aA, const std::string& aT, int sL, const std::string& bR) {
 	skillName = sN;
 	requirementType = rT;
 	requirementPayment = rP;
@@ -16,6 +16,8 @@ Skills::Skills(const std::string& sN, const std::string& rT, float rP, const std
 	skillEffectAmt = sEA;
 	atkAmt = aA;
 	applicationType = aT;
+	skillLvl = sL;
+	bodyReq = bR;
 }
 Skills::Skills(const Skills& o) {
 	skillName = o.skillName;
@@ -50,7 +52,8 @@ Skills::Skills(Skills&& o)noexcept {
 	skillEffectAmt = o.skillEffectAmt;
 	atkAmt = o.atkAmt;
 	applicationType = o.applicationType;
-
+	bodyReq = o.bodyReq;
+	skillLvl = o.skillLvl;
 }
 
 Skills & Skills::operator=(Skills && other) noexcept {
@@ -64,6 +67,8 @@ Skills & Skills::operator=(Skills && other) noexcept {
 		skillEffectAmt = other.skillEffectAmt;
 		atkAmt = other.atkAmt;
 		applicationType = std::move(other.applicationType);
+		bodyReq = std::move(other.bodyReq);
+		skillLvl = std::move(other.skillLvl);
 		// No need to release resources of 'other' because it's a move operation
 	}
 	return *this;
@@ -73,6 +78,12 @@ Skills::~Skills() {
 }
 bool Skills::operator==(const Skills& o)const {
 	return (this->skillName == o.skillName);
+}
+void Skills::setBodyReq(std::string bR) {
+	bodyReq = bR;
+}
+void Skills::setSkillLvl(int sL) {
+	skillLvl = sL;
 }
 void Skills::updateSkillName(std::string sN) {
 	skillName = sN;
@@ -129,4 +140,10 @@ std::string Skills::getAppType()const {
 }
 int Skills::getSkillID()const {
 	return skillID;
+}
+std::string Skills::getBodyReq()const {
+	return bodyReq;
+}
+int Skills::getSkillLvl()const {
+	return skillLvl;
 }

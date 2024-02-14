@@ -166,8 +166,8 @@ bool SQLCONN::saveplayerSkills() {
 		return false;
 	}*/
 	//load data into vars
-	int skillID, atkAmt, player_ID, boss_ID;
-	std::string skillName, ReqTypes, skillTypes, skillEffect, appType;
+	int skillID, atkAmt, player_ID, skillLevel;
+	std::string skillName, ReqTypes, skillTypes, skillEffect, appType, bodyReq;
 	float ReqPayment, EffectAmt;
 
 	if (Game::getinstance().playerN.getID() == 0) {
@@ -195,10 +195,12 @@ bool SQLCONN::saveplayerSkills() {
 		skillTypes = skill.getSkillType();
 		skillEffect = skill.getSkillEffect();
 		appType = skill.getAppType();
+		bodyReq = skill.getBodyReq();
 
 		atkAmt = skill.getatkAmt();
 		ReqPayment = skill.getRequirementPayment();
 		EffectAmt = skill.getSkillEffectAmt();
+		skillLevel = skill.getSkillLvl();
 
 		
 		SQLHSTMT hStmt;
@@ -210,8 +212,8 @@ bool SQLCONN::saveplayerSkills() {
 			//save to sql
 			std::cout << "Saving new data..." << std::endl;
 
-			sqlQuery = (SQLWCHAR*)L"INSERT INTO Skills_Table (skillName, ReqTypes, ReqPayment, skillTypes, skillEffect, EffectAmt, atkAmt, appType, player_ID)"
-				L"VALUES (?,?,?,?,?,?,?,?,?)";
+			sqlQuery = (SQLWCHAR*)L"INSERT INTO Skills_Table (skillName, ReqTypes, ReqPayment, skillTypes, skillEffect, EffectAmt, atkAmt, appType, player_ID, skillLevel, bodyReq)"
+				L"VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 			ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 			if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
@@ -234,7 +236,8 @@ bool SQLCONN::saveplayerSkills() {
 			ret = SQLBindParameter(hStmt, 7, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &atkAmt, 0, NULL);
 			ret = SQLBindParameter(hStmt, 8, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)appType.c_str(), 0, &stringLength);
 			ret = SQLBindParameter(hStmt, 9, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &player_ID, 0, NULL);
-		
+			ret = SQLBindParameter(hStmt, 10, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &skillLevel, 0, NULL);
+			ret = SQLBindParameter(hStmt, 11, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)bodyReq.c_str(), 0, &stringLength);
 			
 
 

@@ -14,11 +14,13 @@ class Skills {
 	float skillEffectAmt;
 	int atkAmt;
 	std::string applicationType;
-	int skillID;
+	int skillID; //only recv through SQL
+	int skillLvl; //default is 1
+	std::string bodyReq;
 public:
 	Skills();
 	Skills(const std::string&, const std::string&, float,
-		const std::string&, const std::string&, float, int, const std::string&);
+		const std::string&, const std::string&, float, int, const std::string&, int, const std::string&);
 	Skills(const Skills&);
 	Skills(Skills&&)noexcept;
 	Skills& operator=(const Skills&);
@@ -36,7 +38,8 @@ public:
 	void updateReqType(std::string);
 	void setapplicationType(std::string);
 	void setSkillID(int);
-
+	void setBodyReq(std::string);
+	void setSkillLvl(int);
 	//getters
 	std::string getSkillName()const;
 	std::string getRequirementType()const;
@@ -47,6 +50,8 @@ public:
 	int getSkillEffectAmt()const;
 	int getatkAmt()const;
 	int getSkillID()const;
+	std::string getBodyReq()const;
+	int getSkillLvl()const;
 
 
 };

@@ -442,6 +442,130 @@ void Character::setBodyType(std::string bodyType) {
 		
 		return;
 	}
+
+	if (bodyType == "Ooze") {
+		//ooze requires complete destruction
+		upperBody.emplace(std::make_pair<std::string, float>("Torso", 1.00f));
+		
+		Torso.HP = 1.00f * (getHP());
+		Torso.bodyName = "Torso";
+		Torso.def = getDef();
+		upperHitBox.push_back(Torso);
+		return;
+	}
+	if (bodyType == "Beast") {
+		upperBody.emplace(std::make_pair<std::string, float>("Head", 0.20f));
+		upperBody.emplace(std::make_pair<std::string, float>("Torso", 0.36f));
+		upperBody.emplace(std::make_pair < std::string, float>("Left Arm", 0.11f));
+		upperBody.emplace(std::make_pair < std::string, float>("Right Arm", 0.11f));
+
+		lowerBody.emplace(std::make_pair<std::string, float>("Right Leg", 0.11f));
+		lowerBody.emplace(std::make_pair<std::string, float>("Left Leg", 0.11f));
+
+		Head.HP = 0.20f * (getHP());
+		Torso.HP = 0.36f * (getHP());
+		LeftArm.HP = 0.11f * (getHP());
+		RightArm.HP = 0.11f * (getHP());
+		LeftLeg.HP = 0.11f * (getHP());
+		RightLeg.HP = 0.11f * (getHP());
+
+		Head.def = getDef();
+		Torso.def = getDef();
+		LeftArm.def = getDef();
+		RightArm.def = getDef();
+		LeftLeg.def = getDef();
+		RightLeg.def = getDef();
+
+		Head.bodyName = "Head";
+		Torso.bodyName = "Torso";
+		LeftArm.bodyName = "Left Arm";
+		RightArm.bodyName = "Right Arm";
+		LeftLeg.bodyName = "Left Leg";
+		RightLeg.bodyName = "Right Leg";
+
+		lowerHitBox.push_back(RightLeg);
+		lowerHitBox.push_back(LeftLeg);
+
+		upperHitBox.push_back(Head);
+		upperHitBox.push_back(Torso);
+		upperHitBox.push_back(LeftArm);
+		upperHitBox.push_back(RightArm);
+		upperHitBox.push_back(LeftLeg);
+		upperHitBox.push_back(RightLeg);
+
+
+		return;
+	}
+	if (bodyType == "Plant") {
+		//will never have wings
+		if (hasLegs) {
+			upperBody.emplace(std::make_pair<std::string, float>("Head", 0.20f));
+			upperBody.emplace(std::make_pair<std::string, float>("Torso", 0.36f));
+			upperBody.emplace(std::make_pair < std::string, float>("Left Arm", 0.11f));
+			upperBody.emplace(std::make_pair < std::string, float>("Right Arm", 0.11f));
+
+			lowerBody.emplace(std::make_pair<std::string, float>("Right Leg", 0.11f));
+			lowerBody.emplace(std::make_pair<std::string, float>("Left Leg", 0.11f));
+
+			Head.HP = 0.20f * (getHP());
+			Torso.HP = 0.36f * (getHP());
+			LeftArm.HP = 0.11f * (getHP());
+			RightArm.HP = 0.11f * (getHP());
+			LeftLeg.HP = 0.11f * (getHP());
+			RightLeg.HP = 0.11f * (getHP());
+
+			Head.def = getDef();
+			Torso.def = getDef();
+			LeftArm.def = getDef();
+			RightArm.def = getDef();
+			LeftLeg.def = getDef();
+			RightLeg.def = getDef();
+
+			Head.bodyName = "Head";
+			Torso.bodyName = "Torso";
+			LeftArm.bodyName = "Left Arm";
+			RightArm.bodyName = "Right Arm";
+			LeftLeg.bodyName = "Left Leg";
+			RightLeg.bodyName = "Right Leg";
+
+			lowerHitBox.push_back(RightLeg);
+			lowerHitBox.push_back(LeftLeg);
+
+			upperHitBox.push_back(Head);
+			upperHitBox.push_back(Torso);
+			upperHitBox.push_back(LeftArm);
+			upperHitBox.push_back(RightArm);
+			upperHitBox.push_back(LeftLeg);
+			upperHitBox.push_back(RightLeg);
+
+
+			return;
+		}
+		upperBody.emplace(std::make_pair<std::string, float>("Head", 0.40f));
+		lowerBody.emplace(std::make_pair<std::string, float>("Torso", 0.60f));
+		
+
+		Head.HP = 0.40f * (getHP());
+		Torso.HP = 0.60f * (getHP());
+	
+
+		Head.def = getDef();
+		Torso.def = getDef();
+		
+
+		Head.bodyName = "Head";
+		Torso.bodyName = "Torso";
+	
+
+		
+
+		upperHitBox.push_back(Head);
+		lowerHitBox.push_back(Torso);
+		
+
+
+		return;
+	}
 }
 void Character::setHasLegs(bool legs) {
 	hasWings = legs;

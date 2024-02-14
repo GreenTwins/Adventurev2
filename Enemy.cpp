@@ -82,6 +82,9 @@ void Enemy::setDunLvl(int dL) {
 void Enemy::setDunLoc(int dL) {
 	dunLoc = dL;
 }
+void Enemy::setLvl(int level) {
+	lvl = level;
+}
 
 int Enemy::getDunLvl()const {
 	return dunlvl;
@@ -108,4 +111,7 @@ int Enemy::getGivenXp()const {
 }
 int Enemy::getGivenGold()const {
 	return givenGold;
+}
+int Enemy::getLvl()const {
+	return lvl;
 }

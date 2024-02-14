@@ -11,6 +11,7 @@ class Enemy : public Character {
 	int givenXP;
 	int dunlvl;
 	int dunLoc;
+	int lvl;
 public:
 	Enemy();
 	Enemy(const std::string, const std::string, int, int, int, float, int, int, int, int, int);
@@ -23,13 +24,14 @@ public:
 	void setGivenGold(int);
 	void setDunLvl(int);
 	void setDunLoc(int);
+	void setLvl(int);
 	//getters
 	int getatkNum()const;
 	int getDunLvl()const;
 	int getDunLoc()const;
 	int getGivenXp()const;
 	int getGivenGold()const;
-
+	int getLvl()const;
 	void loadSkills(Skills&&);
 	Skills&& removeSkills(std::string&);//this is for Hunter subclass
     //combine removeSkills and loadSkills for taking and receiving skills from player

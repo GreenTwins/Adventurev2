@@ -127,7 +127,7 @@ void Player::compileAllStats() {
 	setMP(MPamt + 50);
 	setMaxMp(MPamt + 50);
 	setFatigue(0);
-	float staminaamt = (((1.0f/3.0f) * (ptWorth *getDex()) + ((1.0f / 3.0f) * (ptWorth*getEnd()))));
+	float staminaamt = calculateStamin(getDex(), getEnd());
 	std::cout << staminaamt << "\n";
 	setStamina(10 + staminaamt);
 	setMaxStamina(getStamina());
@@ -140,6 +140,9 @@ void Player::compileAllStats() {
 	setLvl(1);
 	setGold(0);
 	setActiveJob("None");
+}
+float Player::calculateStamin(int dex, int endurance) {
+	return (((1.0f / 3.0f) * (ptWorth * dex) + ((1.0f / 3.0f) * (ptWorth * endurance))));
 }
 float Player::calculatePrec(int stamina, int& fatigue, int MaxStamina, int dex, int intel) {
 	float indicator = 0.60f * MaxStamina;
@@ -625,14 +628,14 @@ std::string playerClass::getSubClassName()const {
 void Mage::distributeClassSpecific(int lvl) {
 	// Add Mage-specific information
 	Skills primMageSkill1("Magic Resistance", "", 0, "Passive",
-		"player takes less dmg from magic attks", 0.40f, 0, "resist");
+		"player takes less dmg from magic attks", 0.40f, 0, "resist", 1, "Humanoid");
 	Skills primMageSkill2("Birthright", "", 0, "Passive",
-		"Magic based attks consume less mana", 0.30f, 0, "enhance");
+		"Magic based attks consume less mana", 0.30f, 0, "enhance", 1, "Humanoid");
 
 	//lvl 1 free atk
 	Skills MagicSkill1("Water bullets", "MP", (rand() % 15 + 1), "Attack",
 		": magic imbued water droplets-strong enough to pierce armor, fire at enemy "
-		, 0, (rand() % 6 + 1), "Specific ");
+		, 0, (rand() % 6 + 1), "Specific ", 1, "Humanoid");
 
 	if (lvl == 1) {
 		addClassSkill(std::move(primMageSkill1));
@@ -678,13 +681,13 @@ void Mage::subClassSelection() {
 	
 		_maxSkills = 5;
 		 std::vector<Skills>wizardSkills= {
-			 {"Fireball", "MP", 4, "Attack","summons a ball of fire", 0, (rand() % 6 + 1), " "},
-			 {"Water Whip", "MP", 4, "Attack",": water comes to your call and forms a weapon", 0, (rand() % 6 + 1), " "},
-			 {"Gale", "MP", 10, "Attack","calls forth wind spirits", 0, (rand() % 6 + 1), " "},
-			 {"Magic Missle", "MP", 12, "Attack",": bolts of energy shoot out towards your enemy", 0, 5, " "},
-			 {"Call to chaos", "MP", 15, "Attack",": a call from oblivion, fate chooses your spell", 0, (rand() % 8 + 1), " "},
-			 {"Magic Mark", "MP", 8, "Attack",": a curse is bestowed upon your enemy", 0, (rand() % 6 + 1), " "},
-			 {"Guiding Bolt", "MP", 10, "Attack",": from the heavens comes a gift of pain for your enemy", 0, (rand() % 6 + 1), " "},
+			 {"Fireball", "MP", 4, "Attack","summons a ball of fire", 0, (rand() % 6 + 1), " ",1, "All"},
+			 {"Water Whip", "MP", 4, "Attack",": water comes to your call and forms a weapon", 0, (rand() % 6 + 1), " ",1, "All"},
+			 {"Gale", "MP", 10, "Attack","calls forth wind spirits", 0, (rand() % 6 + 1), " ",1, "All"},
+			 {"Magic Missle", "MP", 12, "Attack",": bolts of energy shoot out towards your enemy", 0, 5, " ",1, "Humanoid"},
+			 {"Call to chaos", "MP", 15, "Attack",": a call from oblivion, fate chooses your spell", 0, (rand() % 8 + 1), " ",1, "All"},
+			 {"Magic Mark", "MP", 8, "Attack",": a curse is bestowed upon your enemy", 0, (rand() % 6 + 1), " ",1, "All"},
+			 {"Guiding Bolt", "MP", 10, "Attack",": from the heavens comes a gift of pain for your enemy", 0, (rand() % 6 + 1), " ",1, "Humanoid"},
 			 
 		};
 
@@ -697,14 +700,14 @@ void Mage::subClassSelection() {
 	else if (subclassN == "Paladin") {
 		_maxSkills = 5;
 		std::vector<Skills> paladinSkills = {
-			{"Holy Water shot", "MP", 5, "Attack", "holy water rains down", 0, (rand() % 6 + 1), "AOE "},
-			{"Blade of light slash", "MP", 10, "Attack", "a blade of pure light is conjured temporarily", 0, (rand() % 6 + 1), "Specific"},
-			{"Arrows of judgement", "MP", 30, "Attack", "light arrows descend down", 0, ((rand() % 6 + 1) * (rand() % 6 + 1)), "AOE"},
-			{"Magic Missle", "MP", 12, "Attack", ": bolts of energy shoot out towards your enemy", 0, 5, " "},
-			{"Cutting Laser", "MP", 15, "Attack", ": a single beam of focussed light ", 0, (rand() % 8 + 1), "Specific"},
-			{"Flash Bang", "MP", 3, "Attack", ":a bomb of light ", 0, (rand() % 6 + 1), " "},
-			{"Dawn Strike", "Stamina", 2, "Attack", "a destructive melee attack", 0, (rand() % 6 + 1), "Specific "},
-			{"Touch of light", "stamina", 5, "Attack", ": damage any evil that is grazed by your touch", 0, (rand() % 6 + 1), "Specific"}
+			{"Holy Water shot", "MP", 5, "Attack", "holy water rains down", 0, (rand() % 6 + 1), "AOE ",1, "Humanoid"},
+			{"Blade of light slash", "MP", 10, "Attack", "a blade of pure light is conjured temporarily", 0, (rand() % 6 + 1), "Specific",1, "Humanoid"},
+			{"Arrows of judgement", "MP", 30, "Attack", "light arrows descend down", 0, ((rand() % 6 + 1) * (rand() % 6 + 1)), "AOE",1, "Humanoid"},
+			{"Magic Missle", "MP", 12, "Attack", ": bolts of energy shoot out towards your enemy", 0, 5, " ",1, "All"},
+			{"Cutting Laser", "MP", 15, "Attack", ": a single beam of focussed light ", 0, (rand() % 8 + 1), "Specific",1, "Humanoid"},
+			{"Flash Bang", "MP", 3, "Attack", ":a bomb of light ", 0, (rand() % 6 + 1), " ",1, "Humanoid"},
+			{"Dawn Strike", "Stamina", 2, "Attack", "a destructive melee attack", 0, (rand() % 6 + 1), "Specific ",1, "Humanoid"},
+			{"Touch of light", "stamina", 5, "Attack", ": damage any evil that is grazed by your touch", 0, (rand() % 6 + 1), "Specific",1, "Humanoid"}
 		};
 		
 		for (int i = 0; i < paladinSkills.size(); ++i) {
@@ -716,14 +719,14 @@ void Mage::subClassSelection() {
 		_maxSkills = 5;
 		
 		std::vector<Skills>gamblerSkills = {
-			{"Lucky Punch", "MP",1.00f*(rand() % 31), "Attack", "A skill that allows the player to punch the enemy, dealing a random amt of damage at a random cost",0,(rand() % 31), "Specific"},
-			{"Cleave","MP", 1.00f * (rand() % 20), "Attack", "A possible mighty attack, that can slice space time...or a costly dud of an attack", 0,(rand() % 20),"AOE" },
-			{"Lacerate", "MP", 1.00f * (rand() % 10),"Attack", "A stolen slashing technique from the Warrior class. Unknown damage...",0,(rand() % 10), "AOE"},
-			{"Rend","MP", 1.00f * (rand() % 5), "Attack","A ball of energy that eviscerates the enemy..or is a harmless gust of wind..", 0,(rand() % 5),"AOE"},
-			{"Slot Machine", "MP", 30,"Attack", "Throw mana away in the hope that equivalent damage is dealt to enemy", 0,(rand() % 31),"AOE"},
-			{"Deconstruct", "MP",1.00f * (rand()%40), "Attack","An ultimate technique that can tear the enemy asunder", 0, (rand()%40), "AOE"},
-			{"Phishing for flames", "MP",1.00f * (rand()%5),"Attack", "A light weight tactic, used in hopes of scoring heavy damage",0 ,  (rand()%5), "Specific"},
-			{"Jackpot", "MP",1.00f * (rand()%8),"Attack","A sweet deal. Mana flows at random for cheap for quick damage", 0,(rand()%8+1),"AOE"}
+			{"Lucky Punch", "MP",1.00f*(rand() % 31), "Attack", "A skill that allows the player to punch the enemy, dealing a random amt of damage at a random cost",0,(rand() % 31), "Specific",1, "Humanoid"},
+			{"Cleave","MP", 1.00f * (rand() % 20), "Attack", "A possible mighty attack, that can slice space time...or a costly dud of an attack", 0,(rand() % 20),"AOE",1, "Humanoid" },
+			{"Lacerate", "MP", 1.00f * (rand() % 10),"Attack", "A stolen slashing technique from the Warrior class. Unknown damage...",0,(rand() % 10), "AOE",1, "Humanoid"},
+			{"Rend","MP", 1.00f * (rand() % 5), "Attack","A ball of energy that eviscerates the enemy..or is a harmless gust of wind..", 0,(rand() % 5),"AOE",1, "Humanoid"},
+			{"Slot Machine", "MP", 30,"Attack", "Throw mana away in the hope that equivalent damage is dealt to enemy", 0,(rand() % 31),"AOE",1, "Humanoid"},
+			{"Deconstruct", "MP",1.00f * (rand()%40), "Attack","An ultimate technique that can tear the enemy asunder", 0, (rand()%40), "AOE",1, "Humanoid"},
+			{"Phishing for flames", "MP",1.00f * (rand()%5),"Attack", "A light weight tactic, used in hopes of scoring heavy damage",0 ,  (rand()%5), "Specific",1, "Humanoid"},
+			{"Jackpot", "MP",1.00f * (rand()%8),"Attack","A sweet deal. Mana flows at random for cheap for quick damage", 0,(rand()%8+1),"AOE",1, "Humanoid"}
 		};
 
 		gamblersDelight.insert({ "Lucky Punch", 31 });
@@ -801,12 +804,12 @@ int Mage::getGambleatk(std::string atkname) {
 void Warrior::distributeClassSpecific(int lvl) {
 	// Add Warrior-specific information
 	Skills primWarriorSkill1("Natural Abuser", "", 0, "Passive",
-		"all melee attks give extra damage", 0.15f, 0, "enhance");
+		"all melee attks give extra damage", 0.15f, 0, "enhance", 1, "Humanoid");
 	Skills primWarriorSkill2("Rage", "stamina", 1, "Toggle",
-		"increase players str and spd", 0.20f, 0, "enhance");
+		"increase players str and spd", 0.20f, 0, "enhance", 1, "Humanoid");
 	//lvl 1 free atk
 	Skills WarriorSkill("Combo Rush", "Stamina", (rand() % 6 + 1), "Attack",
-		":open handed attacks backed by pure innate strength ", 0, (rand() % 6 + 1), "AOE");
+		":open handed attacks backed by pure innate strength ", 0, (rand() % 6 + 1), "AOE", 1, "Humanoid");
 
 	if (lvl == 1) {
 		addClassSkill(std::move(primWarriorSkill1));
@@ -855,14 +858,14 @@ void Warrior::subClassSelection() {
 		_maxSkills = 5;
 
 		std::vector<Skills> swordsmenSkills = {
-			{"Bladestorm", "Stamina", 2, "Attack", "your attack turns into a natural disaster of swinging blades", 0, (rand() % 6 + 1), "AOE "},
-			{"Piercing Strike", "Stamina", 1, "Attack", ": basic bladed attack", 0, (rand() % 6 + 1), "Specific"},
-			{"Barrage", "Stamina", 3, "Attack", "A rush of energy is converted to your blade", 0, (rand() % 6 + 1), " "},
-			{"Lacerate", "MP", 12, "Attack", ": magical strength gathers into your blade to add extra dmg", 0, (rand() % 10 + 1), "Specific "},
-			{"Slash x8", "Stamina", 15, "Attack", ": multiple slashes to the opponent", 0, (rand() % 8 + 1), " "},
-			{"Bone breaker", "Stamina", 2, "Attack", ": extra strength gathers in your arms for a single strike", 0, (rand() % 6 + 1), " "},
-			{"First strike", "stamina", 1, "Attack", ": way of the bladeless strike", 0, (rand() % 6 + 1), "Specific"},
-			{"Wingchun: Bui Sau", "Stamina", 1, "Attack", ": a 3 finger piercing technique", 0, (rand() % 6 + 1), " "}
+			{"Bladestorm", "Stamina", 2, "Attack", "your attack turns into a natural disaster of swinging blades", 0, (rand() % 6 + 1), "AOE ",1, "Humanoid"},
+			{"Piercing Strike", "Stamina", 1, "Attack", ": basic bladed attack", 0, (rand() % 6 + 1), "Specific",1, "Humanoid"},
+			{"Barrage", "Stamina", 3, "Attack", "A rush of energy is converted to your blade", 0, (rand() % 6 + 1), " ",1, "Humanoid"},
+			{"Lacerate", "MP", 12, "Attack", ": magical strength gathers into your blade to add extra dmg", 0, (rand() % 10 + 1), "Specific ",1, "Humanoid"},
+			{"Slash x8", "Stamina", 15, "Attack", ": multiple slashes to the opponent", 0, (rand() % 8 + 1), " ",1, "Humanoid"},
+			{"Bone breaker", "Stamina", 2, "Attack", ": extra strength gathers in your arms for a single strike", 0, (rand() % 6 + 1), " ",1, "Humanoid"},
+			{"First strike", "stamina", 1, "Attack", ": way of the bladeless strike", 0, (rand() % 6 + 1), "Specific",1, "Humanoid"},
+			{"Wingchun: Bui Sau", "Stamina", 1, "Attack", ": a 3 finger piercing technique", 0, (rand() % 6 + 1), " ",1, "Humanoid"}
 		};
 
 		for (int i = 0; i < swordsmenSkills.size(); ++i) {
@@ -877,8 +880,8 @@ void Warrior::subClassSelection() {
 		std::cout << " they have the ability to use any weapon equipped as well as absorb skills from humanoid opponents beaten\n";
 
 		std::vector<Skills> hunterSkills = {
-			{"Bone break", "stamina", 2, "Attack", "using brute strength to put down your opponent", 0, (rand() % 6 + 1), "Specific"},
-			{"Gluttony", "MP", 40, "Toggle", "Take 1 skill from opponent, success based on Hunter vs Hunted perc.", 0, 0, "Special"}
+			{"Bone break", "stamina", 2, "Attack", "using brute strength to put down your opponent", 0, (rand() % 6 + 1), "Specific",1, "Humanoid"},
+			{"Gluttony", "MP", 40, "Toggle", "Take 1 skill from opponent, success based on Hunter vs Hunted perc.", 0, 0, "Special",1, "Humanoid"}
 		};
 
 		for (int i = 0; i < hunterSkills.size(); ++i) {
@@ -891,12 +894,12 @@ void Warrior::subClassSelection() {
 		_maxSkills = 4;
 
 		std::vector<Skills>tankSkills = {
-			{"Telekenetic Grab","MP", 5, "Attack", "invisible forces snatch up your enemy, slamming them to the ground", 0, (rand() % 6 + 1), "AOE"},
-			{"Power smash", "Stamina",1, "Attack", "Brute strength used to drive into your enemy", 0, (rand() % 6 + 1),"Specific"},
-			{"Shockwave","MP", 2,"Attack","Mana flows into the muscles as you slam your fists into the ground", 0, (rand() % 6 + 1), "AOE"},
-			{"Reverse Suplex","Stamina", 2, "Attack", "Youre provided strength to hoist your enemy in the air before slamming them down", 0, (rand() % 6 + 1), "AOE"},
-			{"Cobra Clutch backbreaker", "Stamina", 4, "Attack", "no matter the size, all backs will be broken", 0, (rand()%6+1), "Specific"},
-			{"Firemans Carry", "Stamina", 1.00f * (rand()%6+1), "Attack", "the enemy is aquanted with the ground",0,(rand() % 6 + 1),"AOE"}
+			{"Telekenetic Grab","MP", 5, "Attack", "invisible forces snatch up your enemy, slamming them to the ground", 0, (rand() % 6 + 1), "AOE",1, "Humanoid"},
+			{"Power smash", "Stamina",1, "Attack", "Brute strength used to drive into your enemy", 0, (rand() % 6 + 1),"Specific",1, "Humanoid"},
+			{"Shockwave","MP", 2,"Attack","Mana flows into the muscles as you slam your fists into the ground", 0, (rand() % 6 + 1), "AOE",1, "Humanoid"},
+			{"Reverse Suplex","Stamina", 2, "Attack", "Youre provided strength to hoist your enemy in the air before slamming them down", 0, (rand() % 6 + 1), "AOE",1, "Humanoid"},
+			{"Cobra Clutch backbreaker", "Stamina", 4, "Attack", "no matter the size, all backs will be broken", 0, (rand()%6+1), "Specific",1, "Humanoid"},
+			{"Firemans Carry", "Stamina", 1.00f * (rand()%6+1), "Attack", "the enemy is aquanted with the ground",0,(rand() % 6 + 1),"AOE",1, "Humanoid"}
 
 		};
 		for (int i = 0; i < tankSkills.size(); ++i) {
@@ -974,11 +977,11 @@ bool Warrior::stealSkill(float success) {
 void Assassin::distributeClassSpecific(int lvl) {
 	// Add Assassin-specific information
 	Skills primAssassinSkill1("blade apprentice", "", 0, "Passive",
-		"all bladed weapons deal extra damage", 0.10f, 0, "enhance");
+		"all bladed weapons deal extra damage", 0.10f, 0, "enhance", 1, "Humanoid");
 	Skills primAssassinSkill2("Stealth", "MP", 3, "Toggle",
-		"the player is given an extra dodge", (rand() % 6 + 1), 0, "resist");
+		"the player is given an extra dodge", (rand() % 6 + 1), 0, "resist", 1, "Humanoid");
 	Skills assassinSkill("Hunt", "Stamina", 2, "Attack",
-		"", 0, (rand() % 6 + 1), "Specific");
+		"", 0, (rand() % 6 + 1), "Specific", 1, "Humanoid");
 
 	if(lvl==1){
 		addClassSkill(std::move(primAssassinSkill1));
@@ -1027,13 +1030,13 @@ void Assassin::subClassSelection() {
 		_maxSkills = 4;
 
 		std::vector<Skills>rogueSkills = {
-			{"Dagger rush", "Stamina", 1,"Attack", "A chained attack that pierces the target", 0, 5,"Specific"},
-			{"Bloodlust", "MP", 1.00f*(rand()%20+1), "Toggle", "if HP is less than 15 set HP to 0",0,0," "},
-			{"Shadow hunter", "Stamina", 2, "Attack", "lurk in the shadows to strike the opponent", 0, (rand()%6+1), "Specific"},
-			{"precise kill", "Stamina", 1.00f * (rand()%6+1), "Attack", "locate pressure points to incapacitate", 0, (rand()%6+1), "Specific"},
-			{"Dance with poison", "MP", 3, "Toggle", "if HP is less than 50 set HP to -3",0,0,"Effect"},
-			{"Shadow Dash", "Stamina", 1.00f*(rand()%6+1), "Attack", "quick attack from darkness", 0, (rand()%6+1),"Specific"},
-			{"Cobra strike", "Stamina", 2, "Attack", "lethal attack", 0, 5, "Specific"}
+			{"Dagger rush", "Stamina", 1,"Attack", "A chained attack that pierces the target", 0, 5,"Specific",1, "Humanoid"},
+			{"Bloodlust", "MP", 1.00f*(rand()%20+1), "Toggle", "if HP is less than 15 set HP to 0",0,0," ",1, "Humanoid"},
+			{"Shadow hunter", "Stamina", 2, "Attack", "lurk in the shadows to strike the opponent", 0, (rand()%6+1), "Specific",1, "Humanoid"},
+			{"precise kill", "Stamina", 1.00f * (rand()%6+1), "Attack", "locate pressure points to incapacitate", 0, (rand()%6+1), "Specific",1, "Humanoid"},
+			{"Dance with poison", "MP", 3, "Toggle", "if HP is less than 50 set HP to -3",0,0,"Effect",1, "Humanoid"},
+			{"Shadow Dash", "Stamina", 1.00f*(rand()%6+1), "Attack", "quick attack from darkness", 0, (rand()%6+1),"Specific",1, "Humanoid"},
+			{"Cobra strike", "Stamina", 2, "Attack", "lethal attack", 0, 5, "Specific",1, "Humanoid"}
 		};
 		for (int i = 0; i < rogueSkills.size(); ++i) {
 			displaySkill(rogueSkills[i], i + 1);

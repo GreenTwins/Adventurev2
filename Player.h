@@ -161,6 +161,7 @@ public:
 	void CustomizeStats(int, int);
 	void compileAllStats();
 	float calculatePrec(int, int&, int, int, int);
+	float calculateStamin(int, int);
 	int getLocation()const;
 	
 	
