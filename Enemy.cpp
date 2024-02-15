@@ -3,7 +3,17 @@
 Enemy::Enemy():Character() {
 
 }
-
+Enemy::Enemy(int intel, int lvl) {
+	if (intel < (lvl * 3)) {
+		atkCap = "minimum";
+	}
+	else if ((intel > (lvl * 3)) && (intel < (lvl*4))) {
+		atkCap = "median";
+	}
+	else {
+		atkCap = "maximum";
+	}
+}
 Enemy::Enemy(const std::string bT, const std::string n, int hp, int mp, int stam, 
 	float pre, int intel, int str, int def,  int spd, int dod) {
 	setBodyType(bT);

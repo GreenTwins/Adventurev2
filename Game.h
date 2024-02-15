@@ -103,7 +103,7 @@ public:
 	std::string ActiveMissionName;
 	std::map<int, std::string>locationforMissions; //holds dunNum grabbed and name
 	std::vector<std::map<int, int>>locations;//first int has mapLocation and 2nd is the num of dungeons at that location. The location also determines the size of the map
-	//std::vector<Enemy>enemyList;//this gets loaded based on the location
+	std::vector<Enemy>enemyList;//this gets loaded based on the location
 	bool GameInit = false;
 	static Game& getinstance();
 	void createPlayer(std::string n);

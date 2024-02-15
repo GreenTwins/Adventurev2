@@ -346,7 +346,7 @@ GAME CLASS init,cleaner, getters and setters
 Game::Game() {
 	/*MainMenu& master = MainMenu::getInstance();
 	master.display();*/
-	//enemyList.clear();
+	enemyList.clear();
 	locations.clear();
 	//BossReq.push_back("Troll"); not used
 	uploadWorldMap();
@@ -437,6 +437,59 @@ void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
 	catch (bool result) {
 		std::cout << "Database failed to connect" << std::endl;
 	}
+}
+
+bool Game::PrePlay() {
+	GameInit = true;
+	bool tryAgain = true;
+	bool success = false;
+	char option;
+	currentDunLvl = 1;
+	currentDunNum = 1; 
+	playerN.setLocation(currentDunLvl);
+	while (tryAgain) {
+		getLocationName(1);//starting new
+		Map newMap;
+		std::cout << "creating paths" << std::endl;
+		newMap.createPaths(currentDunLvl);
+		Game::getinstance().loadEnemies(1, 1, enemyList);
+		std::cout << enemyList.size();
+		if (play(newMap)) {
+			//go back to island
+			GameInit = false;
+			success = true;
+			tryAgain = false;
+		}
+		//got back to main menu or try again
+		else {
+			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
+			std::cin >> option;
+			if (option == 'Q' || option == 'q') {
+				tryAgain = false;
+			}
+			playerN.setHP(playerN.getMaxHP());
+		}
+	}
+	return success;
+}
+
+
+bool Game::play(Map& currentMap) {
+	//system(CLEAR_SCREEN);
+	currentMap.makeMove(1);
+
+	if (playerN.getHP() > 0) {
+		//system(CLEAR_SCREEN);
+		std::cout << "You've entered the Boss room" << std::endl;
+		if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
+			/*playerN.setGold(playerN.getcurrentMap.totalGold);
+			playerN.setXP(currentMap.totalXP);*/
+			return true;
+		}
+		return false;
+	}
+	std::cout << "You've died" << std::endl;
+	return false;
 }
 /******************************************************************************************************
 GAME CLASS game loading and instances
@@ -532,6 +585,102 @@ bool Game::PrePlay() {
 	//return success;
 	return true;
 }
+//Create code from input#include <iostream>
+//#include <iostream>
+//#include <sstream>
+//#include <vector>
+//#include <map>
+//#include <functional>
+//867688a60b0ee4f282fd0bafa50fbbde0cecdea6
+//
+//class Enemy {
+//public:
+//	Enemy(int hp) : hp(hp) {}
+//
+//	int getHP() const {
+//		return hp;
+//	}
+//
+//	void setHP(int newHP) {
+//		hp = newHP;
+//	}
+//
+//private:
+//	int hp;
+//};
+//
+//void lessThan(const std::string& subject, int checker, int result, Enemy& enemy) {
+//	if (subject == "HP") {
+//		if (result < 0) {
+//			//we are then subtracting this amount from HP
+//			std::cout << "subtracting\n";
+//			enemy.setHP(enemy.getHP() + result);
+//			return;
+//		}
+//		else {
+//			if (enemy.getHP() < checker) {
+//				enemy.setHP(result);
+//				return;
+//			}
+//		}
+//
+//		std::cout << "Your opponent has too much health to complete\n";
+//	}
+//	// Add more conditions for other subjects if needed
+//}
+//
+//void greaterThan(const std::string& subject, int checker, int result, Enemy& enemy) {
+//	// Implement similar logic for greater than
+//}
+//
+//void equalTo(const std::string& subject, int checker, int result, Enemy& enemy) {
+//	// Implement similar logic for equal to
+//}
+//
+//// Map operators to corresponding functions
+//std::map<std::string, std::function<void(const std::string&, int, int, Enemy&)>> operatorFunctions = {
+//	{"less", lessThan},
+//	{"greater", greaterThan},
+//	{"equal", equalTo}
+//};
+//
+//void parseAndExecute(const std::string& userInput, Enemy& enemy) {
+//	std::istringstream iss(userInput);
+//	std::string word;
+//	std::vector<std::string> words;
+//
+//	while (iss >> word) {
+//		words.push_back(word);
+//	}
+//
+//	if (words.size() >= 6) {
+//		std::string subject = words[1];
+//		std::string op = words[3];
+//		int checker, result;
+//		std::istringstream(words[5]) >> checker;
+//		std::istringstream(words[9]) >> result;
+//
+//		if (operatorFunctions.find(op) != operatorFunctions.end()) {
+//			operatorFunctions[op](subject, checker, result, enemy);
+//		}
+//		else {
+//			std::cout << "Invalid operator: " << op << "\n";
+//		}
+//	}
+//	else {
+//		std::cout << "Invalid input format\n";
+//	}
+//}
+//
+//int main() {
+//	Enemy enemy(2);
+//	std::string userInput = "if HP is less than 15 set HP to 0";
+//	parseAndExecute(userInput, enemy);
+//
+//	std::cout << "Enemy's HP after operation: " << enemy.getHP() << "\n";
+//
+//	return 0;
+//}
 /******************************************************************************************************
 GAME CLASS player association
 

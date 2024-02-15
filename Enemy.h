@@ -12,8 +12,10 @@ class Enemy : public Character {
 	int dunlvl;
 	int dunLoc;
 	int lvl;
+	std::string atkCap;
 public:
 	Enemy();
+	Enemy(int, int);
 	Enemy(const std::string, const std::string, int, int, int, float, int, int, int, int, int);
 	Enemy(const Enemy&);
 	Enemy(Enemy&&)noexcept;
