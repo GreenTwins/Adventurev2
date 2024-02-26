@@ -58,7 +58,7 @@ public:
 	void setSubClassName(std::string);
 	void addSkill(Skills&&);
 	void addClassSkill(Skills&&);
-	
+
 
 
 	// Getters
@@ -71,7 +71,7 @@ public:
 	std::vector<std::string>subClasses = { "Wizard","Paladin" ,"Gambler" };
 	void distributeClassSpecific(int) override;
 	void subClassSelection()override;
-	
+
 	//gambler specific
 	std::unordered_multimap<std::string, float>gamblersDelight;
 	/*virtual int getGambleatkmultip(std::string) = 0;
@@ -89,7 +89,7 @@ public:
 
 	//hunter speciic
 	bool stealSkill(float);
-	bool gluttonyActive(float,float);
+	bool gluttonyActive(float, float);
 };
 
 class Assassin : public playerClass {
@@ -108,7 +108,8 @@ public:
 
 
 class Player : public Character {
-	std::vector<int>dodge;
+	int maindodge;
+	int secondarydodge;
 	float dodgingSkill;
 	int level;
 	int XP;
@@ -119,7 +120,7 @@ class Player : public Character {
 	std::string ActiveJob;
 	const double ptWorth = 8.33;
 	bool chooseAtk;
-	
+
 	size_t numofAtks;
 	int location;
 	int ID;
@@ -130,7 +131,7 @@ public:
 	Player(const Player&);
 	Player(Player&&);
 	~Player();
-	
+
 	bool loaded = false;
 	void init();
 	//direct access
@@ -163,11 +164,11 @@ public:
 	float calculatePrec(int, int&, int, int, int);
 	float calculateStamin(int, int);
 	int getLocation()const;
-	
-	
+
+
 	void classSelection();
 	void loadClassSkills();
-	
+
 
 	//displays
 	void displayAllStats()const;

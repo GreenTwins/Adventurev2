@@ -25,7 +25,7 @@ currentLocation)
 //int 
 std::unique_ptr<int>determinenextconnectedPath(int path, int locationSize) {
 
-	std::map<int, int>& checker=Game::getinstance().nextPathTracker;
+	std::map<int, int>& checker = Game::getinstance().nextPathTracker;
 
 	if (checker.find(path) != checker.end() && checker[path] > 3) {
 		std::random_device rd;
@@ -439,57 +439,58 @@ void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
 	}
 }
 
-bool Game::PrePlay() {
-	GameInit = true;
-	bool tryAgain = true;
-	bool success = false;
-	char option;
-	currentDunLvl = 1;
-	currentDunNum = 1; 
-	playerN.setLocation(currentDunLvl);
-	while (tryAgain) {
-		getLocationName(1);//starting new
-		Map newMap;
-		std::cout << "creating paths" << std::endl;
-		newMap.createPaths(currentDunLvl);
-		Game::getinstance().loadEnemies(1, 1, enemyList);
-		std::cout << enemyList.size();
-		if (play(newMap)) {
-			//go back to island
-			GameInit = false;
-			success = true;
-			tryAgain = false;
-		}
-		//got back to main menu or try again
-		else {
-			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
-			std::cin >> option;
-			if (option == 'Q' || option == 'q') {
-				tryAgain = false;
-			}
-			playerN.setHP(playerN.getMaxHP());
-		}
-	}
-	return success;
-}
+//bool Game::PrePlay() {
+//	GameInit = true;
+//	bool tryAgain = true;
+//	bool success = false;
+//	char option;
+//	currentDunLvl = 1;
+//	currentDunNum = 1;
+//	playerN.setLocation(currentDunLvl);
+//	while (tryAgain) {
+//		getLocationName(1);//starting new
+//		Map newMap;
+//		std::cout << "creating paths" << std::endl;
+//		newMap.createPaths(currentDunLvl);
+//		Game::getinstance().loadEnemies(1, 1, enemyList);
+//		std::cout << enemyList.size();
+//		if (play(newMap)) {
+//			//go back to island
+//			GameInit = false;
+//			success = true;
+//			tryAgain = false;
+//		}
+//		//got back to main menu or try again
+//		else {
+//			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
+//			std::cin >> option;
+//			if (option == 'Q' || option == 'q') {
+//				tryAgain = false;
+//			}
+//			playerN.setHP(playerN.getMaxHP());
+//		}
+//	}
+//	return success;
+//}
 
 
 bool Game::play(Map& currentMap) {
 	//system(CLEAR_SCREEN);
-	currentMap.makeMove(1);
+	//currentMap.makeMove(1);
 
-	if (playerN.getHP() > 0) {
-		//system(CLEAR_SCREEN);
-		std::cout << "You've entered the Boss room" << std::endl;
-		if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
-			/*playerN.setGold(playerN.getcurrentMap.totalGold);
-			playerN.setXP(currentMap.totalXP);*/
-			return true;
-		}
-		return false;
-	}
-	std::cout << "You've died" << std::endl;
-	return false;
+	//if (playerN.getHP() > 0) {
+	//	//system(CLEAR_SCREEN);
+	//	std::cout << "You've entered the Boss room" << std::endl;
+	//	if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
+	//		/*playerN.setGold(playerN.getcurrentMap.totalGold);
+	//		playerN.setXP(currentMap.totalXP);*/
+	//		return true;
+	//	}
+	//	return false;
+	//}
+	//std::cout << "You've died" << std::endl;
+	//return false;
+	return true;
 }
 /******************************************************************************************************
 GAME CLASS game loading and instances
@@ -689,7 +690,7 @@ void Game::createPlayer(std::string n) {
 	Player p(n);
 	p.init();
 	p.preLoadAllSkills();
-	playerN =std::move(p);
+	playerN = std::move(p);
 	newChar = true;
 }
 
@@ -732,12 +733,12 @@ bool MainMenu::display()const {
 				break;
 			}
 		}
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\nInvalid choice. Try again";
-		
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "\nInvalid choice. Try again";
+
 	} while (true);
-	
+
 	Game& gameInstance = Game::getinstance();
 	switch (option) {
 
@@ -760,7 +761,7 @@ bool MainMenu::display()const {
 			GoToConsole = false;
 		}
 		//load chosen player
-		if (!sqlInstance.loadAllData()){
+		if (!sqlInstance.loadAllData()) {
 			std::cout << "Error loading player \n";
 			GoToConsole = false;
 		}

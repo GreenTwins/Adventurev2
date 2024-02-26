@@ -7,7 +7,7 @@
 Skills::Skills() {
 
 }
-Skills::Skills(const std::string& sN, const std::string& rT, float rP, const std::string& sT, const std::string& sE, float sEA, int aA, const std::string& aT, int sL, const std::string& bR) {
+Skills::Skills(const std::string& sN, const std::string& rT, float rP, const std::string& sT, const std::string& sE, float sEA, int aA, const std::string& aT, int sL, const std::string& bR, const std::string& atkT) {
 	skillName = sN;
 	requirementType = rT;
 	requirementPayment = rP;
@@ -18,6 +18,7 @@ Skills::Skills(const std::string& sN, const std::string& rT, float rP, const std
 	applicationType = aT;
 	skillLvl = sL;
 	bodyReq = bR;
+	atkType = atkT;
 }
 Skills::Skills(const Skills& o) {
 	skillName = o.skillName;
@@ -28,6 +29,8 @@ Skills::Skills(const Skills& o) {
 	skillEffectAmt = o.skillEffectAmt;
 	atkAmt = o.atkAmt;
 	applicationType = o.applicationType;
+	bodyReq = o.bodyReq;
+	atkType = o.atkType;
 }
 Skills& Skills::operator=(const Skills& other) {
 	if (this != &other) {
@@ -40,6 +43,10 @@ Skills& Skills::operator=(const Skills& other) {
 		skillEffectAmt = other.skillEffectAmt;
 		atkAmt = other.atkAmt;
 		applicationType = other.applicationType;
+		skillID = other.skillID;
+		skillLvl = other.skillLvl;
+		bodyReq = other.bodyReq;
+		atkType = other.atkType;
 	}
 	return *this;
 }
@@ -54,9 +61,12 @@ Skills::Skills(Skills&& o)noexcept {
 	applicationType = o.applicationType;
 	bodyReq = o.bodyReq;
 	skillLvl = o.skillLvl;
+	skillID = o.skillID;
+	bodyReq = o.bodyReq;
+	atkType = o.atkType;
 }
 
-Skills & Skills::operator=(Skills && other) noexcept {
+Skills& Skills::operator=(Skills&& other) noexcept {
 	if (this != &other) {
 		// Move-assign members from 'other' to 'this'
 		skillName = std::move(other.skillName);
@@ -69,6 +79,9 @@ Skills & Skills::operator=(Skills && other) noexcept {
 		applicationType = std::move(other.applicationType);
 		bodyReq = std::move(other.bodyReq);
 		skillLvl = std::move(other.skillLvl);
+		skillID = std::move(other.skillID);
+		bodyReq = std::move(other.bodyReq);
+		atkType = std::move(other.atkType);
 		// No need to release resources of 'other' because it's a move operation
 	}
 	return *this;
@@ -111,6 +124,13 @@ void Skills::setapplicationType(std::string aT) {
 }
 void Skills::setSkillID(int id) {
 	skillID = id;
+}
+void Skills::setatkType(std::string atkT) {
+	atkType = atkT;
+}
+
+std::string Skills::getAtkType()const {
+	return atkType;
 }
 std::string Skills::getSkillName()const {
 	return skillName;

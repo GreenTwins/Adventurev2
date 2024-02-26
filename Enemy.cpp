@@ -1,21 +1,11 @@
 #include "Enemy.h"
 
-Enemy::Enemy():Character() {
+Enemy::Enemy() :Character() {
 
 }
-Enemy::Enemy(int intel, int lvl) {
-	if (intel < (lvl * 3)) {
-		atkCap = "minimum";
-	}
-	else if ((intel > (lvl * 3)) && (intel < (lvl*4))) {
-		atkCap = "median";
-	}
-	else {
-		atkCap = "maximum";
-	}
-}
-Enemy::Enemy(const std::string bT, const std::string n, int hp, int mp, int stam, 
-	float pre, int intel, int str, int def,  int spd, int dod) {
+
+Enemy::Enemy(const std::string bT, const std::string n, int hp, int mp, int stam,
+	float pre, int intel, int str, int def, int spd, int dod) {
 	setBodyType(bT);
 	setName(n);
 	setHP(hp);
@@ -76,10 +66,50 @@ Enemy::Enemy(Enemy&& other)noexcept {
 	dunlvl = other.getDunLvl();
 	dunLoc = other.getDunLoc();
 }
+void Enemy::implementStats() {
+	int level = rand() % (getLvl()) + 1;
+	int currentLevel = getLvl();
+	setLvl(level);
+
+	int endurRoll = rand() % (getLvl() * 6) + 1;
+	int intelRoll = rand() % (getLvl() * 6) + 1;
+	int dexRoll = rand() % (getLvl() * 6) + 1;
+	setatkNum(intelRoll + 1);
+	if (getMP() == 0) {
+		setMP(intelRoll * currentLevel);
+	}
+
+	if (currentLevel < level) {
+		//upgrade everything else
+		setHP(getHP() + ((endurRoll + dexRoll) * level));
+		setMP(getMP() + (intelRoll * level));
+		setStr(getStr() * level);
+		setDef(getDef() * level);
+		setSpd(getSpd() * level);
+
+	}
+	setEnD(endurRoll);
+	setInt(intelRoll);
+	setDex(dexRoll);
+	setAtkCap(intelRoll, getLvl());
+}
 void Enemy::setatkNum(int num) {
 	atkNum = num;
 }
-
+void Enemy::setAtkCap(int intel, int lvl) {
+	if (intel < (lvl * 3)) {
+		atkCap = "minimum";
+		setatkNum(2);
+	}
+	else if ((intel > (lvl * 3)) && (intel < (lvl * 4))) {
+		atkCap = "median";
+		setatkNum(3);
+	}
+	else {
+		atkCap = "maximum";
+		setatkNum(4);
+	}
+}
 void Enemy::loadSkills(Skills&& o) {
 	listofSkills.push_back(std::move(o));
 }

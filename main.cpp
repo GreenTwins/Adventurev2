@@ -1,41 +1,23 @@
+
+#define _CRTDBG_MAP_ALLOC
 #include <iostream>
 #include <string>
+//#include "../hiredis-1.2.0/hiredis-1.2.0/hiredis.h"
 //#include "Player.h"
 #include "Game.h"
 #include "SQLCONN.h"
-
+#include <crtdbg.h>
 int main() {
+	/*redisContext* context = redisConnect("redis-18805.c322.us-east-1-2.ec2.cloud.redislabs.com", 18805);
+	if (context == NULL || context->err) {
+		std::cerr << "Error connecting to Redis: " << context->errstr << std::endl;
+		return 1;
+	}
+	std::cout << "Connected to Redis" << std::endl;
+	redisFree(context);*/
 
-	//Game& newGame = Game::getinstance();
-	//std::string inputName;
-	//std::cout << "What do you want to name your character?: ";
-	//std::getline(std::cin, inputName);
-	//newGame.createPlayer(inputName);
-	//
-	//newGame.playerN.displayAllStats();
-	//std::map<std::string, int>playeratk = newGame.playerN.attack();
 
-	//for (auto& atkData : playeratk) {
-	//	std::string atkName = atkData.first;
-	//	int atkDmg = atkData.second;
-	//	if (atkName == " ") {
-	////check if we can redo it but if not then its a whiff
-	//	std::cout << "You've made an attempt to attack but lack the ability to complete\n";
-
-	//	}
-	//	else if (atkName == "Effect") {
-	//////////		//use function to read said effect
-
-	//	}
-	//	else {
-	//		int totaldmg = atkDmg + newGame.playerN.getStr();
-	//		std::cout << newGame.playerN.getName() << " uses " << atkName;
-	//		std::cout << "\n Total attack power: " << totaldmg << "\n";
-	//	}
-	//}
-
-	//newGame.playerN.displayAllStats();
-
+	/*
 	MainMenu& mainmenu = MainMenu::getInstance();
 	SQLCONN& sqlconn = SQLCONN::createInstance();
 	if (!mainmenu.display()) {
@@ -46,13 +28,13 @@ int main() {
 		if (!sqlconn.saveAllData()) {
 			return -1;
 		}
+	}*/
+	Game& game = Game::getinstance();
+	SQLCONN& sqlconn = SQLCONN::createInstance();
+	sqlconn.getEnemies(1, 1, game.enemyList);
 
-		/*SQLCONN::createInstance().sqlSave();
-		SQLCONN::createInstance().saveplayerSkills();
-		SQLCONN::createInstance().saveplayerHitBox();*/
-		Game::getinstance().newChar = false;
+	for (auto enemy : game.enemyList) {
+		std::cout << enemy.getName() << "\n";
 	}
-	
-	
 	return 0;
 }

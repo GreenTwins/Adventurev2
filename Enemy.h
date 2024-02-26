@@ -15,7 +15,6 @@ class Enemy : public Character {
 	std::string atkCap;
 public:
 	Enemy();
-	Enemy(int, int);
 	Enemy(const std::string, const std::string, int, int, int, float, int, int, int, int, int);
 	Enemy(const Enemy&);
 	Enemy(Enemy&&)noexcept;
@@ -27,6 +26,8 @@ public:
 	void setDunLvl(int);
 	void setDunLoc(int);
 	void setLvl(int);
+	void setAtkCap(int, int);
+	void implementStats();
 	//getters
 	int getatkNum()const;
 	int getDunLvl()const;
@@ -36,7 +37,7 @@ public:
 	int getLvl()const;
 	void loadSkills(Skills&&);
 	Skills&& removeSkills(std::string&);//this is for Hunter subclass
-    //combine removeSkills and loadSkills for taking and receiving skills from player
+	//combine removeSkills and loadSkills for taking and receiving skills from player
 	//only Slime has that skill
 };
 
