@@ -285,22 +285,22 @@ int Map::availableMoves(int a) {
 
 	if (pathwayy[a]) {//this gets the .second of the map which is whether there is an enemy
 		//std::cout << "There is an enemy in the room" << std::endl;
-		//int listsize = Game::getinstance().enemyList.size();
-		//int randomEnemy = rand() % listsize + 1;
+		int listsize = Game::getinstance().enemyList.size();
+		int randomEnemy = rand() % listsize + 1;
 
-		/*Enemy newEnemy(currentDungeonNum);
 		if (randomEnemy >= listsize) {
-			newEnemy = Game::getinstance().enemyList[randomEnemy - 1];
+			randomEnemy -= 1;
+			
 		}
-		else {
-			newEnemy = Game::getinstance().enemyList[randomEnemy];
-		}
-		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";*/
+
+		Enemy newEnemy(Game::getinstance().enemyList[randomEnemy]);
+
+		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";
 
 
-		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
-		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
-		//std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemyPtr);
+		std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
+		std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
+		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemyPtr);
 
 		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
 
@@ -337,6 +337,38 @@ int Map::availableMoves(int a) {
 	nextPlacement = temp;
 	upDateTracker();
 	return temp;
+}
+
+void EnemyAttacks(Character& p1, Character& en) {
+
+}
+
+void PlayerAttacks(Character& p1, Character& en) {
+
+}
+std::unique_ptr<bool>Map::DungeonBattle(Player& p1, std::unique_ptr<Enemy>& en) {
+	int currentRound = 1; 
+	srand(time(NULL));
+
+	std::cout << (p1.getSpd() <= en->getSpd() ? en->getName() + " is faster!\n" : "Your speed is greater\n");
+
+	while ((p1.getHP() > 0) && (en->getHP() > 0)) {
+		if (p1.getSpd() <= en->getSpd()) {
+			//Enemy atk first
+			EnemyAttacks(p1, *en);
+			if (p1.getHP() > 0) {
+				//if player alive then can atk
+				PlayerAttacks(p1, *en);
+			}
+		}
+		else {
+			//player atk first
+			PlayerAttacks(p1, *en);
+			if (en->getHP() > 0) {
+				EnemyAttacks(p1, *en);
+			}
+		}
+	}
 }
 /******************************************************************************************************
 GAME CLASS init,cleaner, getters and setters
@@ -430,64 +462,65 @@ int Game::TravelonWorldMap() {
 }
 void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
 	try {
-		/*SQLCONN& enemyGrab = SQLCONN::createInstance();
-		enemyGrab.getEnemies(loc, dunNum, e);*/
-		//enemyGrab.disconnect();
+		SQLCONN& enemyGrab = SQLCONN::createInstance();
+		enemyGrab.LoadEnemies(loc, dunNum, e);
+		enemyGrab.disconnect();
 	}
 	catch (bool result) {
 		std::cout << "Database failed to connect" << std::endl;
 	}
 }
 
-//bool Game::PrePlay() {
-//	GameInit = true;
-//	bool tryAgain = true;
-//	bool success = false;
-//	char option;
-//	currentDunLvl = 1;
-//	currentDunNum = 1;
-//	playerN.setLocation(currentDunLvl);
-//	while (tryAgain) {
-//		getLocationName(1);//starting new
-//		Map newMap;
-//		std::cout << "creating paths" << std::endl;
-//		newMap.createPaths(currentDunLvl);
-//		Game::getinstance().loadEnemies(1, 1, enemyList);
-//		std::cout << enemyList.size();
-//		if (play(newMap)) {
-//			//go back to island
-//			GameInit = false;
-//			success = true;
-//			tryAgain = false;
-//		}
-//		//got back to main menu or try again
-//		else {
-//			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
-//			std::cin >> option;
-//			if (option == 'Q' || option == 'q') {
-//				tryAgain = false;
-//			}
-//			playerN.setHP(playerN.getMaxHP());
-//		}
-//	}
-//	return success;
-//}
+
+bool Game::PrePlay() {
+	GameInit = true;
+	bool tryAgain = true;
+	bool success = false;
+	char option;
+	currentDunLvl = 1;
+	currentDunNum = 1;
+	playerN.setLocation(currentDunLvl);
+	while (tryAgain) {
+		getLocationName(1);//starting new
+		Map newMap;
+		std::cout << "creating paths" << std::endl;
+		newMap.createPaths(currentDunLvl);
+		Game::getinstance().loadEnemies(1, 1, enemyList);
+		std::cout << enemyList.size();
+		if (play(newMap)) {
+			//go back to island
+			GameInit = false;
+			success = true;
+			tryAgain = false;
+		}
+		//got back to main menu or try again
+		else {
+			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
+			std::cin >> option;
+			if (option == 'Q' || option == 'q') {
+				tryAgain = false;
+			}
+			playerN.setHP(playerN.getMaxHP());
+		}
+	}
+	return success;
+}
 
 
 bool Game::play(Map& currentMap) {
 	//system(CLEAR_SCREEN);
-	//currentMap.makeMove(1);
+	currentMap.makeMove(1);
 
-	//if (playerN.getHP() > 0) {
-	//	//system(CLEAR_SCREEN);
-	//	std::cout << "You've entered the Boss room" << std::endl;
-	//	if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
-	//		/*playerN.setGold(playerN.getcurrentMap.totalGold);
-	//		playerN.setXP(currentMap.totalXP);*/
-	//		return true;
-	//	}
-	//	return false;
-	//}
+	if (playerN.getHP() > 0) {
+		//system(CLEAR_SCREEN);
+		std::cout << "You've entered the Boss room" << std::endl;
+		//if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
+		//	/*playerN.setGold(playerN.getcurrentMap.totalGold);
+		//	playerN.setXP(currentMap.totalXP);*/
+		//	return true;
+		//}
+		return false;
+	}
 	//std::cout << "You've died" << std::endl;
 	//return false;
 	return true;
@@ -552,40 +585,7 @@ bool Game::loadGame() {
 
 	return conn_success;
 }
-bool Game::PrePlay() {
-	GameInit = true;
-	bool tryAgain = true;
-	bool success = false;
-	char option;
-	currentDunLvl = 1;
-	currentDunNum = 1;
-	playerN.setLocation(currentDunLvl);
-	//while (tryAgain) {
-	//	getLocationName(1);//starting new
-	//	Map newMap;
-	//	std::cout << "creating paths" << std::endl;
-	//	newMap.createPaths(currentDunLvl);
-	//	Game::getinstance().loadEnemies(1, 1, Game::enemyList);
-	//	std::cout << Game::getinstance().enemyList.size();
-	//	if (play(newMap)) {
-	//		//go back to island
-	//		GameInit = false;
-	//		success = true;
-	//		tryAgain = false;
-	//	}
-	//	//got back to main menu or try again
-	//	else {
-	//		std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
-	//		std::cin >> option;
-	//		if (option == 'Q' || option == 'q') {
-	//			tryAgain = false;
-	//		}
-	//		Game::getinstance().playerN.refillHP();
-	//	}
-	//}
-	//return success;
-	return true;
-}
+
 //Create code from input#include <iostream>
 //#include <iostream>
 //#include <sstream>
@@ -748,9 +748,9 @@ bool MainMenu::display()const {
 
 
 		gameInstance.createPlayer(name);
-		/*if (!gameInstance.PrePlay()) {
+		if (!gameInstance.PrePlay()) {
 			GoToConsole = false;
-		}*/
+		}
 	}
 		  break;
 	case 2: {

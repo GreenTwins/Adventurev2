@@ -42,7 +42,7 @@ public:
 	void makeMove(int currLocation);
 	//void loadMapData();
 	//bool bossBattle(int loc, int dunNum, Player& p1);
-	//std::unique_ptr<bool> DungeonBattle(Player& pl, std::unique_ptr<Enemy>& en);
+	std::unique_ptr<bool> DungeonBattle(Player& pl, std::unique_ptr<Enemy>& en);
 
 
 
