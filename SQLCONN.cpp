@@ -9,6 +9,7 @@
 #include <locale>
 #include <string>
 #include <cmath>
+#include <thread>
 
 
 
@@ -1063,7 +1064,15 @@ bool SQLCONN::loadAllData() {
 
 	return success;
 }
+void SQLCONN::LoadEnemies(int location, int dungeonNum, std::vector<Enemy>&el) {
+	//}loadEnemies will be called if its a cache miss
+	std::thread EnemyStats(&SQLCONN::getEnemies,this, location, dungeonNum, std::ref(el));
+	std::thread EnemySkills(&SQLCONN::getEnemySkills,this);
 
+	EnemyStats.join();
+	EnemySkills.join();
+
+}
 
 
 bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
@@ -1079,9 +1088,6 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
-	//SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM Enemy_Table WHERE SpawnLocation = ? AND dungeonNum=?";
-	//SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
-   // SQLRETURN ret;
 	SQLWCHAR* storedProcedure = (SQLWCHAR*)L"{CALL GetEnemiesByLocationAndDungeon(?, ?)}";
 	SQLRETURN ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
 	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &locationValue, 0, NULL);
@@ -1107,27 +1113,6 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		return false;
 	}
 
-	/*ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &location, 0, NULL);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
-		SQLINTEGER nativeError;
-		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
-		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
-		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-		return false;
-	}
-	ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_INTEGER, SQL_INTEGER, 0, 0, &dungeonNum, 0, NULL);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
-		SQLINTEGER nativeError;
-		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
-		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
-		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-		return false;
-	}*/
-
 	ret = SQLExecute(hStmt);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
@@ -1138,7 +1123,9 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
 	}
-	std::cout << "fetching...." << std::endl;
+	std::cout << "fetching stats...." << std::endl;
+
+	std::lock_guard<std::mutex>_lock(_mu);
 	while (SQLFetch(hStmt) == SQL_SUCCESS) {
 
 		//std::cout << enemy.location << " :";
@@ -1166,6 +1153,7 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		std::string convertedBodyType = reinterpret_cast<char*>(BodyType);
 		// Populate Enemy object
 		Enemy enemy; //how smart they are determines how many skills they can use
+		enemy.setEnemyID(enemyID);
 		enemy.setDunLoc(SpawnLocation);
 		enemy.setDunLvl(dungeonNum);
 		enemy.setName(reinterpret_cast<char*>(EnemyName));
@@ -1194,8 +1182,121 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 
 		//std::cout << enemy.getName() << std::endl;
 		el.push_back(enemy);
+		++_vectorSize;
 	}
 
+
+	SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
+	disconnect();
+	_conVa.notify_one();
+	std::cout << "fethcing completed" << std::endl;
+	return true;
+}
+bool SQLCONN::getEnemySkills() {
+	{
+		std::unique_lock<std::mutex>uLock(_mu);
+		_conVa.wait_for(uLock, std::chrono::seconds(3), [this] {return(_vectorSize > 0); });
+	}
+	
+	if (isConnectionActive()) {
+		SQLDisconnect(sqlConnection);
+	}
+	if (!connect()) {
+		return false;
+	}
+
+	SQLINTEGER currentenemyID;
+	int enemyVecPosition = 0;
+	Enemy* updateEnemyPtr = nullptr;
+	while (enemyVecPosition < _vectorSize) {
+		currentenemyID = Game::getinstance().enemyList[enemyVecPosition].getID();
+		if (currentenemyID <= 0) {
+			//error break out of loop
+			std::cerr << "Hit a snag..";
+			break;
+		}
+		updateEnemyPtr = &Game::getinstance().enemyList[enemyVecPosition];
+		//now we need to check to see if 
+		SQLHSTMT hStmt;
+		SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+
+		SQLWCHAR* storedProcedure = (SQLWCHAR*)L"{CALL GetEnemiesMainSkills(?)}";
+		SQLRETURN ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
+		ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &currentenemyID, 0, NULL);
+		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+			SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
+			SQLINTEGER nativeError;
+			SQLSMALLINT length;
+			SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_MAX_MESSAGE_LENGTH, &length);
+			std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
+			SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+			return false;
+		}
+
+		ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
+		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+			SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+			SQLINTEGER nativeError;
+			SQLSMALLINT length;
+			SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+			std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+			SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+			return false;
+		}
+
+		ret = SQLExecute(hStmt);
+		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+			SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+			SQLINTEGER nativeError;
+			SQLSMALLINT length;
+			SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
+			std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+			SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+			return false;
+		}
+		std::cout << "fetching skills...." << std::endl;
+		while (SQLFetch(hStmt) == SQL_SUCCESS) {
+
+			
+			SQLCHAR skillName[255], ReqTypes[255], skillTypes[255], skillEffect[255], appType[255], bodyReq[255], attackType[255];
+			SQLINTEGER skillID, atkAmt, skillLevel;
+			SQLFLOAT ReqPayment, EffectAmt;
+
+			SQLGetData(hStmt, 1, SQL_C_LONG, &skillID, 0, NULL);
+			SQLGetData(hStmt, 2, SQL_C_CHAR, skillName, sizeof(skillName), NULL);
+			SQLGetData(hStmt, 3, SQL_C_CHAR, ReqTypes, sizeof(ReqTypes), NULL);
+			SQLGetData(hStmt, 4, SQL_C_FLOAT, &ReqPayment, 0, NULL);
+			SQLGetData(hStmt, 5, SQL_C_CHAR, skillTypes, sizeof(skillTypes),NULL);
+			SQLGetData(hStmt, 6, SQL_C_CHAR, skillEffect, sizeof(skillEffect), NULL);
+			SQLGetData(hStmt, 7, SQL_C_LONG, &EffectAmt, 0, NULL);
+			SQLGetData(hStmt, 8, SQL_C_LONG, &atkAmt, 0, NULL);
+			SQLGetData(hStmt, 9, SQL_C_CHAR, appType, sizeof(appType), NULL);
+			SQLGetData(hStmt, 10, SQL_C_LONG, &skillLevel, 0, NULL);
+			SQLGetData(hStmt, 11, SQL_C_CHAR, bodyReq, sizeof(bodyReq), NULL);
+			SQLGetData(hStmt, 12, SQL_C_CHAR, attackType, sizeof(attackType), NULL);
+
+			std::string convertedSkillName = reinterpret_cast<char*>(skillName);
+			std::string convertedReqType = reinterpret_cast<char*>(ReqTypes);
+			float convertedReqPayment = ReqPayment;
+			std::string convertedskillTypes = reinterpret_cast<char*>(skillTypes);
+			std::string conveertedskillEffect = reinterpret_cast<char*>(skillEffect);
+			float convertedeffectAmt = EffectAmt;
+			int convertedatkAmt = atkAmt;
+			std::string convertedappType = reinterpret_cast<char*>(appType);
+			int convertedSkillLevel = skillLevel;
+			std::string convertedBodyReq = reinterpret_cast<char*>(bodyReq);
+			std::string convertedAtkType = reinterpret_cast<char*>(attackType);
+
+			Skills _skill(convertedSkillName, convertedReqType, convertedReqPayment, convertedskillTypes, conveertedskillEffect, convertedeffectAmt, convertedatkAmt, convertedappType, convertedSkillLevel, convertedBodyReq, convertedAtkType);
+
+			updateEnemyPtr->loadSkills(std::move(_skill));
+			
+
+		}
+
+		updateEnemyPtr = nullptr;
+		++enemyVecPosition;
+	}
 
 	SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
 	disconnect();

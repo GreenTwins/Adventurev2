@@ -37,7 +37,7 @@ Enemy::Enemy(const Enemy& other) {
 	setDef(other.getDef());
 	setSpd(other.getSpd());
 	setInt(other.getInt());
-
+	setEnemyID(other.getID());
 	listofSkills = other.listofSkills;
 	atkNum = other.getatkNum();
 	givenGold = other.getGivenGold();
@@ -58,7 +58,7 @@ Enemy::Enemy(Enemy&& other)noexcept {
 	setDef(other.getDef());
 	setSpd(other.getSpd());
 	setInt(other.getInt());
-
+	setEnemyID(other.getID());
 	listofSkills = std::move(other.listofSkills);
 	atkNum = other.getatkNum();
 	givenGold = other.getGivenGold();
@@ -110,6 +110,9 @@ void Enemy::setAtkCap(int intel, int lvl) {
 		setatkNum(4);
 	}
 }
+void Enemy::setEnemyID(int enID) {
+	enemyID = enID;
+}
 void Enemy::loadSkills(Skills&& o) {
 	listofSkills.push_back(std::move(o));
 }
@@ -126,6 +129,9 @@ void Enemy::setLvl(int level) {
 	lvl = level;
 }
 
+int Enemy::getID()const {
+	return enemyID;
+}
 int Enemy::getDunLvl()const {
 	return dunlvl;
 }

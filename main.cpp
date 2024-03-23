@@ -31,10 +31,11 @@ int main() {
 	}*/
 	Game& game = Game::getinstance();
 	SQLCONN& sqlconn = SQLCONN::createInstance();
-	sqlconn.getEnemies(1, 1, game.enemyList);
+	sqlconn.LoadEnemies(1, 1, game.enemyList);
 
 	for (auto enemy : game.enemyList) {
-		std::cout << enemy.getName() << "\n";
+		std::cout << enemy.getName() << " uses ";
+		std::cout << enemy.listofSkills[0].getSkillName() << "\n";
 	}
 	return 0;
 }

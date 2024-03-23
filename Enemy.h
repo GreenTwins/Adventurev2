@@ -13,6 +13,7 @@ class Enemy : public Character {
 	int dunLoc;
 	int lvl;
 	std::string atkCap;
+	int enemyID; //this is only pulled from dB
 public:
 	Enemy();
 	Enemy(const std::string, const std::string, int, int, int, float, int, int, int, int, int);
@@ -27,6 +28,7 @@ public:
 	void setDunLoc(int);
 	void setLvl(int);
 	void setAtkCap(int, int);
+	void setEnemyID(int);
 	void implementStats();
 	//getters
 	int getatkNum()const;
@@ -35,6 +37,7 @@ public:
 	int getGivenXp()const;
 	int getGivenGold()const;
 	int getLvl()const;
+	int getID()const;
 	void loadSkills(Skills&&);
 	Skills&& removeSkills(std::string&);//this is for Hunter subclass
 	//combine removeSkills and loadSkills for taking and receiving skills from player

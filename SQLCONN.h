@@ -4,8 +4,8 @@
 
 #include <vector>
 #include "Enemy.h"
-
-
+#include "mutex"
+#include <condition_variable>
 
 
 
@@ -13,16 +13,22 @@ class SQLCONN {
 	SQLCONN();
 	~SQLCONN();
 
+	
 public:
+	std::mutex _mu;
+	std::condition_variable _conVa;
 	SQLCONN(const SQLCONN& o) = delete;
 	SQLCONN& operator=(const SQLCONN&) = delete;
 	static SQLCONN& createInstance();
+    int  _vectorSize;
 	bool connect();
 	void disconnect();
 	//display all chars
 	bool displayNames();
 	//gather all enemies from sql
+	void LoadEnemies(int loc, int dunNum, std::vector<Enemy>&e);
 	bool getEnemies(int loc, int dunNum, std::vector<Enemy>& e);
+	bool getEnemySkills();
 	//bool getBoss(int loc, int dunNum, Boss& b);
 	bool saveAllData();
 	bool loadAllData();
