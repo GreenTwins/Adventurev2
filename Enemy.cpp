@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include <tuple>
 
 Enemy::Enemy() :Character() {
 
@@ -24,10 +25,11 @@ Enemy::Enemy(const std::string bT, const std::string n, int hp, int mp, int stam
 Enemy::~Enemy() {
 
 }
-Enemy::Enemy(const Enemy& other) {
+Enemy::Enemy(const Enemy& other): Character(other) {
 	setBodyType(other.getBodyType());
 	setName(other.getName());
 	setHP(other.getHP());
+	setLvl(other.getLvl());
 	setMaxHP(other.getMaxHP());
 	setMP(other.getMP());
 	setMaxMp(other.getMaxMP());
@@ -45,10 +47,11 @@ Enemy::Enemy(const Enemy& other) {
 	dunlvl = other.getDunLvl();
 	dunLoc = other.getDunLoc();
 }
-Enemy::Enemy(Enemy&& other)noexcept {
+Enemy::Enemy(Enemy&& other)noexcept: Character(std::move(other)){
 	setBodyType(other.getBodyType());
 	setName(other.getName());
 	setHP(other.getHP());
+	setLvl(other.getLvl());
 	setMaxHP(other.getMaxHP());
 	setMP(other.getMP());
 	setMaxMp(other.getMaxMP());
@@ -66,8 +69,41 @@ Enemy::Enemy(Enemy&& other)noexcept {
 	dunlvl = other.getDunLvl();
 	dunLoc = other.getDunLoc();
 }
-void Enemy::implementStats() {
-	int level = rand() % (getLvl()) + 1;
+Enemy& Enemy::operator=(Enemy&& other)noexcept {
+	if (this != &other) {
+		// Move-assign members from 'other' to 'this'
+		// Example:
+		setName(other.getName());
+		enemyID = other.enemyID;
+		lvl = other.lvl;
+		setStr(other.getStr());
+		setDef(other.getDef());
+		setSpd(other.getSpd());
+		setInt(other.getInt());
+		setDex(other.getDex());
+		setEnD(other.getEnd());
+		setPrec(other.getPrec());
+		setMaxPrec(other.getMaxPrec());
+		setStamina(other.getStamina());
+		setMaxStamina(other.getMaxStamina());
+		setFatigue(other.getFatigue());
+		setHP(other.getHP());
+		setMaxHP(other.getMaxHP());
+		setMP(other.getMP());
+		setMaxMp(other.getMaxMP());
+		setBodyType(other.getBodyType());
+		listofSkills = other.listofSkills;
+		givenGold = other.givenGold;
+		givenXP = other.givenXP;
+		dunlvl = other.dunlvl;
+		dunLoc = other.dunLoc;
+		atkCap = other.atkCap;
+
+	}
+	return *this;
+}
+void Enemy::implementStats(int loc) {
+	int level = rand() % (getLvl()) + loc;
 	int currentLevel = getLvl();
 	setLvl(level);
 
@@ -92,10 +128,25 @@ void Enemy::implementStats() {
 	setInt(intelRoll);
 	setDex(dexRoll);
 	setAtkCap(intelRoll, getLvl());
+	setMaxHP(getHP());
+	setMaxMp(getMP());
+	setStamina(calculateStamin(getDex(), getEnd(),6.33 ));//dex, endurance, ptWorth which is 6.33 for enemies
+	setMaxStamina(getStamina());
+	int fati = getFatigue();
+	setPrec(calculatePrec(getStamina(), fati, getMaxStamina(), getDex(), getInt()));
+
+}
+std::tuple<std::string, int> Enemy::attack(Skills& currSkill) {
+	//std::cout<< Enemy::getName()<<" uses "<<currSkill.getSkillName();
+	//what type is it?
+	std::string atktype = currSkill.getAtkType();
+	std::string skilltype = currSkill.getSkillType();
+	
 }
 void Enemy::setatkNum(int num) {
 	atkNum = num;
 }
+
 void Enemy::setAtkCap(int intel, int lvl) {
 	if (intel < (lvl * 3)) {
 		atkCap = "minimum";

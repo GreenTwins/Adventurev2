@@ -44,6 +44,7 @@ Player::Player(Player&& other)
 {
 	// No need to call init() as the object is already initialized
 }
+
 Player& Player::operator=(Player&& other) noexcept {
 	if (this != &other) {
 		// Move-assign members from 'other' to 'this'
@@ -129,7 +130,7 @@ void Player::compileAllStats() {
 	setMP(MPamt + 50);
 	setMaxMp(MPamt + 50);
 	setFatigue(0);
-	float staminaamt = calculateStamin(getDex(), getEnd());
+	float staminaamt = calculateStamin(getDex(), getEnd(), ptWorth);
 	std::cout << staminaamt << "\n";
 	setStamina(10 + staminaamt);
 	setMaxStamina(getStamina());
@@ -143,29 +144,29 @@ void Player::compileAllStats() {
 	setGold(0);
 	setActiveJob("None");
 }
-float Player::calculateStamin(int dex, int endurance) {
-	return (((1.0f / 3.0f) * (ptWorth * dex) + ((1.0f / 3.0f) * (ptWorth * endurance))));
-}
-float Player::calculatePrec(int stamina, int& fatigue, int MaxStamina, int dex, int intel) {
-	float indicator = 0.60f * MaxStamina;
-	//std::cout << "indicator: " << indicator << "\n";
-	if (stamina < indicator) {
-		//std::cout << "stamina: " << stamina << " \n";
-		int fallenamt = indicator - stamina;
-		fatigue = fallenamt;
-	}
-	float precision = 0.00f;
-	precision = static_cast<float>(intel) / dex;
-
-	precision *= static_cast<float>(stamina - fatigue) / MaxStamina;
-	if (precision < 0.01f) {
-		precision = 0;
-	}
-	if (precision > 1) {
-		precision = 1.00f;
-	}
-	return precision * 100.0f;
-}
+//float Player::calculateStamin(int dex, int endurance) {
+//	return (((1.0f / 3.0f) * (ptWorth * dex) + ((1.0f / 3.0f) * (ptWorth * endurance))));
+//}
+//float Player::calculatePrec(int stamina, int& fatigue, int MaxStamina, int dex, int intel) {
+//	float indicator = 0.60f * MaxStamina;
+//	//std::cout << "indicator: " << indicator << "\n";
+//	if (stamina < indicator) {
+//		//std::cout << "stamina: " << stamina << " \n";
+//		int fallenamt = indicator - stamina;
+//		fatigue = fallenamt;
+//	}
+//	float precision = 0.00f;
+//	precision = static_cast<float>(intel) / dex;
+//
+//	precision *= static_cast<float>(stamina - fatigue) / MaxStamina;
+//	if (precision < 0.01f) {
+//		precision = 0;
+//	}
+//	if (precision > 1) {
+//		precision = 1.00f;
+//	}
+//	return precision * 100.0f;
+//}
 void Player::AutocreateStats() {
 	srand(time(NULL));
 	int atkRoll = rand() % 6 + 1;

@@ -3,7 +3,8 @@
 #include <queue>
 #include <map>
 #include <list>
-
+#include <mutex>
+#include "Attack.h"
 #include "Player.h"
 #include "Enemy.h"
 #pragma once
@@ -42,8 +43,8 @@ public:
 	void makeMove(int currLocation);
 	//void loadMapData();
 	//bool bossBattle(int loc, int dunNum, Player& p1);
-	std::unique_ptr<bool> DungeonBattle(Player& pl, std::unique_ptr<Enemy>& en);
-
+	std::unique_ptr<bool> DungeonBattle(Player& pl, Enemy& en);
+	
 
 
 	//SPOILS FROM BATTLE
@@ -69,6 +70,8 @@ public:
 
 #endif
 
+
+
 /******************************************************************************************************
 GAME CLASS
 
@@ -80,6 +83,7 @@ list of enemies based on location given, player interactions (load, fight, creat
 #pragma once
 #ifndef _GAME_H_
 #define _GAME_H_
+
 class Game {
 
 
@@ -89,7 +93,8 @@ class Game {
 	Game& operator=(const Game&) = delete;
 	bool onserver = false;
 	bool onlocal = false;
-
+	mutable std::mutex _createNamemtx_;
+	std::shared_ptr<AttackMod>_globalatk;
 public:
 	int currentDunNum = 0;
 	int currentDunLvl = 0;
@@ -99,9 +104,9 @@ public:
 	//map and dungeon creation
 	std::vector<Map>maps;
 	std::map<int, int>nextPathTracker;
-	std::vector<std::map<int, std::string>>AllMissions;
-	std::string ActiveMissionName;
-	std::map<int, std::string>locationforMissions; //holds dunNum grabbed and name
+	std::vector<std::map<int, std::string>>availableMissions;//loc and type
+	
+	
 	std::vector<std::map<int, int>>locations;//first int has mapLocation and 2nd is the num of dungeons at that location. The location also determines the size of the map
 	std::vector<Enemy>enemyList;//this gets loaded based on the location
 	bool GameInit = false;
@@ -109,12 +114,20 @@ public:
 	void createPlayer(std::string n);
 	//enter map-> map holds the dungeons and expects a player and a list of enemies as its input
 
+	//FLAGS
+	//bool CaveActive;
+	//bool ForestActive;
+	//bool RuinActive;
+	std::string ActiveMissionType;
 
+	std::string SpliceConstructedWord(std::string&,int);
 	bool loadGame();
 	bool startMission();
-	void loadAllMissions();
+	void createName(std::string&);
+	void loadAllMissions(int);
+	void createDungeon(int);
 	void displayMapsAvailable();
-	void loadEnemies(int loc, int dunNum, std::vector<Enemy>& enemyList);
+	void loadEnemies(int currloc, std::vector<Enemy>& enemyList);
 	bool PrePlay();
 	bool play(Map& currentMap);
 	void getLocationName(int loc);
@@ -123,6 +136,9 @@ public:
 	void fromLocal(bool i);
 	bool isLocal()const;
 	void SkillTree();
+	void EnemyskillApplication(const std::string&, Enemy&, Player&);
+	void PlayerskillApplication(const std::string&, Enemy&, Player&);
+
 
 	//STORE
 	void displayStore(int dunLvl);
@@ -141,6 +157,10 @@ public:
 	std::vector<std::map<std::string, bool>>world_map; //bool for visibility based on level if false user cant see name nor choose
 	void uploadWorldMap();
 	int TravelonWorldMap();
+
+	std::shared_ptr<AttackMod>getUniversalAtk();
+	void reduce(const std::string&, int, int, Enemy&);
+	void lessThan(const std::string&, int, int, Enemy&);
 
 };
 
@@ -166,6 +186,7 @@ public:
 	static MainMenu& getInstance();
 	void Save();
 	bool display()const;
+
 };
 
 

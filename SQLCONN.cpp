@@ -1064,34 +1064,49 @@ bool SQLCONN::loadAllData() {
 
 	return success;
 }
-void SQLCONN::LoadEnemies(int location, int dungeonNum, std::vector<Enemy>&el) {
+void SQLCONN::LoadEnemies(std::string locType, int location, std::vector<Enemy>&el) {
 	//}loadEnemies will be called if its a cache miss
-	std::thread EnemyStats(&SQLCONN::getEnemies,this, location, dungeonNum, std::ref(el));
-	std::thread EnemySkills(&SQLCONN::getEnemySkills,this);
+	std::vector<Enemy>* _listptr = nullptr;
+	if (locType == "Cave") {
+		_listptr = &CaveEnemies;
+	}
+	else if (locType == "Forest") {
+		_listptr = &ForestEnemies;
+	}
+	if (_listptr->empty()) {
+		std::thread EnemyStats(&SQLCONN::getEnemies, this, location, locType, std::ref(el));
+		std::thread EnemySkills(&SQLCONN::getEnemySkills, this);
 
-	EnemyStats.join();
-	EnemySkills.join();
-
+		EnemyStats.join();
+		EnemySkills.join();
+	}
+	else {
+		for (auto enemy : *_listptr) {
+			el.push_back(enemy);
+		}
+	}
 }
 
 
-bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
+bool SQLCONN::getEnemies(int location, std::string locType, std::vector<Enemy>& el) {
 	if (isConnectionActive()) {
 		SQLDisconnect(sqlConnection);
 	}
 	if (!connect()) {
 		return false;
 	}
-	SQLINTEGER locationValue = location;
-	SQLINTEGER dungeonNumValue = dungeonNum;
+	/*SQLINTEGER locationValue = location;
+	SQLINTEGER dungeonNumValue = dungeonNum;*/
 
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
-	SQLWCHAR* storedProcedure = (SQLWCHAR*)L"{CALL GetEnemiesByLocationAndDungeon(?, ?)}";
+	SQLWCHAR* storedProcedure = (SQLWCHAR*)L"{CALL GetEnemiesByLocationAndDungeon(?)}";
 	SQLRETURN ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
-	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &locationValue, 0, NULL);
-	ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &dungeonNumValue, 0, NULL);
+	//const char* locTypeCStr = locType.c_str();
+	SQLLEN locSize = locType.length();
+	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, locSize, 0, (SQLPOINTER)locType.c_str(), 0, NULL);
+	//ret = SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &dungeonNumValue, 0, NULL);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
@@ -1102,8 +1117,8 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		return false;
 	}
 
-	ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+	//ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
+	/*if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 		SQLINTEGER nativeError;
 		SQLSMALLINT length;
@@ -1111,7 +1126,7 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
-	}
+	}*/
 
 	ret = SQLExecute(hStmt);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
@@ -1132,7 +1147,7 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		// Assuming columns in order of EnemyID, SpawnLocation, EnemyName, HP, MP, STR, DEF, SPD, DODGE, SKILL1, SKILL2, SKILL3
 		SQLINTEGER enemyID, SpawnLocation, dungeonNum, HP, Str, Def, Spd, Intel, dex, endur, XPGiven, GoldGiven, enemyLvl;
 		bool hasWings, hasLegs;
-		SQLCHAR EnemyName[255], BodyType[255]; // Assuming max length of 50 for name
+		SQLCHAR EnemyName[255], BodyType[255], LocType[255]; // Assuming max length of 50 for name
 
 		SQLGetData(hStmt, 1, SQL_C_LONG, &enemyID, 0, NULL);
 		SQLGetData(hStmt, 2, SQL_C_CHAR, BodyType, sizeof(BodyType), NULL);
@@ -1143,27 +1158,29 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		SQLGetData(hStmt, 10, SQL_C_LONG, &Spd, 0, NULL);
 		SQLGetData(hStmt, 14, SQL_C_BIT, &hasWings, 0, NULL);
 		SQLGetData(hStmt, 15, SQL_C_BIT, &hasLegs, 0, NULL);
-		SQLGetData(hStmt, 16, SQL_C_LONG, &SpawnLocation, 0, NULL);
-		SQLGetData(hStmt, 17, SQL_C_LONG, &dungeonNum, 0, NULL);
-		SQLGetData(hStmt, 18, SQL_C_LONG, &enemyLvl, 0, NULL);
-		SQLGetData(hStmt, 19, SQL_C_LONG, &XPGiven, 0, NULL);
-		SQLGetData(hStmt, 20, SQL_C_LONG, &GoldGiven, 0, NULL);
+		/*SQLGetData(hStmt, 16, SQL_C_LONG, &SpawnLocation, 0, NULL);
+		SQLGetData(hStmt, 17, SQL_C_LONG, &dungeonNum, 0, NULL);*/
+		
+		SQLGetData(hStmt, 16, SQL_C_LONG, &enemyLvl, 0, NULL);
+		SQLGetData(hStmt, 17, SQL_C_LONG, &XPGiven, 0, NULL);
+		SQLGetData(hStmt, 18, SQL_C_LONG, &GoldGiven, 0, NULL);
+		SQLGetData(hStmt, 20, SQL_C_CHAR, &LocType, 0, NULL);
 
 		std::string convertedEnemyName = reinterpret_cast<char*>(EnemyName);
 		std::string convertedBodyType = reinterpret_cast<char*>(BodyType);
 		// Populate Enemy object
 		Enemy enemy; //how smart they are determines how many skills they can use
 		enemy.setEnemyID(enemyID);
-		enemy.setDunLoc(SpawnLocation);
-		enemy.setDunLvl(dungeonNum);
+		/*enemy.setDunLoc(SpawnLocation);
+		enemy.setDunLvl(dungeonNum);*/
 		enemy.setName(reinterpret_cast<char*>(EnemyName));
-
+		enemy.setHP(HP);
 		enemy.setStr(Str);
 		enemy.setDef(Def);
 		enemy.setSpd(Spd);
 		enemy.setLvl(enemyLvl);
 
-		enemy.implementStats();
+		enemy.implementStats(location);
 
 		if (hasLegs) {
 			enemy.setHasLegs(1);
@@ -1180,6 +1197,16 @@ bool SQLCONN::getEnemies(int location, int dungeonNum, std::vector<Enemy>& el) {
 		}
 		enemy.setBodyType(convertedBodyType);
 
+		//std::string loctype = reinterpret_cast<char*>(LocType);
+		if (locType == "Cave") {
+			CaveEnemies.push_back(enemy);
+		}
+		else if (locType == "Forest") {
+			ForestEnemies.push_back(enemy);
+		}
+		else {
+
+		}
 		//std::cout << enemy.getName() << std::endl;
 		el.push_back(enemy);
 		++_vectorSize;

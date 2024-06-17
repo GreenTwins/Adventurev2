@@ -15,6 +15,7 @@ class SQLCONN {
 
 	
 public:
+	
 	std::mutex _mu;
 	std::condition_variable _conVa;
 	SQLCONN(const SQLCONN& o) = delete;
@@ -26,8 +27,8 @@ public:
 	//display all chars
 	bool displayNames();
 	//gather all enemies from sql
-	void LoadEnemies(int loc, int dunNum, std::vector<Enemy>&e);
-	bool getEnemies(int loc, int dunNum, std::vector<Enemy>& e);
+	void LoadEnemies(std::string locType, int location, std::vector<Enemy>&e);
+	bool getEnemies(int, std::string locType, std::vector<Enemy>& e);
 	bool getEnemySkills();
 	//bool getBoss(int loc, int dunNum, Boss& b);
 	bool saveAllData();
@@ -36,6 +37,8 @@ public:
 	bool InvSave();
 	bool getplayerID();
 	std::vector<std::string>playerList;
+	std::vector<Enemy>CaveEnemies;
+	std::vector<Enemy>ForestEnemies;
 	bool loadPlayerData(const std::string& a);
 	bool saveplayerHitBox();
 	bool loadPlayerHitbox();

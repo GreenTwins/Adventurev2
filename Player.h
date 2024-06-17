@@ -161,14 +161,14 @@ public:
 	void CustomizecreateStats(int);
 	void CustomizeStats(int, int);
 	void compileAllStats();
-	float calculatePrec(int, int&, int, int, int);
-	float calculateStamin(int, int);
+	//float calculatePrec(int, int&, int, int, int);
+	//float calculateStamin(int, int);
 	int getLocation()const;
 
 
 	void classSelection();
 	void loadClassSkills();
-
+	
 
 	//displays
 	void displayAllStats()const;
@@ -187,6 +187,7 @@ public:
 	//overloads
 	//Player& operator=(const Player&);
 	Player& operator=(Player&& other) noexcept;
+	
 };
 
 

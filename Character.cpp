@@ -50,6 +50,42 @@ Character::Character(std::string a, std::string type) {
 	lowerBody.clear();
 
 }
+Character::Character(const Character& o) {
+	HP = o.HP;
+	maxHP = o.maxHP;
+	MP = o.MP;
+	maxMP = o.maxMP;
+	maxStamina = o.maxStamina;
+	maxPrec = o.maxPrec;
+	maxFatigue = o.maxFatigue;
+	stamina = o.stamina;
+	fatigue = o.fatigue;
+	prec = o.prec;
+	dodge = o.dodge;
+	upperBody = o.upperBody;
+	lowerBody = o.lowerBody;
+	Str = o.Str;
+	Def = o.Def;
+	Spd = o.Spd;
+	Int = o.Int;
+	dex = o.dex;
+	enD = o.enD;
+	hasWings = o.hasWings;
+	hasLegs = o.hasLegs;
+	Head = o.Head;
+	Torso = o.Torso;
+	LeftArm = o.LeftArm;
+	LeftLeg = o.LeftLeg;
+	RightArm = o.RightArm;
+	RightLeg = o.RightLeg;
+	Trunk = o.Trunk;
+	Tail = o.Tail;
+	Thorax = o.Thorax;
+	Abdomen = o.Abdomen;
+	BodyType = o.BodyType;
+	upperHitBox = o.upperHitBox;
+	lowerHitBox = o.lowerHitBox;
+}
 Character::Character(Character&& o)noexcept {
 	HP =          o.HP;
 	maxHP =       o.maxHP;
@@ -89,7 +125,29 @@ Character::Character(Character&& o)noexcept {
 Character::~Character() {
 	dodge.clear();
 }
+float Character::calculatePrec(int stamina, int& fatigue, int MaxStamina, int dex, int intel) {
+	float indicator = 0.60f * MaxStamina;
+	//std::cout << "indicator: " << indicator << "\n";
+	if (stamina < indicator) {
+		//std::cout << "stamina: " << stamina << " \n";
+		int fallenamt = indicator - stamina;
+		fatigue = fallenamt;
+	}
+	float precision = 0.00f;
+	precision = static_cast<float>(intel) / dex;
 
+	precision *= static_cast<float>(stamina - fatigue) / MaxStamina;
+	if (precision < 0.01f) {
+		precision = 0;
+	}
+	if (precision > 1) {
+		precision = 1.00f;
+	}
+	return precision * 100.0f;
+}
+float Character::calculateStamin(int dex, int endurance, int ptWorth) {
+	return (((1.0f / 3.0f) * (ptWorth * dex) + ((1.0f / 3.0f) * (ptWorth * endurance))));
+}
 std::string Character::getBodyType()const {
 	return BodyType;
 }
@@ -568,7 +626,7 @@ void Character::setBodyType(std::string bodyType) {
 	}
 }
 void Character::setHasLegs(bool legs) {
-	hasWings = legs;
+	hasLegs = legs;
 }
 void Character::setHasWings(bool wings) {
 	hasWings = wings;
@@ -639,3 +697,19 @@ void Character::setMP(int m) {
 	MP = m;
 }
 
+void Character::lessThan(const std::string& subject, int checker, int result, Character& ch) {
+	if (subject == "HP") {
+		if (result < 0) {
+			std::cout << "subtracting\n";
+			ch.setHP(ch.getHP() + result);
+			return;
+		}
+		else {
+			if (ch.getHP() < checker) {
+				ch.setHP(result);
+				return;
+			}
+		}
+		std::cout << " The opponent has too much health to complete\n";
+	}
+}

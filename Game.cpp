@@ -1,5 +1,9 @@
 #include "Game.h"
+#include <sstream>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <functional>
 #include <random>
 #include <string>
 #include "SQLCONN.h"
@@ -298,9 +302,9 @@ int Map::availableMoves(int a) {
 		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";
 
 
-		std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
-		std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
-		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemyPtr);
+		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
+		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
+		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
 
 		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
 
@@ -339,36 +343,56 @@ int Map::availableMoves(int a) {
 	return temp;
 }
 
-void EnemyAttacks(Character& p1, Character& en) {
-
+void EnemyAttacks(Player& p1, Enemy& en) {
+	int enRoll = rand()%en.getatkNum();
+	Skills *enSkill=  &en.listofSkills[enRoll];
+	
+	if (enSkill->getSkillType() != "On") {
+		//could be regular attack or toggles
+		if (enSkill->getSkillType() == "Toggle") {
+			enSkill->setatkType("On");
+			Game::getinstance().EnemyskillApplication(enSkill->getSkillEffect(), en, p1);
+		}
+		//something about effects
+		else {
+			std::cout << "regular atk";
+		}
+	}
+	else {
+		//its already on so redo
+	}
 }
 
 void PlayerAttacks(Character& p1, Character& en) {
 
 }
-std::unique_ptr<bool>Map::DungeonBattle(Player& p1, std::unique_ptr<Enemy>& en) {
+std::unique_ptr<bool>Map::DungeonBattle(Player& p1, Enemy& en) {
 	int currentRound = 1; 
 	srand(time(NULL));
 
-	std::cout << (p1.getSpd() <= en->getSpd() ? en->getName() + " is faster!\n" : "Your speed is greater\n");
+	std::cout << (p1.getSpd() <= en.getSpd() ? en.getName() + " is faster!\n" : "Your speed is greater\n");
 
-	while ((p1.getHP() > 0) && (en->getHP() > 0)) {
-		if (p1.getSpd() <= en->getSpd()) {
+	while ((p1.getHP() > 0) && (en.getHP() > 0)) {
+		if (p1.getSpd() <= en.getSpd()) {
 			//Enemy atk first
-			EnemyAttacks(p1, *en);
+			EnemyAttacks(p1, en);
 			if (p1.getHP() > 0) {
 				//if player alive then can atk
-				PlayerAttacks(p1, *en);
+				PlayerAttacks(p1, en);
 			}
 		}
 		else {
 			//player atk first
-			PlayerAttacks(p1, *en);
-			if (en->getHP() > 0) {
-				EnemyAttacks(p1, *en);
+			PlayerAttacks(p1, en);
+			if (en.getHP() > 0) {
+				EnemyAttacks(p1, en);
 			}
 		}
 	}
+	if (en.getHP() > 0) {
+		return std::make_unique<bool>(true);
+   }
+	return std::make_unique<bool>(false);
 }
 /******************************************************************************************************
 GAME CLASS init,cleaner, getters and setters
@@ -383,6 +407,8 @@ Game::Game() {
 	//BossReq.push_back("Troll"); not used
 	uploadWorldMap();
 	turnByturn = false;
+
+	
 }
 Game::~Game() {
 	std::cout << "Game instance deleted" << std::endl;
@@ -460,10 +486,198 @@ int Game::TravelonWorldMap() {
 	}
 	return travelLocation;
 }
-void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
+std::shared_ptr<AttackMod>Game::getUniversalAtk() {
+	return _globalatk;
+}
+void Game::loadAllMissions(int currLoc) {
+	createDungeon(currLoc); //what dun is available at given loc and load types -> end shows active mission  
+	loadEnemies(currLoc, enemyList);
+}
+std::string Game::SpliceConstructedWord(std::string& word, int mapItem) {
+	try {
+		if ((mapItem > 2)||(mapItem < 0)) {
+			throw(mapItem);
+		}
+		std::string splicedWord;
+		size_t posofSpace = word.find(' ');
+		//int countToSpace = std::stoi(word.substr(0, posofSpace));
+		if (mapItem == 1) {
+			splicedWord = word.substr(0, posofSpace);
+		}
+		else {
+		
+			splicedWord = word.substr(posofSpace + 1);
+		}
+
+		return splicedWord;
+	}
+	catch (...) {
+		std::cout << "\nError detected. MapItem not a 1 or a 2. Redoing: \n";
+		return SpliceConstructedWord(word, 1);
+	}
+}
+void Game::createName(std::string& placement) {
+	while (true) {
+		if (_createNamemtx_.try_lock()) {
+			break; // Break out of the loop once we acquire the lock
+		}
+		else {
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		}
+	}
+	std::vector<std::string>_desc = {};
+	std::vector<std::string>_name = {};
+	if (placement.length() > 6) {
+		placement = SpliceConstructedWord(placement, 1);
+	}
+	try {
+		if (placement == "Cave") {
+			_desc = { "Blyke ","Blue ","Baker ","Mammoth ","Ellora ","Reed Flute ","The Silent " };
+			_name = { "Cave","Grotto","Cavern","Cave","Hallows","Hole","OverHang","Hideout","Den","Shelter","Abyss" };
+		}
+		else if (placement == "Forest") {
+			_desc = { "Thick Basin","Hallow","Misty Oak","Loch","Treacherous" };
+			_name = { "Grove","Woods","Wilds","Forest","Woodland","Thicket" };
+		}
+		else if (placement == "Deep Forest") {
+
+		}
+		else if (placement == "Hillside") {
+
+		}
+		else if (placement == "Dungeon") {
+
+		}
+		else {
+			throw (placement);
+		}
+
+		srand(time(NULL));
+		std::string locationName = (_desc[rand()%_desc.size()] + _name[rand()%_name.size()]);
+		placement = placement + " " + locationName;
+	}
+	catch (...) {
+		std::cerr << "\nexception caught inside createDungeon: \n";
+		
+	}
+	//load new mission name this will be thread safe
+
+	//std::lock_guard<std::mutex>lock(_createNamemtx_);
+	
+	_createNamemtx_.unlock();
+}
+void Game::createDungeon(int loc) {
+	std::map<int, std::string>_dunLoc;
+	int _missionchoice = 0;
+	switch (loc) {
+	case 1: {
+		_dunLoc[1] = "Cave";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[2] = "Forest";
+		//availableMissions.push_back(_dunLoc);
+		int randomDun = rand()% 2;
+		_dunLoc[3] = (randomDun == 0) ? "Cave" : "Forest";
+		
+	}
+		  break;
+	case 2: {
+		_dunLoc[1] = "Deep Forest";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[2] = " Hillside";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[3] = "Dungeon";
+		//availableMissions.push_back(_dunLoc);
+	}
+		  break;
+	case 3: {
+		_dunLoc[1] = "Ruins";
+		_dunLoc[2] = "Ruins";
+		_dunLoc[3] = "Ruins";
+		//availableMissions.push_back(_dunLoc);
+	}
+		  break;
+	case 4: {
+		_dunLoc[1] = "Town";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[2] = "Swamp";
+		//availableMissions.push_back(_dunLoc);
+	}
+		  break;
+	default:
+		std::cerr << "\nWe run an error in the location loading\n";
+		break;
+	}
+	//now currMiss is loaded with loc type and you have the current LocLevel
+	//pick 3 types to send to name creator func()
+	//from name creator, player chooses which mission to go on
+	//chosen mission type is used to call the dB, the locLevel is used (+1) to determine enemy lvl
+	//any failure will be caught and throw to a higher level rerun
+	//std::vector<std::string>_mapTypes;
+	/*int _missionsSize = availableMissions.size();
+	std::string Mapsavailable;
+	for (int i = 0; i < 3; ++i) {
+		int randNum = rand() % _missionsSize;
+		for (auto type : availableMissions[randNum]) {
+			Mapsavailable = type.second;
+		}
+		_mapTypes.push_back(Mapsavailable);
+	}*/
+	//using dunLoc to get the type of Location and the have the threads create the 3 names. Inside of the threads the & of the string obj has its contents changed
+	//to hold the newly formed name. This can then be used again to grab the enemies func using 
+	//_dunLoc.size();
+	try {
+		std::vector<std::thread>_workerThreads;
+
+	
+		
+		for (auto& ot : _dunLoc)
+			_workerThreads.push_back(std::thread(&Game::createName, this, std::ref(ot.second)));
+		
+		for (auto& pt : _workerThreads)
+			pt.join();
+	}
+	catch (std::string e) {
+		std::cout << "Failure. This is what was given as param to createName: " << e;
+	}
+	
+
+	/*std::thread first(&Game::createName, this, std::ref(_mapTypes[0]));
+	std::thread second(&Game::createName, this, std::ref(_mapTypes[1]));
+	std::thread third(&Game::createName, this, std::ref(_mapTypes[2]));*/
+
+	/*first.join();
+	second.join();
+	third.join();*/
+
+
+	//display available missions
+	int index = 1;
+	for (auto& mapelem : _dunLoc) {
+
+		std::cout << index << ".) " << mapelem.second << std::endl;
+		mapelem.second = SpliceConstructedWord(mapelem.second, 1); //we dont need the name anymore
+		++index;
+	}
+	std::cout << "\n Which mission will you choose?: ";
+	std::cin >> _missionchoice;
+
+	int finder = 1;
+	for (auto& choice : _dunLoc) {
+		if (finder == _missionchoice) {
+			//choice.second= SpliceConstructedWord(choice.second, 2);
+			ActiveMissionType = choice.second;
+		}
+		++finder;
+	}
+	//ActiveMissionType = "blah";//gotta come up with a way to get not just the name but also the type and pass the type to LoadEnemies(type, e);
+
+}
+
+void Game::loadEnemies(int currLoc, std::vector<Enemy>& e) {
 	try {
 		SQLCONN& enemyGrab = SQLCONN::createInstance();
-		enemyGrab.LoadEnemies(loc, dunNum, e);
+		//loadAllMissions(currLoc);
+		enemyGrab.LoadEnemies(ActiveMissionType, currLoc, e);
 		enemyGrab.disconnect();
 	}
 	catch (bool result) {
@@ -485,10 +699,11 @@ bool Game::PrePlay() {
 		Map newMap;
 		std::cout << "creating paths" << std::endl;
 		newMap.createPaths(currentDunLvl);
-		Game::getinstance().loadEnemies(1, 1, enemyList);
+		Game::getinstance().loadEnemies(1, enemyList);
 		std::cout << enemyList.size();
 		if (play(newMap)) {
 			//go back to island
+
 			GameInit = false;
 			success = true;
 			tryAgain = false;
@@ -524,6 +739,77 @@ bool Game::play(Map& currentMap) {
 	//std::cout << "You've died" << std::endl;
 	//return false;
 	return true;
+}
+Game::Game() : _globalatk(std::make_shared<AttackMod>()) {}
+
+void reduce(const std::string& obj, int duration, int amount, Enemy& en, std::shared_ptr<AttackMod>_gA) {
+	if (obj == "HP") {
+		if (duration == 0) {
+			std::cout << "removing " << amount << " from " << en.getHP() << std::endl;
+			_gA->effectAmt = 100;
+			_gA->atkAmt = amount;
+		}
+	}
+}
+void lessThan(const std::string& subj, int checker, int result, Enemy& en, std::shared_ptr<AttackMod>_gA) {
+	if (subj == "HP"){
+		if (result < 0) {
+			std::cout << "subtracting\n";
+			en.setHP(en.getHP() + result);
+			//effectamt
+			_gA->atkAmt = result;
+		}
+		else {
+			if (en.getHP() < checker) {
+				en.setHP(result);
+				_gA->atkAmt = result;
+			}
+			else {
+				std::cout << "Your opponent has too much health to complete \n";
+			}
+		}
+	}
+}
+void greaterThan(const std::string& subj, int checker, int result, Enemy& en, std::shared_ptr<AttackMod>_gA) {
+
+}
+void equalTo(const std::string& subj, int checker, int result, Enemy& en, std::shared_ptr<AttackMod>_gA) {
+
+}
+std::map<std::string, std::function<void(const std::string&, int, int, Enemy&, std::shared_ptr<AttackMod>)>>operatorFunctions = {
+	{"less", lessThan},
+	{"greater", greaterThan},
+	{"equal", equalTo},
+	{"reduce", reduce}
+};
+void Game::EnemyskillApplication(const std::string& effectinput, Enemy& en, Player& p1) {
+	std::istringstream iss(effectinput);
+	std::string word;
+	std::vector<std::string>words;
+
+	while (iss >> word) {
+		words.push_back(word);
+	}
+
+	if (words[0] == "-") {
+		std::string subject = words[2];
+		std::string op = "reduce";
+		int duration = 0, amount;
+		std::istringstream(words[1]) >> amount;
+
+		try {
+			std::istringstream durationStream(words[4]);
+			durationStream.exceptions(std::ios::failbit | std::ios::badbit);
+			durationStream >> duration;
+		}
+		catch (const std::ios_base::failure& e) {
+			duration = 0;
+		}
+
+		/*if (operatorFunctions.find(op) != operatorFunctions.end()) {
+			operatorFunctions[op](subject, duration, amount, en, );
+		}*/
+	}
 }
 /******************************************************************************************************
 GAME CLASS game loading and instances

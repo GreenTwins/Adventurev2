@@ -14,6 +14,7 @@ class Enemy : public Character {
 	int lvl;
 	std::string atkCap;
 	int enemyID; //this is only pulled from dB
+	
 public:
 	Enemy();
 	Enemy(const std::string, const std::string, int, int, int, float, int, int, int, int, int);
@@ -29,7 +30,7 @@ public:
 	void setLvl(int);
 	void setAtkCap(int, int);
 	void setEnemyID(int);
-	void implementStats();
+	void implementStats(int);
 	//getters
 	int getatkNum()const;
 	int getDunLvl()const;
@@ -42,6 +43,11 @@ public:
 	Skills&& removeSkills(std::string&);//this is for Hunter subclass
 	//combine removeSkills and loadSkills for taking and receiving skills from player
 	//only Slime has that skill
+	Enemy& operator=(Enemy&& other)noexcept;
+
+	std::tuple<std::string, int> attack(Skills& currSkill);
+	
+	
 };
 
 #endif

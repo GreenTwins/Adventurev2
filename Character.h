@@ -36,6 +36,7 @@ class Character {
 public:
     Character();
     Character(std::string, std::string);
+    Character(const Character&);
     Character(Character&&)noexcept;
     ~Character();
 
@@ -63,6 +64,10 @@ public:
     bool withLegs()const;
     int getUpperBodysize()const;
     int getLowerBodysize()const;
+
+    //in game calc
+    float calculatePrec(int, int&, int, int, int);
+    float calculateStamin(int, int,int);
 
 
     // Setters
@@ -110,5 +115,14 @@ public:
     void takeUpperBodyDmg(int);
     void takeLowerBodyDmg();
     void takePreciseDmg();
+
+    //skillEffect
+    void lessThan(const std::string&, int, int, Character&);
+    void greaterThan(const std::string&, int, int, Character&);
+    void equalTo(const std::string&, int, int, Character&);
+    std::map<std::string, std::is_function<void(const std::string&, int, int, Character&)>>operatorFunctions;
+    void parseAndExecute(const std::string&, Character&);
+
+
 };
 #endif

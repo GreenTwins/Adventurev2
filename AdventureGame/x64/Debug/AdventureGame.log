@@ -1,1 +1,118 @@
-﻿  AdventureGame.vcxproj -> C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\x64\Debug\AdventureGame.exe
+﻿  Character.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Character.cpp(133,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Character.cpp(229,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Character.cpp(233,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Enemy.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Enemy.cpp(16,13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Enemy.cpp(133,48): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Enemy.cpp(134,26): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Enemy.cpp(136,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  FlavianBattleTester.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(9,7): warning C4101: 'enemyLoadOption': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(8,7): warning C4101: 'playerLoadOption': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(137,16): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(150,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(153,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(157,81): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(160,44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(162,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(191,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(194,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(198,79): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(201,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\FlavianBattleTester.cpp(203,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Game.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(262,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(287,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(292,16): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(371,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(555,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(683,14): warning C4101: 'result': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(743,7): error C2084: function 'Game::Game(void)' already has a body
+  C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Game.cpp(402,7):
+  see previous definition of '{ctor}'
+  
+  main.cpp
+  Player.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(126,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(129,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(133,57): warning C4244: 'argument': conversion from 'const double' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(136,26): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(138,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(171,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(639,57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(781,39): warning C4101: 'e': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(792,17): warning C4244: '=': conversion from 'const _Ty2' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(792,17): warning C4244:         with
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(792,17): warning C4244:         [
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(792,17): warning C4244:             _Ty2=float
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(792,17): warning C4244:         ]
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(814,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(944,39): warning C4101: 'e': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(964,22): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(985,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(1091,39): warning C4101: 'e': unreferenced local variable
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:         with
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:             _Ty=int
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:         ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:         and
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:             _Ty2=float
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54): warning C4244:         ]
+  (compiling source file 'Player.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\utility(250,54):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(735,26):
+  	see reference to function template instantiation 'std::pair<const std::string,float>::pair<const char(&)[12],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Other1=const char (&)[12],
+              _Other2=int
+          ]
+  		C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Player.cpp(735,25):
+  		see the first reference to 'std::pair<const std::string,float>::pair' in 'Mage::subClassSelection'
+  
+  Skills.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Skills.cpp(108,19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Skills.cpp(111,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Skills.cpp(143,9): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Skills.cpp(152,9): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
+  SQLCONN.cpp
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(204,43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(205,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(172,6): warning C4101: 'skillID': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(359,56): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(334,43): warning C4101: 'dodge': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(586,17): warning C4244: 'argument': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(593,14): warning C4244: 'argument': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(594,17): warning C4244: 'argument': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(540,18): warning C4101: 'hasLegs': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(540,8): warning C4101: 'hasWings': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(697,42): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(704,46): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(711,46): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(718,45): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(725,45): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(732,43): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(739,45): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(746,42): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(753,44): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(760,43): warning C4244: '=': conversion from 'SQLINTEGER' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(828,12): warning C4101: 'bodyPartHP': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(830,18): warning C4101: 'hasWeapon': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(830,8): warning C4101: 'hasArmor': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(827,54): warning C4101: 'playerID': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(901,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(888,25): warning C4101: 'bodyPartID': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1148,38): warning C4101: 'dungeonNum': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1148,76): warning C4101: 'dex': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1148,23): warning C4101: 'SpawnLocation': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1148,69): warning C4101: 'Intel': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1148,81): warning C4101: 'endur': unreferenced local variable
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1307,30): warning C4244: 'initializing': conversion from 'SQLFLOAT' to 'float', possible loss of data
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\SQLCONN.cpp(1310,29): warning C4244: 'initializing': conversion from 'SQLFLOAT' to 'float', possible loss of data
+  Generating Code...
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Enemy.cpp(145,1): error C4716: 'Enemy::attack': must return a value
+C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\Adventurev2\Enemy.cpp(204,1): warning C4172: returning address of local variable or temporary: removedSkill
