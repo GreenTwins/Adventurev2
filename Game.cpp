@@ -740,7 +740,7 @@ bool Game::play(Map& currentMap) {
 	//return false;
 	return true;
 }
-Game::Game() : _globalatk(std::make_shared<AttackMod>()) {}
+//Game::Game() : _globalatk(std::make_shared<AttackMod>()) {}
 
 void reduce(const std::string& obj, int duration, int amount, Enemy& en, std::shared_ptr<AttackMod>_gA) {
 	if (obj == "HP") {

@@ -142,6 +142,10 @@ std::tuple<std::string, int> Enemy::attack(Skills& currSkill) {
 	std::string atktype = currSkill.getAtkType();
 	std::string skilltype = currSkill.getSkillType();
 	
+	//temp
+	std::tuple<std::string, int>temp = { "blah", 0 };
+
+	return temp;
 }
 void Enemy::setatkNum(int num) {
 	atkNum = num;
