@@ -3,6 +3,7 @@
 #include <queue>
 #include <map>
 #include <list>
+#include <algorithm>
 
 #include "Player.h"
 #include "Enemy.h"

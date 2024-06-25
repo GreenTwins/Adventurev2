@@ -68,7 +68,7 @@ bool SQLCONN::connect() {
 	SQLWCHAR connStr[] = L"DRIVER={SQL Server};SERVER=localhost\\sqlexpress;DATABASE=master;Integrated Security=True;";
 	SQLWCHAR outConnStr[SQL_MAX_MESSAGE_LENGTH];
 	SQLSMALLINT outConnStrLen;
-	SQLRETURN ret = SQLDriverConnect(sqlConnection, NULL, connStr, SQL_NTS, outConnStr, sizeof(outConnStr), &outConnStrLen, SQL_DRIVER_NOPROMPT);
+	SQLRETURN ret = SQLDriverConnect(sqlConnection, NULL, (SQLCHAR*)connStr, SQL_NTS, (SQLCHAR*)outConnStr, sizeof(outConnStr), &outConnStrLen, SQL_DRIVER_NOPROMPT);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLWCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 		SQLINTEGER nativeError;
@@ -90,9 +90,9 @@ bool SQLCONN::getplayerID() {
 	SQLINTEGER  playerID;
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
-	SQLWCHAR* sqlQuery = nullptr;
+	SQLCHAR* sqlQuery = nullptr;
 	SQLRETURN ret;
-	sqlQuery = (SQLWCHAR*)L"SELECT playerID FROM Player_Table WHERE playerName=?";
+	sqlQuery = (SQLCHAR*)L"SELECT playerID FROM Player_Table WHERE playerName=?";
 	ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
@@ -215,7 +215,7 @@ bool SQLCONN::saveplayerSkills() {
 			sqlQuery = (SQLWCHAR*)L"INSERT INTO Skills_Table (skillName, ReqTypes, ReqPayment, skillTypes, skillEffect, EffectAmt, atkAmt, appType, player_ID, skillLevel, bodyReq)"
 				L"VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
-			ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+			ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 			if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 				SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 				SQLINTEGER nativeError;
@@ -281,11 +281,11 @@ bool SQLCONN::displayNames() {
 	SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT playerName FROM Player_Table";
 	//gotta do this annoying imbue since SQLWCHAR is a wchar_t
 	//std::wcout.imbue(std::locale());
-	SQLRETURN ret = SQLExecDirect(sqlStatement, sqlQuery, SQL_NTS);
+	SQLRETURN ret = SQLExecDirect(sqlStatement, (SQLCHAR*)sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLWCHAR errorMsg[SQL_MAX_MESSAGE_LENGTH];
 		SQLSMALLINT msgLen;
-		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, NULL, NULL, errorMsg, SQL_MAX_MESSAGE_LENGTH, &msgLen);
+		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, NULL, NULL, (SQLCHAR*)errorMsg, SQL_MAX_MESSAGE_LENGTH, &msgLen);
 		std::wcout << "Error exe query: " << errorMsg << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
 		return false;
@@ -309,7 +309,7 @@ bool SQLCONN::displayNames() {
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLWCHAR errorMsg[SQL_MAX_MESSAGE_LENGTH];
 		SQLSMALLINT msgLen;
-		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, NULL, NULL, errorMsg, SQL_MAX_MESSAGE_LENGTH, &msgLen);
+		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, NULL, NULL, (SQLCHAR*)errorMsg, SQL_MAX_MESSAGE_LENGTH, &msgLen);
 		std::wcout << "Error freeing data: " << errorMsg << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
 		return false;
@@ -370,7 +370,7 @@ bool SQLCONN::sqlSave() {
 		sqlQuery = (SQLWCHAR*)L"INSERT INTO Player_Table (playerName, bodyType, playerJob, className, subClassName, HP, maxHP, MP, maxMP, stamina,maxStamina,fatigue,maxFatigue,percision, maxPercision, Strength, Def, Spd, Intel, dext, endur,level, Gold,XP,currentLocation)"
 			L"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+		ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 			SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 			SQLINTEGER nativeError;
@@ -414,7 +414,7 @@ bool SQLCONN::sqlSave() {
 		
 		sqlQuery = (SQLWCHAR*)L"UPDATE Player_Table SET playerName=?, bodyType=?, playerJob=?, className=?, subClassName=?, HP=?, maxHP=?, MP=?, maxMP=?, stamina=?, maxStamina=?, fatigue=? ,maxFatigue=? , percision=?, maxPercision=?, Strength=?, Def=?, Spd=?, Intel=?, dext=?, endur=?,level=?, Gold=?,XP=?WHERE playerName=?";
 
-		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+		ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 			SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 			SQLINTEGER nativeError;
@@ -498,7 +498,7 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
 	SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM Player_Table WHERE playerName = ?";
-	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
@@ -640,7 +640,7 @@ bool SQLCONN::loadPlayerHitbox() {
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
 	SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM body_Part WHERE player_ID = ?";
-	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
@@ -787,7 +787,7 @@ bool SQLCONN::playerSkillsLoading() {
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
 	SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM Skills_Table WHERE player_ID = ?";
-	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
@@ -908,7 +908,7 @@ bool SQLCONN::playerSkillsLoading() {
 		sqlQuery = (SQLWCHAR*)L"INSERT INTO body_Part (bodyPartName, bodyPartHP, defense, hasArmor, armorDef, hasWeapon, player_ID )"
 			L"VALUES (?,?,?,?,?,?,?)";
 
-		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+		ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 			SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 			SQLINTEGER nativeError;
@@ -1069,7 +1069,7 @@ bool SQLCONN::playerSkillsLoading() {
 	 SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
 	 SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM Enemy_Table WHERE SpawnLocation = ? AND dungeonNum=?";
-	 SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+	 SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)sqlQuery, SQL_NTS);
 	 if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		 SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
 		 SQLINTEGER nativeError;

@@ -105,16 +105,29 @@ int Enemy::getDunLoc()const {
 int Enemy::getatkNum()const {
 	return atkNum;
 }
+// Skills&& Enemy::removeSkills(std::string& choice) {
+// 	Skills removedSkill;
+// 	for (auto& it : listofSkills) {
+// 		if (it.getSkillName() == choice) {
+// 			removedSkill = std::move(it);
+// 			listofSkills.erase(std::remove(listofSkills.begin(), listofSkills.end(), it));
+// 			break;
+// 		}
+// 	}
+// 	return std::move(removedSkill);
+// }
+
 Skills&& Enemy::removeSkills(std::string& choice) {
-	Skills removedSkill;
-	for (auto& it : listofSkills) {
-		if (it.getSkillName() == choice) {
-			removedSkill = std::move(it);
-			listofSkills.erase(std::remove(listofSkills.begin(), listofSkills.end(), it));
-			break;
-		}
-	}
-	return std::move(removedSkill);
+    Skills removedSkill;
+    auto it = std::find_if(listofSkills.begin(), listofSkills.end(),
+                           [&choice](const Skills& skill) {
+                               return skill.getSkillName() == choice;
+                           });
+    if (it != listofSkills.end()) {
+        removedSkill = std::move(*it);
+        listofSkills.erase(it);
+    }
+    return std::move(removedSkill);
 }
 int Enemy::getGivenXp()const {
 	return givenXP;

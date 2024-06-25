@@ -1,0 +1,6 @@
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/game/CMakeFiles/game.dir
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/game/CMakeFiles/ALL_BUILD.dir
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/apps/CMakeFiles/main.dir
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/apps/CMakeFiles/ALL_BUILD.dir

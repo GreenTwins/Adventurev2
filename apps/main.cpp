@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 //#include "Player.h"
-#include "Game.h"
+#include <Game.h>
 #include "SQLCONN.h"
 
 int main() {

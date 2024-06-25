@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <time.h>
 #include <iostream>
+#include <limits>
 #include <iomanip>
 
 /*
@@ -563,32 +564,43 @@ std::string Player::getSubClass()const {
 int Player::getLocation()const {
 	return location;
 }
-
 void Player::loadAtks() {
-	if (!chooseAtk) {
-		for (auto& atk : Class->listofAllSkills) {
-			if ((atk.getSkillType() == "Attack")||(atk.getSkillType()=="Toggle")) {
-				//listofSkills.push_back(std::move(atk));
-				addSkill(std::move(atk));
-				Class->listofAllSkills.erase(std::remove(Class->listofAllSkills.begin(), Class->listofAllSkills.end(), atk));
-			}
-		}
-		return;
-	}
-	int choice;
-	std::cout << "Choose the attacks you want to load: ";
-	//display attacks
-	if (std::cin >> choice) {
-		if ((choice <= Class->listofAllSkills.size())&& (choice >0)) {
-			//good to go
-		}
-		else {
-			//maqybe a throw here
-		}
-	}
-	else {
-		//didnt give good input
-	}
+    if (!chooseAtk) {
+        for (auto& atk : Class->listofAllSkills) {
+            if ((atk.getSkillType() == "Attack") || (atk.getSkillType() == "Toggle")) {
+                // Move the skill to the player's list of skills
+                addSkill(std::move(atk));
+            }
+        }
+        
+        // Remove the skills from the class's list of all skills
+        Class->listofAllSkills.erase(
+            std::remove_if(Class->listofAllSkills.begin(), Class->listofAllSkills.end(),
+                           [](const Skills& atk) { 
+                               return (atk.getSkillType() == "Attack" || atk.getSkillType() == "Toggle"); 
+                           }),
+            Class->listofAllSkills.end()
+        );
+        
+        return;
+    }
+
+    int choice;
+    std::cout << "Choose the attacks you want to load: ";
+    // Display attacks
+    if (std::cin >> choice) {
+        if ((choice <= Class->listofAllSkills.size()) && (choice > 0)) {
+            // Good to go
+        } else {
+            // Maybe a throw here
+            throw std::out_of_range("Invalid choice, out of range.");
+        }
+    } else {
+        // Didn't give good input
+        std::cin.clear(); // Clear error state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the rest of the line
+        throw std::invalid_argument("Invalid input, not a number.");
+    }
 }
 /*
 		CLASS STATS DATA

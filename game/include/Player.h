@@ -2,6 +2,7 @@
 #include <vector>
 #include "Character.h"
 #include <memory>
+#include <algorithm>
 #include <unordered_map>
 #include "Skills.h"
 #pragma once

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include <time.h>
 #include "SQLCONN.h"
 /******************************************************************************************************
 MAP CLASS init,cleaner, getters and setters
@@ -439,58 +440,58 @@ void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
 	}
 }
 
-bool Game::PrePlay() {
-	GameInit = true;
-	bool tryAgain = true;
-	bool success = false;
-	char option;
-	currentDunLvl = 1;
-	currentDunNum = 1; 
-	playerN.setLocation(currentDunLvl);
-	while (tryAgain) {
-		getLocationName(1);//starting new
-		Map newMap;
-		std::cout << "creating paths" << std::endl;
-		newMap.createPaths(currentDunLvl);
-		Game::getinstance().loadEnemies(1, 1, enemyList);
-		std::cout << enemyList.size();
-		if (play(newMap)) {
-			//go back to island
-			GameInit = false;
-			success = true;
-			tryAgain = false;
-		}
-		//got back to main menu or try again
-		else {
-			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
-			std::cin >> option;
-			if (option == 'Q' || option == 'q') {
-				tryAgain = false;
-			}
-			playerN.setHP(playerN.getMaxHP());
-		}
-	}
-	return success;
-}
+// bool Game::PrePlay() {
+// 	GameInit = true;
+// 	bool tryAgain = true;
+// 	bool success = false;
+// 	char option;
+// 	currentDunLvl = 1;
+// 	currentDunNum = 1; 
+// 	playerN.setLocation(currentDunLvl);
+// 	while (tryAgain) {
+// 		getLocationName(1);//starting new
+// 		Map newMap;
+// 		std::cout << "creating paths" << std::endl;
+// 		newMap.createPaths(currentDunLvl);
+// 		Game::getinstance().loadEnemies(1, 1, enemyList);
+// 		std::cout << enemyList.size();
+// 		if (play(newMap)) {
+// 			//go back to island
+// 			GameInit = false;
+// 			success = true;
+// 			tryAgain = false;
+// 		}
+// 		//got back to main menu or try again
+// 		else {
+// 			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
+// 			std::cin >> option;
+// 			if (option == 'Q' || option == 'q') {
+// 				tryAgain = false;
+// 			}
+// 			playerN.setHP(playerN.getMaxHP());
+// 		}
+// 	}
+// 	return success;
+// }
 
 
-bool Game::play(Map& currentMap) {
-	//system(CLEAR_SCREEN);
-	currentMap.makeMove(1);
+// bool Game::play(Map& currentMap) {
+// 	//system(CLEAR_SCREEN);
+// 	currentMap.makeMove(1);
 
-	if (playerN.getHP() > 0) {
-		//system(CLEAR_SCREEN);
-		std::cout << "You've entered the Boss room" << std::endl;
-		if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
-			/*playerN.setGold(playerN.getcurrentMap.totalGold);
-			playerN.setXP(currentMap.totalXP);*/
-			return true;
-		}
-		return false;
-	}
-	std::cout << "You've died" << std::endl;
-	return false;
-}
+// 	if (playerN.getHP() > 0) {
+// 		//system(CLEAR_SCREEN);
+// 		std::cout << "You've entered the Boss room" << std::endl;
+// 		if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
+// 			/*playerN.setGold(playerN.getcurrentMap.totalGold);
+// 			playerN.setXP(currentMap.totalXP);*/
+// 			return true;
+// 		}
+// 		return false;
+// 	}
+// 	std::cout << "You've died" << std::endl;
+// 	return false;
+// }
 /******************************************************************************************************
 GAME CLASS game loading and instances
 

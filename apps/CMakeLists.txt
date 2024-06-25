@@ -4,11 +4,16 @@ project(main)
 
 add_executable(main main.cpp)
 
-target_link_libraries(main
-PRIVATE game)
+target_include_directories(main
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/game/include
+)
 
+target_link_libraries(main PRIVATE game)
 
-target_compile_definitions(main PUBLIC cxx_std_20)
-set_target_properties(main PROPERTIES  
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin 
+target_compile_features(main PUBLIC cxx_std_17)
+
+# Set the output directory for the executable
+set_target_properties(main PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
