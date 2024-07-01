@@ -13,7 +13,6 @@ target_link_libraries(main PRIVATE game)
 
 target_compile_features(main PUBLIC cxx_std_17)
 
-# Set the output directory for the executable
 set_target_properties(main PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )

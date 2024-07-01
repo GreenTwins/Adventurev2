@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\CMakeFiles\eb2d2399c565447652ada1f1a29899b1\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{D306E121-F11D-34D6-B3A7-7DC4FC57DA4A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

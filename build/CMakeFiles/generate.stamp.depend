@@ -87,6 +87,11 @@ C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/XLClang-CXX-DetermineCo
 C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/CompilerId/VS-10.vcxproj.in
+C:/Program Files/CMake/share/cmake-3.26/Modules/FetchContent.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FetchContent/CMakeLists.cmake.in
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindGit.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindPackageMessage.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/Internal/FeatureTesting.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows-Determine-CXX.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows-MSVC-C.cmake
@@ -95,3 +100,7 @@ C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows-MSVC.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/WindowsPaths.cmake
 C:/Users/aaron/source/reposv2/advClone/Adventurev2/CMakeLists.txt
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/CMakeFiles/3.26.5/CMakeCCompiler.cmake
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/CMakeFiles/3.26.5/CMakeCXXCompiler.cmake
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/CMakeFiles/3.26.5/CMakeRCCompiler.cmake
+C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/CMakeFiles/3.26.5/CMakeSystem.cmake
