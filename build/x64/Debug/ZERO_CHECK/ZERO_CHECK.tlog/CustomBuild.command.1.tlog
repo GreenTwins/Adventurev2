@@ -1,6 +1,6 @@
-^C:\USERS\AARON\SOURCE\REPOSV2\ADVCLONE\ADVENTUREV2\BUILD\CMAKEFILES\04BD09F3CA622EED3B676470CABD3076\GENERATE.STAMP.RULE
+^C:\USERS\AARON\SOURCE\REPOS\ADVENTURE\ADVENTUREV2\CLONEDADV\ADVPACKET\BUILD\CMAKEFILES\749FCDBF50920EB69F8C516693F92657\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aaron/source/reposv2/advClone/Adventurev2 -BC:/Users/aaron/source/reposv2/advClone/Adventurev2/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/VscodeCmakeGame.sln
+"C:\Program Files\cmake\bin\cmake.exe" -SC:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket -BC:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/VscodeCmakeGame.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

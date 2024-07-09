@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild
+# Install script for directory: C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

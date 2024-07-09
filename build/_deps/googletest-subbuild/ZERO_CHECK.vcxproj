@@ -13,9 +13,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{852F737F-94FB-34BE-9D04-FF131A352975}</ProjectGuid>
+    <ProjectGuid>{AD86A126-A83B-3FA4-9BBF-282F5E7CB269}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
     <ProjectName>ZERO_CHECK</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
@@ -48,11 +48,12 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\9ff43fccdffd4bf45ae773a3bfee02a0\generate.stamp.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\1a23111a6e0d1cbabbef1d52c73ef167\generate.stamp.rule">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</BuildInParallel>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Checking Build System</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild -BC:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate.sln
+"C:\Program Files\cmake\bin\cmake.exe" -SC:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild -BC:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -60,8 +61,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\ExternalProject\RepositoryInfo.txt.in;C:\Program Files\CMake\share\cmake-3.26\Modules\ExternalProject\cfgcmd.txt.in;C:\Program Files\CMake\share\cmake-3.26\Modules\ExternalProject\gitclone.cmake.in;C:\Program Files\CMake\share\cmake-3.26\Modules\ExternalProject\gitupdate.cmake.in;C:\Program Files\CMake\share\cmake-3.26\Modules\ExternalProject\mkdirs.cmake.in;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\WindowsPaths.cmake;C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\3.26.5\CMakeSystem.cmake;C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeLists.txt;C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\googletest-populate-prefix\tmp\googletest-populate-mkdirs.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\cmake\share\cmake-3.29\Modules\CMakeDetermineSystem.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\CMakeSystem.cmake.in;C:\Program Files\cmake\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\PatchInfo.txt.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\RepositoryInfo.txt.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\UpdateInfo.txt.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\cfgcmd.txt.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\gitclone.cmake.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\gitupdate.cmake.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\mkdirs.cmake.in;C:\Program Files\cmake\share\cmake-3.29\Modules\ExternalProject\shared_internal_commands.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Program Files\cmake\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\3.29.0-rc1\CMakeSystem.cmake;C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeLists.txt;C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\googletest-populate-prefix\tmp\googletest-populate-mkdirs.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>

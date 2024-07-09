@@ -2,13 +2,13 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\x64\Debug\ZERO_CHECK</FullPath>
+      <FullPath>C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\x64\Debug\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\x64\Debug\googletest-populate</FullPath>
+      <FullPath>C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\x64\Debug\googletest-populate</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\x64\Debug\ALL_BUILD</FullPath>
+      <FullPath>C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\x64\Debug\ALL_BUILD</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

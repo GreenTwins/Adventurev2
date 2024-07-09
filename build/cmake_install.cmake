@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/aaron/source/reposv2/advClone/Adventurev2
+# Install script for directory: C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,22 +34,22 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-build/cmake_install.cmake")
+  include("C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-build/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/game/cmake_install.cmake")
+  include("C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/game/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/apps/cmake_install.cmake")
+  include("C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/apps/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/tests/cmake_install.cmake")
+  include("C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/tests/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -60,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

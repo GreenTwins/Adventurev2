@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-src"
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-build"
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix"
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix/tmp"
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp"
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix/src"
-  "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-src"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-build"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix/tmp"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix/src"
+  "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp"
 )
 
 set(configSubDirs Debug)
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/${subDir}")
+    file(MAKE_DIRECTORY "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp${cfgdir}") # cfgdir has leading slash
 endif()

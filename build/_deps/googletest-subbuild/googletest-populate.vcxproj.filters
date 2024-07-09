@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-mkdir.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-mkdir.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-download.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-update.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-update.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-patch.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-patch.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-configure.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-configure.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-build.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-build.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-install.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-install.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\a246826f10e7458a1e7d5e3849626549\googletest-populate-test.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\b954793ea5026726e01b5caed0546139\googletest-populate-test.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\1833abdbb98f4d6afc7db86b1d558f04\googletest-populate-complete.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\1fcd860900b87554d40ad219bec89a1d\googletest-populate-complete.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\9ff43fccdffd4bf45ae773a3bfee02a0\googletest-populate.rule">
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\1a23111a6e0d1cbabbef1d52c73ef167\googletest-populate.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\aaron\source\reposv2\advClone\Adventurev2\build\_deps\googletest-subbuild\CMakeFiles\googletest-populate" />
+    <None Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\build\_deps\googletest-subbuild\CMakeFiles\googletest-populate" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{11BFB4D1-EAA7-3530-B89C-1FFBFCEDE48A}</UniqueIdentifier>
+      <UniqueIdentifier>{77E00471-407B-3D7A-A94B-951B0EDCE2BF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

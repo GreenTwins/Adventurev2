@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/aaron/source/reposv2/advClone/Adventurev2/tests
+# Install script for directory: C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

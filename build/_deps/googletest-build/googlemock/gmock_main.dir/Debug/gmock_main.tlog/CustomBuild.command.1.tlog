@@ -1,6 +1,6 @@
-^C:\USERS\AARON\SOURCE\REPOSV2\ADVCLONE\ADVENTUREV2\BUILD\_DEPS\GOOGLETEST-SRC\GOOGLEMOCK\CMAKELISTS.TXT
+^C:\USERS\AARON\SOURCE\REPOS\ADVENTURE\ADVENTUREV2\CLONEDADV\ADVPACKET\BUILD\_DEPS\GOOGLETEST-SRC\GOOGLEMOCK\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/aaron/source/reposv2/advClone/Adventurev2 -BC:/Users/aaron/source/reposv2/advClone/Adventurev2/build --check-stamp-file C:/Users/aaron/source/reposv2/advClone/Adventurev2/build/_deps/googletest-build/googlemock/CMakeFiles/generate.stamp
+"C:\Program Files\cmake\bin\cmake.exe" -SC:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket -BC:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build --check-stamp-file C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-build/googlemock/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
