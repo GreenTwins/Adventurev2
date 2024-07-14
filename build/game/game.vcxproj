@@ -269,6 +269,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\game\src\main.cpp" />
     <ClCompile Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\game\src\Character.cpp" />
     <ClCompile Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\game\src\Enemy.cpp" />
     <ClCompile Include="C:\Users\aaron\source\repos\Adventure\adventurev2\clonedAdv\advpacket\game\src\Game.cpp" />

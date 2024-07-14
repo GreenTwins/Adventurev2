@@ -1,8 +1,11 @@
 #include "Game.h"
+#include <sstream>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <functional>
 #include <random>
 #include <string>
-#include <time.h>
 #include "SQLCONN.h"
 /******************************************************************************************************
 MAP CLASS init,cleaner, getters and setters
@@ -26,7 +29,7 @@ currentLocation)
 //int 
 std::unique_ptr<int>determinenextconnectedPath(int path, int locationSize) {
 
-	std::map<int, int>& checker=Game::getinstance().nextPathTracker;
+	std::map<int, int>& checker = Game::getinstance().nextPathTracker;
 
 	if (checker.find(path) != checker.end() && checker[path] > 3) {
 		std::random_device rd;
@@ -286,22 +289,22 @@ int Map::availableMoves(int a) {
 
 	if (pathwayy[a]) {//this gets the .second of the map which is whether there is an enemy
 		//std::cout << "There is an enemy in the room" << std::endl;
-		//int listsize = Game::getinstance().enemyList.size();
-		//int randomEnemy = rand() % listsize + 1;
+		int listsize = Game::getinstance().enemyList.size();
+		int randomEnemy = rand() % listsize + 1;
 
-		/*Enemy newEnemy(currentDungeonNum);
 		if (randomEnemy >= listsize) {
-			newEnemy = Game::getinstance().enemyList[randomEnemy - 1];
+			randomEnemy -= 1;
+			
 		}
-		else {
-			newEnemy = Game::getinstance().enemyList[randomEnemy];
-		}
-		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";*/
+
+		Enemy newEnemy(Game::getinstance().enemyList[randomEnemy]);
+
+		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";
 
 
 		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
 		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
-		//std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemyPtr);
+		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
 
 		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
 
@@ -339,6 +342,226 @@ int Map::availableMoves(int a) {
 	upDateTracker();
 	return temp;
 }
+bool Game::isSkillActive(std::string& skillName){
+	for(auto&[key,atkskill]: _activeSkills){
+		if(atkskill.name ==skillName){
+			return true;
+		}
+	}
+	return false;
+}
+bool Game::performDodge(double dodgeProbability) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dist(0.0, 1.0);
+
+    double roll = dist(gen);
+    return roll < dodgeProbability;
+}
+void Game::activateSkill(std::string usersName,std::string skillName, int maxTurns, int amt){ //for none regular attacks
+			_skillKey key=std::make_pair(usersName, skillName);
+			_activeSkills[key]= atkSkillsTracker{skillName, maxTurns,0, amt};
+		
+}
+void Game::atkSkillCleaner(std::string& currentFighter){//called at the beginning 
+	std::vector<_skillKey>_keysToRemove;
+	for(auto&[_skillKey, atkSkillsTracker]: _activeSkills){
+		if(_skillKey.first ==currentFighter ){//only triggered if its the current fighters turn
+				atkSkillsTracker.turnsPassed++; //everytime invoked it will increment
+			if(atkSkillsTracker.turnsPassed < atkSkillsTracker.maxTurns){
+				_keysToRemove.push_back(_skillKey);
+			}
+		}
+		
+	}
+	//anything in the vector gets cleared
+	for(const auto& _skillKey: _keysToRemove){
+		_activeSkills.erase(_skillKey);
+	}
+}
+
+void Game::InitiateAttacks(Player& p1, Enemy& en, bool _isplayerAttk) {//attacks and toggles
+	bool reqPayable = false;
+	int _roll{ 0 };
+	int atkamt, duration{0};
+	std::string atkType, name;
+	Skills* enSkill = nullptr;
+	Game& battleCall = Game::getinstance();
+
+	//check that payment can be made, if not then redo roll
+	while (reqPayable) {
+		_roll = rand() % en.getatkNum();
+		enSkill = &en.listofSkills[_roll];
+		atkType = enSkill->getRequirementType();
+		if (atkType == "Stamina") {
+			reqPayable = (en.getStamina() >= enSkill->getRequirementPayment());
+		}
+		else {
+			reqPayable = (en.getMP() >= enSkill->getRequirementPayment());
+		}
+	}
+	
+
+
+		//could be regular attack or toggles
+        //if chosen skill is a toggle AND isnt active
+		if ((enSkill->getSkillType() == "Toggle")&&(!isSkillActive(enSkill->getSkillName()))){
+			//check to see if its in the activatedSKills map
+			battleCall.skillApplication(enSkill->getSkillEffect(), en, p1, _isplayerAttk);//get the atk
+			atkamt= battleCall.getUniversalAtk()->atkAmt;
+			duration = battleCall.getUniversalAtk()->effectAmt;
+			
+
+            if(_isplayerAttk){
+				activateSkill(p1.getName(),enSkill->getSkillName(), duration,atkamt);
+			}
+			else{
+				activateSkill(en.getName(),enSkill->getSkillName(), duration,atkamt);
+			}
+
+		}
+		else if((enSkill->getSkillType() == "Toggle")&&(isSkillActive(enSkill->getSkillName()))) {
+		//its already on so redo
+			return InitiateAttacks(p1,en,_isplayerAttk);
+		}
+		//we have a regular attack selected
+		else {
+			std::cout << "regular atk";
+			atkamt = enSkill->getatkAmt();
+			duration = enSkill->getSkillEffectAmt();
+		}
+	//}
+	
+	// add name and atkType
+	name = battleCall.getUniversalAtk()->atkName;
+	//grab payment
+    if(atkType == "Stamina"){
+		en.setStamina(en.getStamina()-(enSkill->getRequirementPayment()));
+	}
+	else{
+		en.setMP(en.getMP() -(enSkill->getRequirementPayment()));
+	}
+
+	enSkill=nullptr; //clear pointer
+}
+void addPassiveSkills() {
+	//what does this do?
+	//magic attks cause less dmg, 
+	//magic attks consume less mana
+	//melee attks deal extra dmg
+	//bladed weapons deal extra dmg
+	//if hp is less than 60 increase str and spd ->triggers once
+	
+}//passives
+
+
+std::unique_ptr<bool>Map::DungeonBattle(Player& p1, Enemy& en) {
+	int currentRound = 1; 
+	int dodgeRoll{0};
+	int* fatchecker=nullptr;
+	srand(time(NULL));
+	//get passives 
+	std::vector<Skills>EnemyPassiveSkills;
+    std::vector<Skills>PlayerPassiveSkills;
+
+	for (size_t i = 0; i < en.listofSkills.size(); ++i) {
+		if (en.listofSkills[i].getSkillType() == "Passive") {
+			EnemyPassiveSkills.push_back(std::move(en.listofSkills[i]));
+		}
+	}
+	for(size_t j =0; j< p1.listofSkills.size(); ++j){
+		if(p1.listofSkills[j].getSkillType() =="Passive"){
+			PlayerPassiveSkills.push_back(std::move(en.listofSkills[j]));
+		}
+	}
+
+	/*for (auto &&skills : en.listofSkills) {
+		if (skills.getSkillType() == "Passive") {
+			EnemyPassiveSkills.push_back(std::move(skills));
+		}
+	}*/
+	//determine who attacks first
+
+	std::cout << (p1.getSpd() <= en.getSpd() ? en.getName() + " is faster!\n" : "Your speed is greater\n");
+
+	while ((p1.getHP() > 0) && (en.getHP() > 0)) {
+		//distribute/ check  passive effects
+
+		//official attacks
+		//enemy attacks first
+		if (p1.getSpd() <= en.getSpd()) {
+			Game::getinstance().InitiateAttacks(p1, en, false);
+			//globalatk holds info
+			// check p1 passives vs globalatk type
+
+
+			//check precision, fat, stam
+			*fatchecker=en.getFatigue();
+			//recalc Prec to note where attack will go if not AOE, calibrates fatigue based on payments made for atk
+			en.calculatePrec(en.getStamina(),*fatchecker,en.getMaxStamina(), en.getDex(), en.getInt());
+			//player recalcs their dodgeskills
+			p1.calculatedodgeSkill(p1.getSpd(), p1.getInt(), p1.getDex(), p1.getPrec());
+			//allow dodge
+			dodgeRoll = rand()%6+1;
+			// If the probability check passes, we will skew the roll towards the player's dodge number
+    		if (Game::getinstance().performDodge(p1.getdodgingSkill())) {
+        		dodgeRoll = p1.getDodge();
+    		}
+
+    		if (p1.getDodge() == dodgeRoll) {
+        		std::cout << "Player dodged the attack!" << std::endl;
+    		} 
+			else {
+        		std::cout << "Attack hit the player!" << std::endl;
+        		p1.setHP(p1.getHP() - Game::getinstance().getUniversalAtk()->atkAmt); 
+    		}
+			if(p1.getHP() > 0){
+				Game::getinstance().InitiateAttacks(p1,en,false);
+			}
+
+
+			//clear gloabalatk
+			if (p1.getHP() > 0) {
+				//if player alive then can atk
+				Game::getinstance().InitiateAttacks(p1, en, true);
+			}
+			fatchecker=nullptr;
+		}
+		else {
+			//player atk first
+			if (en.getHP() > 0) {
+				Game::getinstance().InitiateAttacks(p1, en, true);
+			}
+			//check prec
+			*fatchecker = p1.getFatigue();
+			p1.calculatePrec(p1.getStamina(),*fatchecker,p1.getMaxStamina(), p1.getDex(), p1.getInt());
+			//enemy recalcs their dodgeskills
+			en.calculatedodgeSkill(en.getSpd(), en.getInt(), en.getDex(), en.getPrec());
+			dodgeRoll = rand()%6+1;
+			// If the probability check passes, we will skew the roll towards the enemy's dodge number
+    		if (Game::getinstance().performDodge(en.getdodgingSkill())) {
+        		dodgeRoll = en.getDodge();
+    		}
+
+    		if (en.getDodge() == dodgeRoll) {
+        		std::cout << "Enemy dodged the attack!" << std::endl;
+    		} 
+			else {
+        		std::cout << "Attack hit the enemy!" << std::endl;
+        		en.setHP(en.getHP() - Game::getinstance().getUniversalAtk()->atkAmt); 
+    		}
+			//clear gloabalatk
+			if (en.getHP() > 0) {
+				//if enemy alive then can atk
+				Game::getinstance().InitiateAttacks(p1, en, false);
+			}
+		}
+	}
+	if (en.getHP() > 0) {
+		return std::make_unique<bool>(true);
+   }
+	return std::make_unique<bool>(false);
+}
 /******************************************************************************************************
 GAME CLASS init,cleaner, getters and setters
 
@@ -352,6 +575,8 @@ Game::Game() {
 	//BossReq.push_back("Troll"); not used
 	uploadWorldMap();
 	turnByturn = false;
+
+	
 }
 Game::~Game() {
 	std::cout << "Game instance deleted" << std::endl;
@@ -362,6 +587,7 @@ void Game::fromSQL(bool i) {
 void Game::fromLocal(bool i) {
 	onlocal = i;
 }
+
 void Game::uploadWorldMap() {
 	std::vector<std::string>world_mapNames = { "Realm of Qiteoria", "Realm of Reperion: Dark Forest","Ruined Settlement of Ibburyon","The Echo Lands","The Barrens","The Reach of Dreams","Lands of the Broken","The Hells Vale" };
 
@@ -389,7 +615,7 @@ bool Game::isLocal()const {
 }
 void Game::getLocationName(int loc) {
 	std::map<std::string, bool>currentLocation = world_map[loc - 1];
-	for (auto& mapItem : currentLocation) {
+ 	for (auto& mapItem : currentLocation) {
 		std::cout << "You've entered: " << mapItem.first << "\n";
 	}
 }
@@ -429,69 +655,508 @@ int Game::TravelonWorldMap() {
 	}
 	return travelLocation;
 }
-void Game::loadEnemies(int loc, int dunNum, std::vector<Enemy>& e) {
+std::shared_ptr<AttackMod>Game::getUniversalAtk() {
+	return _globalatk;
+}
+void Game::loadAllMissions(int currLoc) {
+	createDungeon(currLoc); //what dun is available at given loc and load types -> end shows active mission  
+	loadEnemies(currLoc, enemyList);
+}
+std::string Game::SpliceConstructedWord(std::string& word, int mapItem) {
 	try {
-		/*SQLCONN& enemyGrab = SQLCONN::createInstance();
-		enemyGrab.getEnemies(loc, dunNum, e);*/
-		//enemyGrab.disconnect();
+		if ((mapItem > 2)||(mapItem < 0)) {
+			throw(mapItem);
+		}
+		std::string splicedWord;
+		size_t posofSpace = word.find(' ');
+		//int countToSpace = std::stoi(word.substr(0, posofSpace));
+		if (mapItem == 1) {
+			splicedWord = word.substr(0, posofSpace);
+		}
+		else {
+		
+			splicedWord = word.substr(posofSpace + 1);
+		}
+
+		return splicedWord;
+	}
+	catch (...) {
+		std::cout << "\nError detected. MapItem not a 1 or a 2. Redoing: \n";
+		return SpliceConstructedWord(word, 1);
+	}
+}
+void Game::createName(std::string& placement) {
+	while (true) {
+		if (_createNamemtx_.try_lock()) {
+			break; // Break out of the loop once we acquire the lock
+		}
+		else {
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		}
+	}
+	std::vector<std::string>_desc = {};
+	std::vector<std::string>_name = {};
+	if (placement.length() > 6) {
+		placement = SpliceConstructedWord(placement, 1);
+	}
+	try {
+		if (placement == "Cave") {
+			_desc = { "Blyke ","Blue ","Baker ","Mammoth ","Ellora ","Reed Flute ","The Silent " };
+			_name = { "Cave","Grotto","Cavern","Cave","Hallows","Hole","OverHang","Hideout","Den","Shelter","Abyss" };
+		}
+		else if (placement == "Forest") {
+			_desc = { "Thick Basin","Hallow","Misty Oak","Loch","Treacherous" };
+			_name = { "Grove","Woods","Wilds","Forest","Woodland","Thicket" };
+		}
+		else if (placement == "Deep Forest") {
+
+		}
+		else if (placement == "Hillside") {
+
+		}
+		else if (placement == "Dungeon") {
+
+		}
+		else {
+			throw (placement);
+		}
+
+		srand(time(NULL));
+		std::string locationName = (_desc[rand()%_desc.size()] + _name[rand()%_name.size()]);
+		placement = placement + " " + locationName;
+	}
+	catch (...) {
+		std::cerr << "\nexception caught inside createDungeon: \n";
+		
+	}
+	//load new mission name this will be thread safe
+
+	//std::lock_guard<std::mutex>lock(_createNamemtx_);
+	
+	_createNamemtx_.unlock();
+}
+void Game::createDungeon(int loc) {
+	std::map<int, std::string>_dunLoc;
+	int _missionchoice = 0;
+	switch (loc) {
+	case 1: {
+		_dunLoc[1] = "Cave";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[2] = "Forest";
+		//availableMissions.push_back(_dunLoc);
+		int randomDun = rand()% 2;
+		_dunLoc[3] = (randomDun == 0) ? "Cave" : "Forest";
+		
+	}
+		  break;
+	case 2: {
+		_dunLoc[1] = "Deep Forest";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[2] = " Hillside";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[3] = "Dungeon";
+		//availableMissions.push_back(_dunLoc);
+	}
+		  break;
+	case 3: {
+		_dunLoc[1] = "Ruins";
+		_dunLoc[2] = "Ruins";
+		_dunLoc[3] = "Ruins";
+		//availableMissions.push_back(_dunLoc);
+	}
+		  break;
+	case 4: {
+		_dunLoc[1] = "Town";
+		//availableMissions.push_back(_dunLoc);
+		_dunLoc[2] = "Swamp";
+		//availableMissions.push_back(_dunLoc);
+	}
+		  break;
+	default:
+		std::cerr << "\nWe run an error in the location loading\n";
+		break;
+	}
+	//now currMiss is loaded with loc type and you have the current LocLevel
+	//pick 3 types to send to name creator func()
+	//from name creator, player chooses which mission to go on
+	//chosen mission type is used to call the dB, the locLevel is used (+1) to determine enemy lvl
+	//any failure will be caught and throw to a higher level rerun
+	//std::vector<std::string>_mapTypes;
+	/*int _missionsSize = availableMissions.size();
+	std::string Mapsavailable;
+	for (int i = 0; i < 3; ++i) {
+		int randNum = rand() % _missionsSize;
+		for (auto type : availableMissions[randNum]) {
+			Mapsavailable = type.second;
+		}
+		_mapTypes.push_back(Mapsavailable);
+	}*/
+	//using dunLoc to get the type of Location and the have the threads create the 3 names. Inside of the threads the & of the string obj has its contents changed
+	//to hold the newly formed name. This can then be used again to grab the enemies func using 
+	//_dunLoc.size();
+	try {
+		std::vector<std::thread>_workerThreads;
+
+	
+		
+		for (auto& ot : _dunLoc)
+			_workerThreads.push_back(std::thread(&Game::createName, this, std::ref(ot.second)));
+		
+		for (auto& pt : _workerThreads)
+			pt.join();
+	}
+	catch (std::string e) {
+		std::cout << "Failure. This is what was given as param to createName: " << e;
+	}
+	
+
+	/*std::thread first(&Game::createName, this, std::ref(_mapTypes[0]));
+	std::thread second(&Game::createName, this, std::ref(_mapTypes[1]));
+	std::thread third(&Game::createName, this, std::ref(_mapTypes[2]));*/
+
+	/*first.join();
+	second.join();
+	third.join();*/
+
+
+	//display available missions
+	int index = 1;
+	for (auto& mapelem : _dunLoc) {
+
+		std::cout << index << ".) " << mapelem.second << std::endl;
+		mapelem.second = SpliceConstructedWord(mapelem.second, 1); //we dont need the name anymore
+		++index;
+	}
+	std::cout << "\n Which mission will you choose?: ";
+	std::cin >> _missionchoice;
+
+	int finder = 1;
+	for (auto& choice : _dunLoc) {
+		if (finder == _missionchoice) {
+			//choice.second= SpliceConstructedWord(choice.second, 2);
+			ActiveMissionType = choice.second;
+		}
+		++finder;
+	}
+	//ActiveMissionType = "blah";//gotta come up with a way to get not just the name but also the type and pass the type to LoadEnemies(type, e);
+
+}
+
+void Game::loadEnemies(int currLoc, std::vector<Enemy>& e) {
+	try {
+		SQLCONN& enemyGrab = SQLCONN::createInstance();
+		//loadAllMissions(currLoc);
+		enemyGrab.LoadEnemies(ActiveMissionType, currLoc, e);
+		enemyGrab.disconnect();
 	}
 	catch (bool result) {
 		std::cout << "Database failed to connect" << std::endl;
 	}
 }
 
-// bool Game::PrePlay() {
-// 	GameInit = true;
-// 	bool tryAgain = true;
-// 	bool success = false;
-// 	char option;
-// 	currentDunLvl = 1;
-// 	currentDunNum = 1; 
-// 	playerN.setLocation(currentDunLvl);
-// 	while (tryAgain) {
-// 		getLocationName(1);//starting new
-// 		Map newMap;
-// 		std::cout << "creating paths" << std::endl;
-// 		newMap.createPaths(currentDunLvl);
-// 		Game::getinstance().loadEnemies(1, 1, enemyList);
-// 		std::cout << enemyList.size();
-// 		if (play(newMap)) {
-// 			//go back to island
-// 			GameInit = false;
-// 			success = true;
-// 			tryAgain = false;
-// 		}
-// 		//got back to main menu or try again
-// 		else {
-// 			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
-// 			std::cin >> option;
-// 			if (option == 'Q' || option == 'q') {
-// 				tryAgain = false;
-// 			}
-// 			playerN.setHP(playerN.getMaxHP());
-// 		}
-// 	}
-// 	return success;
-// }
+
+bool Game::PrePlay() {
+	GameInit = true;
+	bool tryAgain = true;
+	bool success = false;
+	char option;
+	currentDunLvl = 1;
+	currentDunNum = 1;
+	playerN.setLocation(currentDunLvl);
+	while (tryAgain) {
+		//need activetype
+		srand(time(NULL));
+		bool preplayActiveType = rand() % 2;
+
+		if (preplayActiveType) {
+			ActiveMissionType = "Cave";
+		}
+		else {
+			ActiveMissionType = "Forest";
+		}
+		getLocationName(1);//starting new
+		Map newMap;
+		std::cout << "creating paths" << std::endl;
+		newMap.createPaths(currentDunLvl);
+		Game::getinstance().loadEnemies(1, enemyList);
+		std::cout << enemyList.size();
+		if (play(newMap)) {
+			//go back to island
+
+			GameInit = false;
+			success = true;
+			tryAgain = false;
+		}
+		//got back to main menu or try again
+		else {
+			std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
+			std::cin >> option;
+			if (option == 'Q' || option == 'q') {
+				tryAgain = false;
+			}
+			playerN.setHP(playerN.getMaxHP());
+		}
+	}
+	return success;
+}
 
 
-// bool Game::play(Map& currentMap) {
-// 	//system(CLEAR_SCREEN);
-// 	currentMap.makeMove(1);
+bool Game::play(Map& currentMap) {
+	//system(CLEAR_SCREEN);
+	currentMap.makeMove(1);
 
-// 	if (playerN.getHP() > 0) {
-// 		//system(CLEAR_SCREEN);
-// 		std::cout << "You've entered the Boss room" << std::endl;
-// 		if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
-// 			/*playerN.setGold(playerN.getcurrentMap.totalGold);
-// 			playerN.setXP(currentMap.totalXP);*/
-// 			return true;
-// 		}
-// 		return false;
-// 	}
-// 	std::cout << "You've died" << std::endl;
-// 	return false;
-// }
+	if (playerN.getHP() > 0) {
+		//system(CLEAR_SCREEN);
+		std::cout << "You've entered the Boss room" << std::endl;
+		//if (currentMap.bossBattle(currentDunLvl, currentDunNum, playerN)) {
+		//	/*playerN.setGold(playerN.getcurrentMap.totalGold);
+		//	playerN.setXP(currentMap.totalXP);*/
+		//	return true;
+		//}
+		return false;
+	}
+	//std::cout << "You've died" << std::endl;
+	//return false;
+	return true;
+}
+//Game::Game() : _globalatk(std::make_shared<AttackMod>()) {}
+
+/*void reduce(const std::string& obj, int duration, int amount, Enemy& en, std::shared_ptr<AttackMod>_gA) {
+	if (obj == "HP") {
+		if (duration == 0) {
+			std::cout << "removing " << amount << " from " << en.getHP() << std::endl;
+			_gA->effectAmt = 100;
+			_gA->atkAmt = amount;
+		}
+	}
+}*/
+/*void lessThan(const std::string& subj, int checker, int result, Enemy& en, std::shared_ptr<AttackMod>_gA) {
+	if (subj == "HP"){
+		if (result < 0) {
+			std::cout << "subtracting\n";
+			en.setHP(en.getHP() + result);
+			//effectamt
+			_gA->atkAmt = result;
+		}
+		else {
+			if (en.getHP() < checker) {
+				en.setHP(result);
+				_gA->atkAmt = result;
+			}
+			else {
+				std::cout << "Your opponent has too much health to complete \n";
+			}
+		}
+	}
+}*/
+void greaterThan(const std::string& subj, int checker, int result, Enemy& en, Player &p1, std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
+
+}
+void equalTo(const std::string& subj, int checker, int result, Enemy& en, Player& p1,std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
+
+}
+/*std::map<std::string, std::function<void(const std::string&, int, int, Enemy&, std::shared_ptr<AttackMod>)>>operatorFunctions = {
+	{"less", lessThan},
+	{"greater", greaterThan},
+	{"equal", equalTo},
+	{"reduce", reduce}
+};*/
+/*void reduce(const std::string& obj, int duration, int amount, Enemy& en, Player& p1, std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
+	// - 8 HP for 3 turns
+ // - 3 HP for the remaining fight
+	if (obj == "HP") {
+		if (duration == 0) {
+			_gA->effectAmt = 100;//100 indicates until end of battle
+			_gA->atkAmt = amount;
+		}
+		else {
+			_gA->effectAmt = duration;
+			_gA->atkAmt = amount;
+		}
+	}
+}*/
+/*void lessThan(const std::string& subj, int checker, int result, Enemy& en, Player& p1, std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
+	//ex: if HP is less than 20 set HP to maxHP
+	//if HP is less than 15 set HP to 0
+	if (subj == "HP") {
+		if (result < 0) { //unknown
+			_gA->atkAmt = result;
+		}
+		else if (result == 50) {//increase own health
+			//hp goes to maxHP
+			if(_isp1atk){
+					if (p1.getHP() < checker) {
+					p1.setHP(p1.getMaxHP());
+					std::cout << p1.getName() << " recovered health" << std::endl;
+				}
+			}
+			else{
+				if (en.getHP() < checker) {
+					en.setHP(en.getMaxHP());
+					std::cout << en.getName() << " recovered health" << std::endl;
+				}
+			}
+			
+
+		}
+		else {//remove player health 
+		    if(_isp1atk){
+				if (en.getHP() < checker) {
+					_gA->effectAmt = 0;
+					_gA->atkAmt = checker;
+				}
+				else {
+				std::cout << "Your opponent has too much health to complete \n";
+				}
+			}
+			else{
+				if (p1.getHP() < checker) {
+					_gA->effectAmt = 0;
+					_gA->atkAmt = checker;
+				}
+				else {
+				std::cout << "Your opponent has too much health to complete \n";
+				}
+			}	
+		}
+	}
+}*/
+
+//
+void reduce(const std::string& obj,int checker,int duration, int amount,Enemy&en, Player&p1 , std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
+       // - 8 HP for 3 turns
+    // - 3 HP for the remaining fight
+	if (obj == "HP") {
+		if (duration == 0) {
+			_gA->effectAmt = 100;//100 indicates until end of battle
+			_gA->atkAmt = amount;
+		}
+		else{
+		    _gA->effectAmt = duration;
+		    _gA->atkAmt = amount;
+		}
+	}
+}
+void lessThan(const std::string& subj, int checker, int duration, int result, Enemy& en, Player& p1,std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
+    //ex: if HP is less than 20 set HP to maxHP result =50 if maxhp
+    //if HP is less than 15 set HP to 0 15= checker result = 0
+	if (subj == "HP"){
+		if (result < 0) { //this was when it would get 
+		//if HP is less than 20 - 3 HP for 5 turns -3 is result duration is 5
+			_gA->atkAmt = result;
+		}
+		else if(duration == 50){//increase own health
+		    //hp goes to maxHP
+		    if(_isp1atk){
+		        if(p1.getHP() < checker){
+		        p1.setHP(p1.getMaxHP());
+		        std::cout<<p1.getName()<<" recovered health"<<std::endl;
+		        }
+		    }
+		    else{
+		        if(en.getHP() < checker){
+		        en.setHP(en.getMaxHP());
+		        std::cout<<en.getName()<<" recovered health"<<std::endl;
+		        }
+		    }
+		    
+		}
+		else {//remove  health 
+		    if(_isp1atk){
+		        if (en.getHP() < checker) {
+			    _gA->effectAmt = duration;
+				_gA->atkAmt = result;
+			    }
+			    else {
+				std::cout << "Your opponent has too much health to complete \n";
+			    }
+		    }
+			else{
+			    if (p1.getHP() < checker) {
+			    _gA->effectAmt = duration;
+				_gA->atkAmt = result;
+			    }
+			    else {
+				std::cout << "Your opponent has too much health to complete \n";
+			    }
+			}
+		}
+	}
+}
+std::map<std::string, std::function<void(const std::string&, int,int,int, Enemy&, Player& p1, std::shared_ptr<AttackMod>, bool _isp1atk)>>operatorFunctions = {
+	{"less", lessThan},
+	{"reduce", reduce}
+
+};
+/*std::map<std::string, std::function<void(const std::string&, int, int, Enemy&, Player& p1, std::shared_ptr<AttackMod>, bool)>>operatorFunctions = {
+	{"less", lessThan},
+	{"greater", greaterThan},
+	{"equal", equalTo},
+	{"reduce", reduce}
+
+};*/
+void Game::skillApplication(const std::string& effectinput, Enemy& en, Player& p1, bool _isplayeratk) {
+	std::istringstream iss(effectinput);
+	std::string word;
+	int duration, atk = 0;
+	int triggeramount{ 0 };
+	std::vector<std::string>words;
+
+	while (iss >> word) {
+		words.push_back(word);
+	}
+
+	if (words[0] == "-") {
+	    //- 8 HP for 3 turns
+		std::string subject = words[2];
+		std::string op = "reduce";
+		std::istringstream(words[1]) >> atk;
+
+		try {
+			std::istringstream durationStream(words[4]);
+			durationStream.exceptions(std::ios::failbit | std::ios::badbit);
+			durationStream >> duration;
+		}
+		catch (const std::ios_base::failure& e) {
+			duration = 0;
+		}
+        
+		if (operatorFunctions.find(op) != operatorFunctions.end()) {
+			operatorFunctions[op](subject, triggeramount,duration, atk,en,p1,_globalatk, _isplayeratk);
+		}
+	}
+
+	else if (words[0] == "if") {
+		
+
+		std::string subject = words[1];
+		//if HP is less than 20 set HP to maxHP 
+        //if HP is less than 50 set HP - 3 for 5 turns
+        //op = less trigger=50 duration= 5 atk = 3
+		std::string op = words[3];
+		std::istringstream(words[5]) >> triggeramount;
+		
+		
+		int endWord = words.size()-1;
+		if(words[endWord]=="maxHP"){
+		    duration = 50; 
+		    atk=0;
+		}
+		else{
+		    std::istringstream(words[endWord-1]) >>duration;
+		    std::istringstream(words[endWord-3])>>atk;
+		    //std::cout<<words[endWord-3]<<std::endl;
+		}
+		if (operatorFunctions.find(op) != operatorFunctions.end()) {
+			operatorFunctions[op](subject,triggeramount,duration, atk,en,p1,_globalatk, _isplayeratk);
+		}
+	}
+		
+
+
+
+}
+
 /******************************************************************************************************
 GAME CLASS game loading and instances
 
@@ -552,40 +1217,7 @@ bool Game::loadGame() {
 
 	return conn_success;
 }
-bool Game::PrePlay() {
-	GameInit = true;
-	bool tryAgain = true;
-	bool success = false;
-	char option;
-	currentDunLvl = 1;
-	currentDunNum = 1;
-	playerN.setLocation(currentDunLvl);
-	//while (tryAgain) {
-	//	getLocationName(1);//starting new
-	//	Map newMap;
-	//	std::cout << "creating paths" << std::endl;
-	//	newMap.createPaths(currentDunLvl);
-	//	Game::getinstance().loadEnemies(1, 1, Game::enemyList);
-	//	std::cout << Game::getinstance().enemyList.size();
-	//	if (play(newMap)) {
-	//		//go back to island
-	//		GameInit = false;
-	//		success = true;
-	//		tryAgain = false;
-	//	}
-	//	//got back to main menu or try again
-	//	else {
-	//		std::cout << "You have died. Would you like to try again? Type C to continue or Q to quit: ";
-	//		std::cin >> option;
-	//		if (option == 'Q' || option == 'q') {
-	//			tryAgain = false;
-	//		}
-	//		Game::getinstance().playerN.refillHP();
-	//	}
-	//}
-	//return success;
-	return true;
-}
+
 //Create code from input#include <iostream>
 //#include <iostream>
 //#include <sstream>
@@ -690,7 +1322,7 @@ void Game::createPlayer(std::string n) {
 	Player p(n);
 	p.init();
 	p.preLoadAllSkills();
-	playerN =std::move(p);
+	playerN = std::move(p);
 	newChar = true;
 }
 
@@ -733,12 +1365,12 @@ bool MainMenu::display()const {
 				break;
 			}
 		}
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\nInvalid choice. Try again";
-		
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "\nInvalid choice. Try again";
+
 	} while (true);
-	
+
 	Game& gameInstance = Game::getinstance();
 	switch (option) {
 
@@ -748,9 +1380,9 @@ bool MainMenu::display()const {
 
 
 		gameInstance.createPlayer(name);
-		/*if (!gameInstance.PrePlay()) {
+		if (!gameInstance.PrePlay()) {
 			GoToConsole = false;
-		}*/
+		}
 	}
 		  break;
 	case 2: {
@@ -761,7 +1393,7 @@ bool MainMenu::display()const {
 			GoToConsole = false;
 		}
 		//load chosen player
-		if (!sqlInstance.loadAllData()){
+		if (!sqlInstance.loadAllData()) {
 			std::cout << "Error loading player \n";
 			GoToConsole = false;
 		}
@@ -775,4 +1407,3 @@ bool MainMenu::display()const {
 
 	return GoToConsole;
 }
-

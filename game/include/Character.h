@@ -22,20 +22,26 @@ class Character {
     float maxPrec;
   
    
-    std::vector<int>dodge;
-
+    int dodge;
     int Str;
+    int maxStr;
     int Def;
+    int maxDef;
     int Spd;
+    int maxSpd;
     int Int;
+    int maxInt;
     int dex;
+    int maxDex;
     int enD;
+    int maxEnD;
     //bodyPart specials
     bool hasWings;
     bool hasLegs;
 public:
     Character();
     Character(std::string, std::string);
+    Character(const Character&);
     Character(Character&&)noexcept;
     ~Character();
 
@@ -52,17 +58,28 @@ public:
     int getMaxFatigue() const;
     float getPrec() const;
     float getMaxPrec() const;
-    std::vector<int> getDodge() const;
+    int getDodge()const;
     int getStr() const;
+    int getmaxStr()const;
     int getDef() const;
+    int getmaxDef()const;
     int getSpd() const;
+    int getmaxSpd()const;
     int getEnd()const;
+    int getmaxEnd()const;
     int getInt()const;
+    int getmaxInt()const;
     int getDex()const;
+    int getmaxDex()const;
     bool withWings()const;
     bool withLegs()const;
     int getUpperBodysize()const;
     int getLowerBodysize()const;
+
+    //in game calc
+    float calculatePrec(int, int&, int, int, int); //handles fatigue
+    float calculateStamin(int, int,int);
+    void gaugeFatigue();
 
 
     // Setters
@@ -80,11 +97,17 @@ public:
     void setMaxPrec(float);
     void setDodge(int);
     void setStr(int);
+    void setmaxStr(int);
     void setDef(int);
+    void setmaxDef(int);
     void setSpd(int);
+    void setmaxSpd(int);
     void setInt(int);
+    void setmaxInt(int);
     void setDex(int);
+    void setmaxDex(int);
     void setEnD(int);
+    void setmaxEnD(int);
     void setHasLegs(bool);
     void setHasWings(bool);
   
@@ -110,5 +133,14 @@ public:
     void takeUpperBodyDmg(int);
     void takeLowerBodyDmg();
     void takePreciseDmg();
+
+    //skillEffect
+    void lessThan(const std::string&, int, int, Character&);
+    void greaterThan(const std::string&, int, int, Character&);
+    void equalTo(const std::string&, int, int, Character&);
+    std::map<std::string, std::is_function<void(const std::string&, int, int, Character&)>>operatorFunctions;
+    void parseAndExecute(const std::string&, Character&);
+
+
 };
 #endif

@@ -2,7 +2,6 @@
 #include <vector>
 #include "Character.h"
 #include <memory>
-#include <algorithm>
 #include <unordered_map>
 #include "Skills.h"
 #pragma once
@@ -59,7 +58,7 @@ public:
 	void setSubClassName(std::string);
 	void addSkill(Skills&&);
 	void addClassSkill(Skills&&);
-	
+
 
 
 	// Getters
@@ -72,7 +71,7 @@ public:
 	std::vector<std::string>subClasses = { "Wizard","Paladin" ,"Gambler" };
 	void distributeClassSpecific(int) override;
 	void subClassSelection()override;
-	
+
 	//gambler specific
 	std::unordered_multimap<std::string, float>gamblersDelight;
 	/*virtual int getGambleatkmultip(std::string) = 0;
@@ -90,7 +89,7 @@ public:
 
 	//hunter speciic
 	bool stealSkill(float);
-	bool gluttonyActive(float,float);
+	bool gluttonyActive(float, float);
 };
 
 class Assassin : public playerClass {
@@ -109,7 +108,6 @@ public:
 
 
 class Player : public Character {
-	std::vector<int>dodge;
 	float dodgingSkill;
 	int level;
 	int XP;
@@ -120,7 +118,7 @@ class Player : public Character {
 	std::string ActiveJob;
 	const double ptWorth = 8.33;
 	bool chooseAtk;
-	
+
 	size_t numofAtks;
 	int location;
 	int ID;
@@ -131,7 +129,7 @@ public:
 	Player(const Player&);
 	Player(Player&&);
 	~Player();
-	
+
 	bool loaded = false;
 	void init();
 	//direct access
@@ -145,11 +143,16 @@ public:
 	void setNumAtks();
 	void setLocation(int);
 	void setID(int);
+	void setdodgingSkill(double);// spd, pre, int
 	std::vector<Skills>listofSkills;
+	std::vector<Skills>passiveSkills;
 	std::vector<Skills>ClassSkills;
+	std::vector<std::string>_playertoggleatks; //for attk
 
 	//getter
 	int getID()const;
+	double getdodgingSkill()const;
+	double calculatedodgeSkill(int,int,int,float);
 	int getLvl()const;
 	int getXP()const;
 	int getGold()const;
@@ -161,11 +164,11 @@ public:
 	void CustomizecreateStats(int);
 	void CustomizeStats(int, int);
 	void compileAllStats();
-	float calculatePrec(int, int&, int, int, int);
-	float calculateStamin(int, int);
+	//float calculatePrec(int, int&, int, int, int);
+	//float calculateStamin(int, int);
 	int getLocation()const;
-	
-	
+
+
 	void classSelection();
 	void loadClassSkills();
 	
@@ -179,6 +182,7 @@ public:
 	void removeAtks();
 	Skills& permRemoveAtk();
 	void addSkill(Skills&&);
+	void addPassiveSkills(Skills&&);
 	void addClassSkill(Skills&&);
 	void preLoadAllSkills();
 	size_t getNumofAtks()const;
@@ -187,8 +191,8 @@ public:
 	//overloads
 	//Player& operator=(const Player&);
 	Player& operator=(Player&& other) noexcept;
+	
 };
 
 
 #endif
-

@@ -25,7 +25,7 @@ set(error_code 1)
 set(number_of_tries 0)
 while(error_code AND number_of_tries LESS 3)
   execute_process(
-    COMMAND "C:/Program Files/Git/mingw64/bin/git.exe"
+    COMMAND "C:/Program Files/Git/cmd/git.exe"
             clone --no-checkout --config "advice.detachedHead=false" "https://github.com/google/googletest.git" "googletest-src"
     WORKING_DIRECTORY "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps"
     RESULT_VARIABLE error_code
@@ -40,7 +40,7 @@ if(error_code)
 endif()
 
 execute_process(
-  COMMAND "C:/Program Files/Git/mingw64/bin/git.exe"
+  COMMAND "C:/Program Files/Git/cmd/git.exe"
           checkout "v1.14.0" --
   WORKING_DIRECTORY "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-src"
   RESULT_VARIABLE error_code
@@ -52,7 +52,7 @@ endif()
 set(init_submodules TRUE)
 if(init_submodules)
   execute_process(
-    COMMAND "C:/Program Files/Git/mingw64/bin/git.exe" 
+    COMMAND "C:/Program Files/Git/cmd/git.exe" 
             submodule update --recursive --init 
     WORKING_DIRECTORY "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-src"
     RESULT_VARIABLE error_code
