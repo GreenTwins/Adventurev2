@@ -4,7 +4,6 @@ project(game)
 
 
 add_library(game
-    src/main.cpp
     src/Character.cpp
     src/Enemy.cpp
     src/Game.cpp

@@ -85,56 +85,67 @@ bool SQLCONN::connect() {
 }
 
 bool SQLCONN::getplayerID() {
-	//disconnect();
-
-	//if (!connect()) {
-	//	return false;
-	//}
-	SQLINTEGER  playerID;
+	// Allocate statement handle
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
-	SQLCHAR* sqlQuery = nullptr;
-	SQLRETURN ret;
-	sqlQuery = (SQLCHAR*)L"SELECT playerID FROM Player_Table WHERE playerName=?";
-	ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+
+	// SQL query
+	SQLCHAR sqlQuery[] = "SELECT playerID FROM Player_Table WHERE playerName = ?";
+
+	// Prepare the statement
+	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
 		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
-		std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
+		SQLGetDiagRec(SQL_HANDLE_STMT, hStmt, 1, sqlState, &nativeError, message, sizeof(message), &length);
+		std::cerr << "SQLPrepare failed with error: " << message << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
 	}
 
+	// Get the player name
 	std::string name = Game::getinstance().playerN.getName();
-	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 255, 0, (SQLPOINTER*)name.c_str(), name.size(), NULL);
+
+	// Bind the parameter
+	SQLLEN nameLen = name.size();
+	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, nameLen, 0, (SQLPOINTER)name.c_str(), 0, &nameLen);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
+		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
 		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
-		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
+		SQLGetDiagRec(SQL_HANDLE_STMT, hStmt, 1, sqlState, &nativeError, message, sizeof(message), &length);
+		std::cerr << "SQLBindParameter failed with error: " << message << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
 	}
+
+	// Execute the statement
 	ret = SQLExecute(hStmt);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
 		SQLINTEGER nativeError;
 		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_MAX_MESSAGE_LENGTH, &length);
-		std::wcerr << "SQLExecute failed with error: " << message << std::endl;
+		SQLGetDiagRec(SQL_HANDLE_STMT, hStmt, 1, sqlState, &nativeError, message, sizeof(message), &length);
+		std::cerr << "SQLExecute failed with error: " << message << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 		return false;
 	}
+
+	// Fetch the result
+	SQLINTEGER playerID;
 	if (SQLFetch(hStmt) == SQL_SUCCESS) {
-		SQLGetData(hStmt, 1, SQL_C_LONG, &playerID, 0, NULL);
+		SQLGetData(hStmt, 1, SQL_C_LONG, &playerID, sizeof(playerID), NULL);
 		Game::getinstance().playerN.setID(playerID);
 	}
-	//create error handle here
+	else {
+		std::cerr << "SQLFetch failed or no data found." << std::endl;
+		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+		return false;
+	}
+
+	// Free the statement handle
 	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-	//disconnect();
 	return true;
 }
 bool SQLCONN::isConnectionActive() {
@@ -208,15 +219,15 @@ bool SQLCONN::saveplayerSkills() {
 
 		SQLHSTMT hStmt;
 		SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
-		SQLCHAR* sqlQuery = nullptr;
+		
 		SQLRETURN ret;
 		//check and see if theres already data available for the given name and....something else
 
 			//save to sql
 		std::cout << "Saving new data..." << std::endl;
 
-		sqlQuery = (SQLCHAR*)L"INSERT INTO Skills_Table (skillName, ReqTypes, ReqPayment, skillTypes, skillEffect, EffectAmt, atkAmt, appType, player_ID, skillLevel, bodyReq)"
-			L"VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		SQLCHAR sqlQuery[] = "INSERT INTO Skills_Table (skillName, ReqTypes, ReqPayment, skillTypes, skillEffect, EffectAmt, atkAmt, appType, player_ID, skillLevel, bodyReq)"
+			"VALUES (?,?,?,?,?,?,?,?,?,?,?)" ;
 
 		ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
@@ -275,53 +286,52 @@ bool SQLCONN::saveplayerSkills() {
 	return true;
 }
 bool SQLCONN::displayNames() {
-	/*if (!connect()) {
+	/*if (!isConnectionActive()) {
 		return false;
 	}*/
+
 	SQLHSTMT sqlStatement;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &sqlStatement);
 
-	SQLCHAR* sqlQuery = (SQLCHAR*)L"SELECT playerName FROM Player_Table";
-	//gotta do this annoying imbue since SQLWCHAR is a wchar_t
-	//std::wcout.imbue(std::locale());
+	SQLCHAR sqlQuery[] = "SELECT playerName FROM Player_Table";
 	SQLRETURN ret = SQLExecDirect(sqlStatement, sqlQuery, SQL_NTS);
+
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR errorMsg[SQL_MAX_MESSAGE_LENGTH];
+		SQLCHAR sqlState[6], errorMsg[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
 		SQLSMALLINT msgLen;
-		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, NULL, NULL, errorMsg, SQL_MAX_MESSAGE_LENGTH, &msgLen);
-		std::wcout << "Error exe query: " << errorMsg << std::endl;
+		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, sqlState, &nativeError, errorMsg, sizeof(errorMsg), &msgLen);
+		std::cerr << "Error executing query: " << errorMsg << std::endl;
 		SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
 		return false;
 	}
-	SQLCHAR PlayerName[255];
 
+	SQLCHAR playerName[255];
 	SQLLEN playerNameLength;
 
 	int i = 1;
 	while (SQLFetch(sqlStatement) == SQL_SUCCESS) {
-		//SQLGetData(hStmt, 4, SQL_C_CHAR, enemyName, sizeof(enemyName), NULL);
-		SQLGetData(sqlStatement, 1, SQL_C_CHAR, PlayerName, sizeof(PlayerName), &playerNameLength);
-		PlayerName[playerNameLength] = '\0';
-		std::string playersName(reinterpret_cast<char*>(PlayerName), playerNameLength);
+		SQLGetData(sqlStatement, 1, SQL_C_CHAR, playerName, sizeof(playerName), &playerNameLength);
+		playerName[playerNameLength] = '\0';
+		std::string playersName(reinterpret_cast<char*>(playerName), playerNameLength);
 		std::cout << i << ".) " << playersName << std::endl;
 		++i;
 
 		playerList.push_back(playersName);
 	}
+
 	ret = SQLFreeStmt(sqlStatement, SQL_CLOSE);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR errorMsg[SQL_MAX_MESSAGE_LENGTH];
+		SQLCHAR sqlState[6], errorMsg[SQL_MAX_MESSAGE_LENGTH];
+		SQLINTEGER nativeError;
 		SQLSMALLINT msgLen;
-		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, NULL, NULL, errorMsg, SQL_MAX_MESSAGE_LENGTH, &msgLen);
-		std::wcout << "Error freeing data: " << errorMsg << std::endl;
-		SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
-		return false;
+		SQLGetDiagRec(SQL_HANDLE_STMT, sqlStatement, 1, sqlState, &nativeError, errorMsg, sizeof(errorMsg), &msgLen);
+		std::cerr << "Error freeing statement: " << errorMsg << std::endl;
 	}
 
 	SQLFreeHandle(SQL_HANDLE_STMT, sqlStatement);
 	return true;
 }
-
 bool SQLCONN::sqlSave() {
 	//if (isConnectionActive()) {
 	//	SQLDisconnect(sqlConnection);
@@ -487,65 +497,84 @@ bool SQLCONN::sqlSave() {
 	return true;
 }
 
-bool SQLCONN::loadPlayerData(const std::string& a) {
-	/*if (isConnectionActive()) {
-		SQLDisconnect(sqlConnection);
-	}
-	if (!connect()) {
-		return false;
-	}*/
+bool SQLCONN::loadPlayerData(const std::string& playerName) {
+    SQLHSTMT hStmt;
+    SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
-	//using SQL transactions with my set up doesnt require individual connections and disconnections
-	SQLHSTMT hStmt;
+    SQLCHAR sqlQuery[] = "SELECT * FROM Player_Table WHERE playerName = ?";
+    SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
+    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+        SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
+        SQLINTEGER nativeError;
+        SQLSMALLINT length;
+        SQLGetDiagRec(SQL_HANDLE_STMT, hStmt, 1, sqlState, &nativeError, message, sizeof(message), &length);
+        std::cerr << "SQLPrepare failed with error: " << message << std::endl;
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        return false;
+    }
 
-	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
+    // Bind the parameter for playerName
+    SQLLEN playerNameLen = playerName.size();
+    ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, playerNameLen, 0, (SQLPOINTER)playerName.c_str(), 0, &playerNameLen);
+    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+        SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
+        SQLINTEGER nativeError;
+        SQLSMALLINT length;
+        SQLGetDiagRec(SQL_HANDLE_STMT, hStmt, 1, sqlState, &nativeError, message, sizeof(message), &length);
+        std::cerr << "SQLBindParameter failed with error: " << message << std::endl;
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        return false;
+    }
 
-	SQLCHAR* sqlQuery = (SQLCHAR*)L"SELECT * FROM Player_Table WHERE playerName = ?";
-	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
-		SQLINTEGER nativeError;
-		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
-		std::wcerr << "SQLPrepare failed with error: " << message << std::endl;
-		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-		return false;
-	}
+    ret = SQLExecute(hStmt);
+    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
+        SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
+        SQLINTEGER nativeError;
+        SQLSMALLINT length;
+        SQLGetDiagRec(SQL_HANDLE_STMT, hStmt, 1, sqlState, &nativeError, message, sizeof(message), &length);
+        std::cerr << "SQLExecute failed with error: " << message << std::endl;
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        return false;
+    }
 
-	ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 255, 0, (SQLPOINTER*)a.c_str(), a.size(), NULL);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR sqlState[6], message[SQL_RETURN_CODE_LEN];
-		SQLINTEGER nativeError;
-		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_RETURN_CODE_LEN, &length);
-		std::wcerr << "SQLBindParameter failed with error: " << message << std::endl;
-		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-		return false;
-	}
-	ret = SQLExecute(hStmt);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-		SQLCHAR sqlState[SQL_SQLSTATE_SIZE + 1], message[SQL_MAX_MESSAGE_LENGTH];
-		SQLINTEGER nativeError;
-		SQLSMALLINT length;
-		SQLGetDiagRecW(SQL_HANDLE_STMT, hStmt, 1, (SQLWCHAR*)sqlState, &nativeError, (SQLWCHAR*)message, SQL_MAX_MESSAGE_LENGTH, &length);
-		std::wcerr << "SQLExecute failed with error: " << message << std::endl;
-		SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-		return false;
-	}
-	std::cout << "fetching...." << std::endl;
+    std::cout << "fetching...." << std::endl;
 
-	while (SQLFetch(hStmt) == SQL_SUCCESS) {
-		// Assuming columns in order of EnemyID, SpawnLocation, EnemyName, HP, MP, STR, DEF, SPD, DODGE, SKILL1, SKILL2, SKILL3
-		SQLINTEGER playerID, HP, maxHP, MP, maxMP, stamina, maxStamina, fatigue, maxFatigue, precision, maxPrecision, Strength, Def, Spd, Intel, dext, endur, level, Gold, XP, currentLocation;
-		bool hasWings, hasLegs;
-		SQLCHAR playerName[255], bodyType[255], playerJob[255], className[255], subClassName[255]; // Assuming max length of 50 for name
+    while (SQLFetch(hStmt) == SQL_SUCCESS) {
+        SQLINTEGER playerID, HP, maxHP, MP, maxMP, stamina, maxStamina, fatigue, maxFatigue, precision, maxPrecision, Strength, Def, Spd, Intel, dext, endur, level, Gold, XP, currentLocation;
+        SQLCHAR bodyType[255], playerJob[255], className[255], subClassName[255];
+
+       /* SQLGetData(hStmt, 1, SQL_C_LONG, &playerID, 0, NULL);
+        SQLGetData(hStmt, 2, SQL_C_CHAR, bodyType, sizeof(bodyType), NULL);
+        SQLGetData(hStmt, 3, SQL_C_CHAR, playerJob, sizeof(playerJob), NULL);
+        SQLGetData(hStmt, 4, SQL_C_CHAR, className, sizeof(className), NULL);
+        SQLGetData(hStmt, 5, SQL_C_CHAR, subClassName, sizeof(subClassName), NULL);
+        SQLGetData(hStmt, 6, SQL_C_LONG, &HP, 0, NULL);
+        SQLGetData(hStmt, 7, SQL_C_LONG, &maxHP, 0, NULL);
+        SQLGetData(hStmt, 8, SQL_C_LONG, &MP, 0, NULL);
+        SQLGetData(hStmt, 9, SQL_C_LONG, &maxMP, 0, NULL);
+        SQLGetData(hStmt, 10, SQL_C_LONG, &stamina, 0, NULL);
+        SQLGetData(hStmt, 11, SQL_C_LONG, &maxStamina, 0, NULL);
+        SQLGetData(hStmt, 12, SQL_C_LONG, &fatigue, 0, NULL);
+        SQLGetData(hStmt, 13, SQL_C_LONG, &maxFatigue, 0, NULL);
+        SQLGetData(hStmt, 14, SQL_C_LONG, &precision, 0, NULL);
+        SQLGetData(hStmt, 15, SQL_C_LONG, &maxPrecision, 0, NULL);
+        SQLGetData(hStmt, 16, SQL_C_LONG, &Strength, 0, NULL);
+        SQLGetData(hStmt, 17, SQL_C_LONG, &Def, 0, NULL);
+        SQLGetData(hStmt, 18, SQL_C_LONG, &Spd, 0, NULL);
+        SQLGetData(hStmt, 19, SQL_C_LONG, &Intel, 0, NULL);
+        SQLGetData(hStmt, 20, SQL_C_LONG, &dext, 0, NULL);
+        SQLGetData(hStmt, 21, SQL_C_LONG, &endur, 0, NULL);
+        SQLGetData(hStmt, 22, SQL_C_LONG, &level, 0, NULL);
+        SQLGetData(hStmt, 23, SQL_C_LONG, &Gold, 0, NULL);
+        SQLGetData(hStmt, 24, SQL_C_LONG, &XP, 0, NULL);
+        SQLGetData(hStmt, 25, SQL_C_LONG, &currentLocation, 0, NULL);*/
+
 
 		SQLGetData(hStmt, 1, SQL_C_LONG, &playerID, 0, NULL);
-		SQLGetData(hStmt, 2, SQL_C_CHAR, &playerName, sizeof(playerName), NULL);
-		SQLGetData(hStmt, 3, SQL_C_CHAR, &bodyType, sizeof(bodyType), NULL);
-		SQLGetData(hStmt, 4, SQL_C_CHAR, &playerJob, sizeof(playerJob), NULL);
-		SQLGetData(hStmt, 5, SQL_C_CHAR, &className, sizeof(className), NULL);
-		SQLGetData(hStmt, 6, SQL_C_CHAR, &subClassName, sizeof(subClassName), NULL);
+		SQLGetData(hStmt, 3, SQL_C_CHAR, bodyType, sizeof(bodyType), NULL);
+		SQLGetData(hStmt, 4, SQL_C_CHAR, playerJob, sizeof(playerJob), NULL);
+		SQLGetData(hStmt, 5, SQL_C_CHAR, className, sizeof(className), NULL);
+		SQLGetData(hStmt, 6, SQL_C_CHAR, subClassName, sizeof(subClassName), NULL);
 		SQLGetData(hStmt, 7, SQL_C_LONG, &HP, 0, NULL);
 		SQLGetData(hStmt, 8, SQL_C_LONG, &maxHP, 0, NULL);
 		SQLGetData(hStmt, 9, SQL_C_LONG, &MP, 0, NULL);
@@ -562,62 +591,45 @@ bool SQLCONN::loadPlayerData(const std::string& a) {
 		SQLGetData(hStmt, 20, SQL_C_LONG, &Intel, 0, NULL);
 		SQLGetData(hStmt, 21, SQL_C_LONG, &dext, 0, NULL);
 		SQLGetData(hStmt, 22, SQL_C_LONG, &endur, 0, NULL);
-		/*SQLGetData(hStmt, 23, SQL_C_BIT, &hasWings, 0, NULL);
-		SQLGetData(hStmt, 24, SQL_C_BIT, &hasLegs, 0, NULL);*/
 		SQLGetData(hStmt, 23, SQL_C_LONG, &level, 0, NULL);
 		SQLGetData(hStmt, 24, SQL_C_LONG, &Gold, 0, NULL);
 		SQLGetData(hStmt, 25, SQL_C_LONG, &XP, 0, NULL);
 		SQLGetData(hStmt, 26, SQL_C_LONG, &currentLocation, 0, NULL);
+        // Populate player data
+        Player p1(playerName);
+        p1.setID(playerID);
+        p1.loaded = true;
+        p1.setLocation(currentLocation);
+        p1.setHP(HP);
+        p1.setMaxHP(maxHP);
+        p1.setMP(MP);
+        p1.setMaxMp(maxMP);
+        p1.setStr(Strength);
+        p1.setStamina(stamina);
+        p1.setMaxStamina(maxStamina);
+        p1.setDef(Def);
+        p1.setSpd(Spd);
+        p1.setInt(Intel);
+        p1.setDex(dext);
+        p1.setEnD(endur);
+        p1.setPrec(precision);
+        p1.setMaxPrec(maxPrecision);
 
+        p1.setBodyType(reinterpret_cast<char*>(bodyType));
+        p1.setActiveJob(reinterpret_cast<char*>(playerJob));
+        p1.setClass(reinterpret_cast<char*>(className));
+        p1.setSubClass(reinterpret_cast<char*>(subClassName));
 
-		// Populate 
-		std::string name = a;
+        p1.setLvl(level);
+        p1.setGold(Gold);
+        p1.setXP(XP);
 
-		Player p1(name);
-		p1.setID(playerID);
-		p1.loaded = true;
-		p1.setLocation(currentLocation);
-		//p1.init();
-		p1.setHP(HP);
-		p1.setMaxHP(maxHP);
-		p1.setMP(MP);
-		p1.setMaxMp(maxMP);
-		p1.setStr(Strength);
-		p1.setStamina(stamina);
-		p1.setMaxStamina(maxStamina);
-		p1.setDef(Def);
-		p1.setSpd(Spd);
-		p1.setInt(Intel);
-		p1.setDex(dext);
-		p1.setEnD(endur);
-		p1.setPrec(precision);
-		p1.setMaxPrec(maxPrecision);
-		//p1.setHasLegs(hasLegs);
-		//p1.setHasWings(hasWings);
+        Game::getinstance().playerN = std::move(p1);
+    }
 
-		std::string convertedbodyType = reinterpret_cast<char*>(bodyType);
-		std::string convertedplayerJob = reinterpret_cast<char*>(playerJob);
-		std::string convertedclassName = reinterpret_cast<char*>(className);
-		std::string convertedsubClassName = reinterpret_cast<char*>(subClassName);
-
-		p1.setBodyType(convertedbodyType); //this is redundant if body type is humanoid as its the default set it new Player call
-		p1.setActiveJob(convertedplayerJob);
-		p1.setClass(convertedclassName);
-		p1.setSubClass(convertedsubClassName);
-
-		p1.setLvl(level);
-		p1.setGold(Gold);
-		p1.setXP(XP);
-
-		Game::getinstance().playerN = std::move(p1);
-	}
-	//load player inventory
-	SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-	//disconnect();
-	return true;
-
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    return true;
 }
-
 
 bool SQLCONN::loadPlayerHitbox() {
 	/*if (isConnectionActive()) {
@@ -643,7 +655,7 @@ bool SQLCONN::loadPlayerHitbox() {
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
 	//SQLWCHAR* sqlQuery = (SQLWCHAR*)L"SELECT * FROM body_Part WHERE player_ID = ?";
-	SQLCHAR* sqlQuery = (SQLCHAR*)L"SELECT * FROM body_Part WHERE playerID = ?";
+	SQLCHAR sqlQuery[] = "SELECT * FROM body_Part WHERE playerID = ?";
 	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
@@ -790,7 +802,7 @@ bool SQLCONN::playerSkillsLoading() {
 
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
-	SQLCHAR* sqlQuery = (SQLCHAR*)L"SELECT * FROM Skills_Table WHERE player_ID = ?";
+	SQLCHAR sqlQuery[] = "SELECT * FROM Skills_Table WHERE player_ID = ?";
 	SQLRETURN ret = SQLPrepare(hStmt, sqlQuery, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 		SQLCHAR sqlState[6], message[SQL_MAX_MESSAGE_LENGTH];
@@ -1101,7 +1113,7 @@ bool SQLCONN::getEnemies(int location, std::string locType, std::vector<Enemy>& 
 	SQLHSTMT hStmt;
 	SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
-	SQLCHAR* storedProcedure = (SQLCHAR*)L"{CALL GetEnemiesByLocationAndDungeon(?)}";
+	SQLCHAR storedProcedure[] ="{CALL GetEnemiesByLocationAndDungeon(?)}";
 	SQLRETURN ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
 	//const char* locTypeCStr = locType.c_str();
 	SQLLEN locSize = locType.length();
@@ -1175,11 +1187,15 @@ bool SQLCONN::getEnemies(int location, std::string locType, std::vector<Enemy>& 
 		enemy.setDunLvl(dungeonNum);*/
 		enemy.setName(reinterpret_cast<char*>(EnemyName));
 		enemy.setHP(HP);
+		enemy.setMaxHP(HP);
 		enemy.setStr(Str);
 		enemy.setDef(Def);
+		//enemy.setmaxDef(Def);
 		enemy.setSpd(Spd);
+		//enemy.setmaxSpd(Spd);
 		enemy.setLvl(enemyLvl);
-
+		enemy.setFatigue(0);
+		enemy.setMaxFatigue(0);
 		enemy.implementStats(location);
 
 		if (hasLegs) {
@@ -1247,7 +1263,7 @@ bool SQLCONN::getEnemySkills() {
 		SQLHSTMT hStmt;
 		SQLAllocHandle(SQL_HANDLE_STMT, sqlConnection, &hStmt);
 
-		SQLCHAR* storedProcedure = (SQLCHAR*)L"{CALL GetEnemiesMainSkills(?)}";
+		SQLCHAR storedProcedure[] = "{CALL GetEnemiesMainSkills(?)}";
 		SQLRETURN ret = SQLPrepare(hStmt, storedProcedure, SQL_NTS);
 		ret = SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &currentenemyID, 0, NULL);
 		if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
@@ -1286,13 +1302,12 @@ bool SQLCONN::getEnemySkills() {
 
 			
 			SQLCHAR skillName[255], ReqTypes[255], skillTypes[255], skillEffect[255], appType[255], bodyReq[255], attackType[255];
-			SQLINTEGER skillID, atkAmt, skillLevel;
-			SQLFLOAT ReqPayment, EffectAmt;
+			SQLINTEGER skillID, atkAmt, skillLevel, ReqPayment, EffectAmt;
 
 			SQLGetData(hStmt, 1, SQL_C_LONG, &skillID, 0, NULL);
 			SQLGetData(hStmt, 2, SQL_C_CHAR, skillName, sizeof(skillName), NULL);
 			SQLGetData(hStmt, 3, SQL_C_CHAR, ReqTypes, sizeof(ReqTypes), NULL);
-			SQLGetData(hStmt, 4, SQL_C_FLOAT, &ReqPayment, 0, NULL);
+			SQLGetData(hStmt, 4, SQL_C_LONG, &ReqPayment, 0, NULL);
 			SQLGetData(hStmt, 5, SQL_C_CHAR, skillTypes, sizeof(skillTypes),NULL);
 			SQLGetData(hStmt, 6, SQL_C_CHAR, skillEffect, sizeof(skillEffect), NULL);
 			SQLGetData(hStmt, 7, SQL_C_LONG, &EffectAmt, 0, NULL);

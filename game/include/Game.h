@@ -43,7 +43,9 @@ public:
 	void makeMove(int currLocation);
 	//void loadMapData();
 	//bool bossBattle(int loc, int dunNum, Player& p1);
+	void executeAttack(Player& p1, Enemy& en, bool);
 	std::unique_ptr<bool> DungeonBattle(Player& pl, Enemy& en);
+	std::unique_ptr<bool>GroupBattle(Player& p1, Enemy& en);
 	
 
 
@@ -176,6 +178,7 @@ public:
 	int TravelonWorldMap();
 
 	std::shared_ptr<AttackMod>getUniversalAtk();
+	
 	void reduce(const std::string&, int, int, Enemy&);
 	void lessThan(const std::string&, int, int, Enemy&);
 

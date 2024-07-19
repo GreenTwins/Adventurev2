@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild version 17.9.5+33de0b227 for .NET Framework
-      Build started 7/13/2024 9:23:16 PM.
+      Build started 7/14/2024 3:28:29 PM.
       
       Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\3.29.0-rc1\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -53,7 +53,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:03.87
+      Time Elapsed 00:00:02.88
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -79,7 +79,7 @@ events:
       The output was:
       0
       MSBuild version 17.9.5+33de0b227 for .NET Framework
-      Build started 7/13/2024 9:23:21 PM.
+      Build started 7/14/2024 3:28:33 PM.
       
       Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\3.29.0-rc1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -108,7 +108,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:03.84
+      Time Elapsed 00:00:02.50
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -127,8 +127,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-50dzqe"
-      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-50dzqe"
+      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ty3f11"
+      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ty3f11"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -137,40 +137,40 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-50dzqe'
+        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ty3f11'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_dc763.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_efa40.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.9.5+33de0b227 for .NET Framework
-        Build started 7/13/2024 9:23:27 PM.
+        Build started 7/14/2024 3:28:37 PM.
         
-        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-50dzqe\\cmTC_dc763.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ty3f11\\cmTC_efa40.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_dc763.dir\\Debug\\".
+          Creating directory "cmTC_efa40.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-50dzqe\\Debug\\".
-          Creating directory "cmTC_dc763.dir\\Debug\\cmTC_dc763.tlog\\".
+          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ty3f11\\Debug\\".
+          Creating directory "cmTC_efa40.dir\\Debug\\cmTC_efa40.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_dc763.dir\\Debug\\cmTC_dc763.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_dc763.dir\\Debug\\cmTC_dc763.tlog\\unsuccessfulbuild".
+          Creating "cmTC_efa40.dir\\Debug\\cmTC_efa40.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_efa40.dir\\Debug\\cmTC_efa40.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_dc763.dir\\Debug\\\\" /Fd"cmTC_dc763.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_efa40.dir\\Debug\\\\" /Fd"cmTC_efa40.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.39.33519 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_dc763.dir\\Debug\\\\" /Fd"cmTC_dc763.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_efa40.dir\\Debug\\\\" /Fd"cmTC_efa40.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-50dzqe\\Debug\\cmTC_dc763.exe" /INCREMENTAL /ILK:"cmTC_dc763.dir\\Debug\\cmTC_dc763.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-50dzqe/Debug/cmTC_dc763.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-50dzqe/Debug/cmTC_dc763.lib" /MACHINE:X64  /machine:x64 cmTC_dc763.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_dc763.vcxproj -> C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-50dzqe\\Debug\\cmTC_dc763.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ty3f11\\Debug\\cmTC_efa40.exe" /INCREMENTAL /ILK:"cmTC_efa40.dir\\Debug\\cmTC_efa40.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ty3f11/Debug/cmTC_efa40.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ty3f11/Debug/cmTC_efa40.lib" /MACHINE:X64  /machine:x64 cmTC_efa40.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_efa40.vcxproj -> C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ty3f11\\Debug\\cmTC_efa40.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_dc763.dir\\Debug\\cmTC_dc763.tlog\\unsuccessfulbuild".
-          Touching "cmTC_dc763.dir\\Debug\\cmTC_dc763.tlog\\cmTC_dc763.lastbuildstate".
-        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-50dzqe\\cmTC_dc763.vcxproj" (default targets).
+          Deleting file "cmTC_efa40.dir\\Debug\\cmTC_efa40.tlog\\unsuccessfulbuild".
+          Touching "cmTC_efa40.dir\\Debug\\cmTC_efa40.tlog\\cmTC_efa40.lastbuildstate".
+        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ty3f11\\cmTC_efa40.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:03.70
+        Time Elapsed 00:00:02.54
         
       exitCode: 0
   -
@@ -210,8 +210,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-gyhltp"
-      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-gyhltp"
+      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-1curvh"
+      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-1curvh"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -220,40 +220,40 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-gyhltp'
+        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-1curvh'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1dfb5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_fe036.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.9.5+33de0b227 for .NET Framework
-        Build started 7/13/2024 9:23:32 PM.
+        Build started 7/14/2024 3:28:41 PM.
         
-        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gyhltp\\cmTC_1dfb5.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1curvh\\cmTC_fe036.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_1dfb5.dir\\Debug\\".
+          Creating directory "cmTC_fe036.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gyhltp\\Debug\\".
-          Creating directory "cmTC_1dfb5.dir\\Debug\\cmTC_1dfb5.tlog\\".
+          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1curvh\\Debug\\".
+          Creating directory "cmTC_fe036.dir\\Debug\\cmTC_fe036.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_1dfb5.dir\\Debug\\cmTC_1dfb5.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_1dfb5.dir\\Debug\\cmTC_1dfb5.tlog\\unsuccessfulbuild".
+          Creating "cmTC_fe036.dir\\Debug\\cmTC_fe036.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_fe036.dir\\Debug\\cmTC_fe036.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1dfb5.dir\\Debug\\\\" /Fd"cmTC_1dfb5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_fe036.dir\\Debug\\\\" /Fd"cmTC_fe036.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.39.33519 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1dfb5.dir\\Debug\\\\" /Fd"cmTC_1dfb5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_fe036.dir\\Debug\\\\" /Fd"cmTC_fe036.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\cmake\\share\\cmake-3.29\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gyhltp\\Debug\\cmTC_1dfb5.exe" /INCREMENTAL /ILK:"cmTC_1dfb5.dir\\Debug\\cmTC_1dfb5.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-gyhltp/Debug/cmTC_1dfb5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-gyhltp/Debug/cmTC_1dfb5.lib" /MACHINE:X64  /machine:x64 cmTC_1dfb5.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_1dfb5.vcxproj -> C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gyhltp\\Debug\\cmTC_1dfb5.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1curvh\\Debug\\cmTC_fe036.exe" /INCREMENTAL /ILK:"cmTC_fe036.dir\\Debug\\cmTC_fe036.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-1curvh/Debug/cmTC_fe036.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-1curvh/Debug/cmTC_fe036.lib" /MACHINE:X64  /machine:x64 cmTC_fe036.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_fe036.vcxproj -> C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1curvh\\Debug\\cmTC_fe036.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_1dfb5.dir\\Debug\\cmTC_1dfb5.tlog\\unsuccessfulbuild".
-          Touching "cmTC_1dfb5.dir\\Debug\\cmTC_1dfb5.tlog\\cmTC_1dfb5.lastbuildstate".
-        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gyhltp\\cmTC_1dfb5.vcxproj" (default targets).
+          Deleting file "cmTC_fe036.dir\\Debug\\cmTC_fe036.tlog\\unsuccessfulbuild".
+          Touching "cmTC_fe036.dir\\Debug\\cmTC_fe036.tlog\\cmTC_fe036.lastbuildstate".
+        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1curvh\\cmTC_fe036.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:03.45
+        Time Elapsed 00:00:02.34
         
       exitCode: 0
   -
@@ -296,8 +296,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-w52hew"
-      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-w52hew"
+      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c5gixy"
+      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c5gixy"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -306,40 +306,40 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-w52hew'
+        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c5gixy'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_658c6.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_5edb4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.9.5+33de0b227 for .NET Framework
-        Build started 7/14/2024 12:53:55 AM.
+        Build started 7/14/2024 3:29:06 PM.
         
-        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\cmTC_658c6.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\cmTC_5edb4.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_658c6.dir\\Debug\\".
+          Creating directory "cmTC_5edb4.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\Debug\\".
-          Creating directory "cmTC_658c6.dir\\Debug\\cmTC_658c6.tlog\\".
+          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\Debug\\".
+          Creating directory "cmTC_5edb4.dir\\Debug\\cmTC_5edb4.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_658c6.dir\\Debug\\cmTC_658c6.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_658c6.dir\\Debug\\cmTC_658c6.tlog\\unsuccessfulbuild".
+          Creating "cmTC_5edb4.dir\\Debug\\cmTC_5edb4.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_5edb4.dir\\Debug\\cmTC_5edb4.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_658c6.dir\\Debug\\\\" /Fd"cmTC_658c6.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\src.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_5edb4.dir\\Debug\\\\" /Fd"cmTC_5edb4.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\src.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.39.33519 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_658c6.dir\\Debug\\\\" /Fd"cmTC_658c6.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\src.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_5edb4.dir\\Debug\\\\" /Fd"cmTC_5edb4.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\src.c"
           src.c
-        C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\cmTC_658c6.vcxproj]
-        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\cmTC_658c6.vcxproj" (default targets) -- FAILED.
+        C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\cmTC_5edb4.vcxproj]
+        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\cmTC_5edb4.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\cmTC_658c6.vcxproj" (default target) (1) ->
+        "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\cmTC_5edb4.vcxproj" (default target) (1) ->
         (ClCompile target) -> 
-          C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-w52hew\\cmTC_658c6.vcxproj]
+          C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c5gixy\\cmTC_5edb4.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:03.81
+        Time Elapsed 00:00:02.84
         
       exitCode: 1
   -
@@ -353,8 +353,8 @@ events:
     checks:
       - "Looking for pthread_create in pthreads"
     directories:
-      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ggoex0"
-      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ggoex0"
+      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-o9ihd9"
+      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-o9ihd9"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -363,42 +363,42 @@ events:
       variable: "CMAKE_HAVE_PTHREADS_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ggoex0'
+        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-o9ihd9'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_47eb5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1154f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.9.5+33de0b227 for .NET Framework
-        Build started 7/14/2024 12:54:00 AM.
+        Build started 7/14/2024 3:29:10 PM.
         
-        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\cmTC_47eb5.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\cmTC_1154f.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_47eb5.dir\\Debug\\".
+          Creating directory "cmTC_1154f.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\Debug\\".
-          Creating directory "cmTC_47eb5.dir\\Debug\\cmTC_47eb5.tlog\\".
+          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\Debug\\".
+          Creating directory "cmTC_1154f.dir\\Debug\\cmTC_1154f.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_47eb5.dir\\Debug\\cmTC_47eb5.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_47eb5.dir\\Debug\\cmTC_47eb5.tlog\\unsuccessfulbuild".
+          Creating "cmTC_1154f.dir\\Debug\\cmTC_1154f.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_1154f.dir\\Debug\\cmTC_1154f.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_47eb5.dir\\Debug\\\\" /Fd"cmTC_47eb5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\CheckFunctionExists.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_1154f.dir\\Debug\\\\" /Fd"cmTC_1154f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\CheckFunctionExists.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.39.33519 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_47eb5.dir\\Debug\\\\" /Fd"cmTC_47eb5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\CheckFunctionExists.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_1154f.dir\\Debug\\\\" /Fd"cmTC_1154f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\Debug\\cmTC_47eb5.exe" /INCREMENTAL /ILK:"cmTC_47eb5.dir\\Debug\\cmTC_47eb5.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ggoex0/Debug/cmTC_47eb5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-ggoex0/Debug/cmTC_47eb5.lib" /MACHINE:X64  /machine:x64 cmTC_47eb5.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\cmTC_47eb5.vcxproj]
-        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\cmTC_47eb5.vcxproj" (default targets) -- FAILED.
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\Debug\\cmTC_1154f.exe" /INCREMENTAL /ILK:"cmTC_1154f.dir\\Debug\\cmTC_1154f.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-o9ihd9/Debug/cmTC_1154f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-o9ihd9/Debug/cmTC_1154f.lib" /MACHINE:X64  /machine:x64 cmTC_1154f.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\cmTC_1154f.vcxproj]
+        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\cmTC_1154f.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\cmTC_47eb5.vcxproj" (default target) (1) ->
+        "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\cmTC_1154f.vcxproj" (default target) (1) ->
         (Link target) -> 
-          LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ggoex0\\cmTC_47eb5.vcxproj]
+          LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o9ihd9\\cmTC_1154f.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:03.76
+        Time Elapsed 00:00:02.74
         
       exitCode: 1
   -
@@ -412,8 +412,8 @@ events:
     checks:
       - "Looking for pthread_create in pthread"
     directories:
-      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c66rz2"
-      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c66rz2"
+      source: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-e6dwsj"
+      binary: "C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-e6dwsj"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -422,42 +422,42 @@ events:
       variable: "CMAKE_HAVE_PTHREAD_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c66rz2'
+        Change Dir: 'C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-e6dwsj'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_e1aaf.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_4645e.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.9.5+33de0b227 for .NET Framework
-        Build started 7/14/2024 12:54:05 AM.
+        Build started 7/14/2024 3:29:14 PM.
         
-        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\cmTC_e1aaf.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\cmTC_4645e.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_e1aaf.dir\\Debug\\".
+          Creating directory "cmTC_4645e.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\Debug\\".
-          Creating directory "cmTC_e1aaf.dir\\Debug\\cmTC_e1aaf.tlog\\".
+          Creating directory "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\Debug\\".
+          Creating directory "cmTC_4645e.dir\\Debug\\cmTC_4645e.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_e1aaf.dir\\Debug\\cmTC_e1aaf.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_e1aaf.dir\\Debug\\cmTC_e1aaf.tlog\\unsuccessfulbuild".
+          Creating "cmTC_4645e.dir\\Debug\\cmTC_4645e.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_4645e.dir\\Debug\\cmTC_4645e.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_e1aaf.dir\\Debug\\\\" /Fd"cmTC_e1aaf.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\CheckFunctionExists.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_4645e.dir\\Debug\\\\" /Fd"cmTC_4645e.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\CheckFunctionExists.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.39.33519 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_e1aaf.dir\\Debug\\\\" /Fd"cmTC_e1aaf.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\CheckFunctionExists.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_4645e.dir\\Debug\\\\" /Fd"cmTC_4645e.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\Debug\\cmTC_e1aaf.exe" /INCREMENTAL /ILK:"cmTC_e1aaf.dir\\Debug\\cmTC_e1aaf.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c66rz2/Debug/cmTC_e1aaf.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-c66rz2/Debug/cmTC_e1aaf.lib" /MACHINE:X64  /machine:x64 cmTC_e1aaf.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\cmTC_e1aaf.vcxproj]
-        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\cmTC_e1aaf.vcxproj" (default targets) -- FAILED.
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\Debug\\cmTC_4645e.exe" /INCREMENTAL /ILK:"cmTC_4645e.dir\\Debug\\cmTC_4645e.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-e6dwsj/Debug/cmTC_4645e.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/CMakeFiles/CMakeScratch/TryCompile-e6dwsj/Debug/cmTC_4645e.lib" /MACHINE:X64  /machine:x64 cmTC_4645e.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\cmTC_4645e.vcxproj]
+        Done Building Project "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\cmTC_4645e.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\cmTC_e1aaf.vcxproj" (default target) (1) ->
+        "C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\cmTC_4645e.vcxproj" (default target) (1) ->
         (Link target) -> 
-          LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-c66rz2\\cmTC_e1aaf.vcxproj]
+          LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\aaron\\source\\repos\\Adventure\\adventurev2\\clonedAdv\\advpacket\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e6dwsj\\cmTC_4645e.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:03.92
+        Time Elapsed 00:00:02.12
         
       exitCode: 1
 ...

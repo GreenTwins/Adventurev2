@@ -54,7 +54,8 @@ public:
     int getMaxMP() const;
     float getStamina() const;
     int getMaxStamina() const;
-    int getFatigue() const;
+    int& guageFatigue();
+    int getFatigue()const;
     int getMaxFatigue() const;
     float getPrec() const;
     float getMaxPrec() const;

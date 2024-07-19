@@ -750,7 +750,7 @@ void Mage::subClassSelection() {
 		std::vector<Skills>gamblerSkills = {
 			{"Lucky Punch", "MP",1.00f * (rand() % 31), "Attack", "A skill that allows the player to punch the enemy, dealing a random amt of damage at a random cost",0,(rand() % 31), "Specific",1, "Humanoid", "Melee Attack"},
 			{"Cleave","MP", 1.00f * (rand() % 20), "Attack", "A possible mighty attack, that can slice space time...or a costly dud of an attack", 0,(rand() % 20),"AOE",1, "Humanoid", "Magical Attack" },
-			{"Lacerate", "MP", 1.00f * (rand() % 10),"Attack", "A stolen slashing technique from the Warrior class. Unknown damage...",0,(rand() % 10), "AOE",1, "Humanoid", "Magical Attack"},
+			{"Lacerate", "MP", 1.00f * (rand() % 10),"Attack", "A stolen slashing technique from the Warrior class. Unknown damage...",0,(rand() % 20+1), "AOE",1, "Humanoid", "Magical Attack"},
 			{"Rend","MP", 1.00f * (rand() % 5), "Attack","A ball of energy that eviscerates the enemy..or is a harmless gust of wind..", 0,(rand() % 5),"AOE",1, "Humanoid", "Magical Attack"},
 			{"Slot Machine", "MP", 30,"Attack", "Throw mana away in the hope that equivalent damage is dealt to enemy", 0,(rand() % 31),"AOE",1, "Humanoid", "Magical Attack"},
 			{"Deconstruct", "MP",1.00f * (rand() % 40), "Attack","An ultimate technique that can tear the enemy asunder", 0, (rand() % 40), "AOE",1, "Humanoid", "Magical Attack"},
@@ -760,7 +760,7 @@ void Mage::subClassSelection() {
 
 		gamblersDelight.insert({ "Lucky Punch", 31 });
 		gamblersDelight.insert({ "Cleave", 20 });
-		gamblersDelight.insert({ "Lacerate", 10 });
+		gamblersDelight.insert({ "Lacerate", 20 });
 		gamblersDelight.insert({ "Rend", 5 });
 		gamblersDelight.insert({ "Slot Machine", 30 });
 		gamblersDelight.insert({ "Deconstruct", 40 });
@@ -890,8 +890,8 @@ void Warrior::subClassSelection() {
 			{"Bladestorm", "Stamina", 2, "Attack", "your attack turns into a natural disaster of swinging blades", 0, (rand() % 6 + 1), "AOE ",1, "Humanoid", "Melee Attack"},
 			{"Piercing Strike", "Stamina", 1, "Attack", ": basic bladed attack", 0, (rand() % 6 + 1), "Specific",1, "Humanoid", "Melee Attack"},
 			{"Barrage", "Stamina", 3, "Attack", "A rush of energy is converted to your blade", 0, (rand() % 6 + 1), " ",1, "Humanoid", "Melee Attack"},
-			{"Lacerate", "MP", 12, "Attack", ": magical strength gathers into your blade to add extra dmg", 0, (rand() % 10 + 1), "Specific ",1, "Humanoid", "Magical Attack"},
-			{"Slash x8", "Stamina", 15, "Attack", ": multiple slashes to the opponent", 0, (rand() % 8 + 1), " ",1, "Humanoid", "Melee Attack"},
+			{"Lacerate", "MP", 12, "Attack", ": magical strength gathers into your blade to add extra dmg", 0, (rand() % 20 + 1), "Specific ",1, "Humanoid", "Magical Attack"},
+			{"Slash x8", "Stamina", 15, "Attack", ": multiple slashes to the opponent", 0, ((rand() % 8 + 1)*8), " ",1, "Humanoid", "Melee Attack"},
 			{"Bone breaker", "Stamina", 2, "Attack", ": extra strength gathers in your arms for a single strike", 0, (rand() % 6 + 1), " ",1, "Humanoid", "Melee Attack"},
 			{"First strike", "stamina", 1, "Attack", ": way of the bladeless strike", 0, (rand() % 6 + 1), "Specific",1, "Humanoid", "Melee Attack"},
 			{"Wingchun: Bui Sau", "Stamina", 1, "Attack", ": a 3 finger piercing technique", 0, (rand() % 6 + 1), " ",1, "Humanoid", "Melee Attack"}

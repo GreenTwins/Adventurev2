@@ -194,7 +194,10 @@ int Character::getMaxStamina() const {
 	return maxStamina;
 }
 
-int Character::getFatigue() const {
+int Character::getFatigue()const {
+	return fatigue;
+}
+int& Character::guageFatigue() {
 	return fatigue;
 }
 

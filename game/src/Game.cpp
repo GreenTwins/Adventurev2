@@ -304,7 +304,16 @@ int Map::availableMoves(int a) {
 
 		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
 		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
-		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
+		std::string battleChecker = "Group";
+		size_t found = newEnemy.getName().find(battleChecker);
+		if (found!=std::string::npos) {
+			std::unique_ptr<bool>GroupBattle(Player & p1, Enemy & en);
+		}
+		else {
+			std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
+		}
+		
+		
 
 		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
 
@@ -350,6 +359,7 @@ bool Game::isSkillActive(std::string& skillName){
 	}
 	return false;
 }
+
 bool Game::performDodge(double dodgeProbability) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -380,69 +390,81 @@ void Game::atkSkillCleaner(std::string& currentFighter){//called at the beginnin
 	}
 }
 
-void Game::InitiateAttacks(Player& p1, Enemy& en, bool _isplayerAttk) {//attacks and toggles
+void Game::InitiateAttacks(Player& p1, Enemy& en, bool _isplayerAttk) {
 	bool reqPayable = false;
 	int _roll{ 0 };
-	int atkamt, duration{0};
+	int atkamt, duration{ 0 };
 	std::string atkType, name;
-	Skills* enSkill = nullptr;
+	Skills* _skill = nullptr;
+
 	Game& battleCall = Game::getinstance();
 
-	//check that payment can be made, if not then redo roll
-	while (reqPayable) {
-		_roll = rand() % en.getatkNum();
-		enSkill = &en.listofSkills[_roll];
-		atkType = enSkill->getRequirementType();
+	// Check that payment can be made, if not then redo roll
+	while (!reqPayable) {
+		if (_isplayerAttk) {
+			_roll = rand() % p1.getNumofAtks();
+			_skill = &p1.listofSkills[_roll];
+		}
+		else {
+			_roll = rand() % en.getatkNum();
+			_skill = &en.listofSkills[_roll];
+		}
+
+		atkType = _skill->getRequirementType();
 		if (atkType == "Stamina") {
-			reqPayable = (en.getStamina() >= enSkill->getRequirementPayment());
+			reqPayable = (_isplayerAttk ? p1.getStamina() : en.getStamina()) >= _skill->getRequirementPayment();
 		}
 		else {
-			reqPayable = (en.getMP() >= enSkill->getRequirementPayment());
+			reqPayable = (_isplayerAttk ? p1.getMP() : en.getMP()) >= _skill->getRequirementPayment();
 		}
 	}
-	
 
+	// Handle toggle skills
+	if (_skill->getSkillType() == "Toggle" && !isSkillActive(_skill->getSkillName())) {
+		battleCall.skillApplication(_skill->getSkillEffect(), en, p1, _isplayerAttk);
+		atkamt = battleCall.getUniversalAtk()->atkAmt;
+		duration = battleCall.getUniversalAtk()->effectAmt;
 
-		//could be regular attack or toggles
-        //if chosen skill is a toggle AND isnt active
-		if ((enSkill->getSkillType() == "Toggle")&&(!isSkillActive(enSkill->getSkillName()))){
-			//check to see if its in the activatedSKills map
-			battleCall.skillApplication(enSkill->getSkillEffect(), en, p1, _isplayerAttk);//get the atk
-			atkamt= battleCall.getUniversalAtk()->atkAmt;
-			duration = battleCall.getUniversalAtk()->effectAmt;
-			
-
-            if(_isplayerAttk){
-				activateSkill(p1.getName(),enSkill->getSkillName(), duration,atkamt);
-			}
-			else{
-				activateSkill(en.getName(),enSkill->getSkillName(), duration,atkamt);
-			}
-
+		if (_isplayerAttk) {
+			activateSkill(p1.getName(), _skill->getSkillName(), duration, atkamt);
 		}
-		else if((enSkill->getSkillType() == "Toggle")&&(isSkillActive(enSkill->getSkillName()))) {
-		//its already on so redo
-			return InitiateAttacks(p1,en,_isplayerAttk);
-		}
-		//we have a regular attack selected
 		else {
-			std::cout << "regular atk";
-			atkamt = enSkill->getatkAmt();
-			duration = enSkill->getSkillEffectAmt();
+			activateSkill(en.getName(), _skill->getSkillName(), duration, atkamt);
 		}
-	//}
-	
-	// add name and atkType
-	name = battleCall.getUniversalAtk()->atkName;
-	//grab payment
-    if(atkType == "Stamina"){
-		en.setStamina(en.getStamina()-(enSkill->getRequirementPayment()));
 	}
-	else{
-		en.setMP(en.getMP() -(enSkill->getRequirementPayment()));
+	else if (_skill->getSkillType() == "Toggle" && isSkillActive(_skill->getSkillName())) {
+		return InitiateAttacks(p1, en, _isplayerAttk);
+	}
+	else {
+		//std::cout << "Regular attack";
+		atkamt = _skill->getatkAmt();
+		duration = _skill->getSkillEffectAmt();
+		battleCall.getUniversalAtk()->atkAmt = atkamt;
+		battleCall.getUniversalAtk()->effectAmt = duration;
 	}
 
-	enSkill=nullptr; //clear pointer
+
+	battleCall.getUniversalAtk()->atkName = _skill->getSkillName();
+	if (atkType == "Stamina") {
+		if (_isplayerAttk) {
+			p1.setStamina(p1.getStamina() - _skill->getRequirementPayment());
+		}
+		else {
+			en.setStamina(en.getStamina() - _skill->getRequirementPayment());
+		}
+	}
+	else {
+		if (_isplayerAttk) {
+			p1.setMP(p1.getMP() - _skill->getRequirementPayment());
+		}
+		else {
+			en.setMP(en.getMP() - _skill->getRequirementPayment());
+		}
+	}
+
+	_skill = nullptr;
+	
+
 }
 void addPassiveSkills() {
 	//what does this do?
@@ -453,121 +475,192 @@ void addPassiveSkills() {
 	//if hp is less than 60 increase str and spd ->triggers once
 	
 }//passives
+std::unique_ptr<bool>Map::GroupBattle(Player& p1, Enemy& en) {
+	int currentRound = 1;
+	int dodgeRoll{ 0 };
+	// get passives
+	std::vector<Skills> EnemyPassiveSkills;
+	std::vector<Skills> PlayerPassiveSkills;
 
-
-std::unique_ptr<bool>Map::DungeonBattle(Player& p1, Enemy& en) {
-	int currentRound = 1; 
-	int dodgeRoll{0};
-	int* fatchecker=nullptr;
-	srand(time(NULL));
-	//get passives 
-	std::vector<Skills>EnemyPassiveSkills;
-    std::vector<Skills>PlayerPassiveSkills;
-
-	for (size_t i = 0; i < en.listofSkills.size(); ++i) {
-		if (en.listofSkills[i].getSkillType() == "Passive") {
-			EnemyPassiveSkills.push_back(std::move(en.listofSkills[i]));
+	for (auto& skill : en.listofSkills) {
+		if (skill.getSkillType() == "Passive") {
+			EnemyPassiveSkills.push_back(skill);
 		}
 	}
-	for(size_t j =0; j< p1.listofSkills.size(); ++j){
-		if(p1.listofSkills[j].getSkillType() =="Passive"){
-			PlayerPassiveSkills.push_back(std::move(en.listofSkills[j]));
+	for (auto& skill : p1.listofSkills) {
+		if (skill.getSkillType() == "Passive") {
+			PlayerPassiveSkills.push_back(skill);
 		}
 	}
+	//Process enemies
+	std::vector<Enemy>enemyGroup; 
+	int numofEnemies = rand() % 6 + 2; //if its +1 then theres a possibility to only have one enemy, we need 2 minimum
+	int individual_HP = en.getHP() / numofEnemies;
+	int individual_MP = en.getMP() / numofEnemies;
+	en.setHP(individual_HP);
+	en.setMP(individual_MP);
 
-	/*for (auto &&skills : en.listofSkills) {
-		if (skills.getSkillType() == "Passive") {
-			EnemyPassiveSkills.push_back(std::move(skills));
-		}
-	}*/
-	//determine who attacks first
+	for (int i = 0; i < numofEnemies; ++i) {
+		enemyGroup.push_back(en);
+	}
+
 
 	std::cout << (p1.getSpd() <= en.getSpd() ? en.getName() + " is faster!\n" : "Your speed is greater\n");
 
 	while ((p1.getHP() > 0) && (en.getHP() > 0)) {
-		//distribute/ check  passive effects
-
-		//official attacks
-		//enemy attacks first
+		
 		if (p1.getSpd() <= en.getSpd()) {
 			Game::getinstance().InitiateAttacks(p1, en, false);
-			//globalatk holds info
-			// check p1 passives vs globalatk type
 
-
-			//check precision, fat, stam
-			*fatchecker=en.getFatigue();
-			//recalc Prec to note where attack will go if not AOE, calibrates fatigue based on payments made for atk
-			en.calculatePrec(en.getStamina(),*fatchecker,en.getMaxStamina(), en.getDex(), en.getInt());
-			//player recalcs their dodgeskills
+			int& fatchecker = en.guageFatigue();
+			en.calculatePrec(en.getStamina(), fatchecker, en.getMaxStamina(), en.getDex(), en.getInt());
 			p1.calculatedodgeSkill(p1.getSpd(), p1.getInt(), p1.getDex(), p1.getPrec());
-			//allow dodge
-			dodgeRoll = rand()%6+1;
-			// If the probability check passes, we will skew the roll towards the player's dodge number
-    		if (Game::getinstance().performDodge(p1.getdodgingSkill())) {
-        		dodgeRoll = p1.getDodge();
-    		}
 
-    		if (p1.getDodge() == dodgeRoll) {
-        		std::cout << "Player dodged the attack!" << std::endl;
-    		} 
-			else {
-        		std::cout << "Attack hit the player!" << std::endl;
-        		p1.setHP(p1.getHP() - Game::getinstance().getUniversalAtk()->atkAmt); 
-    		}
-			if(p1.getHP() > 0){
-				Game::getinstance().InitiateAttacks(p1,en,false);
+			dodgeRoll = rand() % 6 + 1;
+			if (Game::getinstance().performDodge(p1.getdodgingSkill())) {
+				dodgeRoll = p1.getDodge();
 			}
 
+			if (p1.getDodge() == dodgeRoll) {
+				std::cout << p1.getName() << " dodged the attack!" << std::endl;
+			}
+			else {
+				std::cout << p1.getName() << " couldnt dodge the " << Game::getinstance().getUniversalAtk()->atkName << std::endl;
+				p1.setHP(p1.getHP() - Game::getinstance().getUniversalAtk()->atkAmt);
+			}
 
-			//clear gloabalatk
-			if (p1.getHP() > 0) {
-				//if player alive then can atk
+			if (p1.getHP() > 0) {//if player is still alive then attack
 				Game::getinstance().InitiateAttacks(p1, en, true);
 			}
-			fatchecker=nullptr;
 		}
 		else {
-			//player atk first
 			if (en.getHP() > 0) {
 				Game::getinstance().InitiateAttacks(p1, en, true);
 			}
-			//check prec
-			*fatchecker = p1.getFatigue();
-			p1.calculatePrec(p1.getStamina(),*fatchecker,p1.getMaxStamina(), p1.getDex(), p1.getInt());
-			//enemy recalcs their dodgeskills
-			en.calculatedodgeSkill(en.getSpd(), en.getInt(), en.getDex(), en.getPrec());
-			dodgeRoll = rand()%6+1;
-			// If the probability check passes, we will skew the roll towards the enemy's dodge number
-    		if (Game::getinstance().performDodge(en.getdodgingSkill())) {
-        		dodgeRoll = en.getDodge();
-    		}
 
-    		if (en.getDodge() == dodgeRoll) {
-        		std::cout << "Enemy dodged the attack!" << std::endl;
-    		} 
+			int& fatchecker = p1.guageFatigue();
+			p1.calculatePrec(p1.getStamina(), fatchecker, p1.getMaxStamina(), p1.getDex(), p1.getInt());
+			en.calculatedodgeSkill(en.getSpd(), en.getInt(), en.getDex(), en.getPrec());
+
+			dodgeRoll = rand() % 6 + 1;
+			if (Game::getinstance().performDodge(en.getdodgingSkill())) {
+				dodgeRoll = en.getDodge();
+			}
+
+			if (en.getDodge() == dodgeRoll) {
+				std::cout << "Enemy dodged the attack!" << std::endl;
+			}
 			else {
-        		std::cout << "Attack hit the enemy!" << std::endl;
-        		en.setHP(en.getHP() - Game::getinstance().getUniversalAtk()->atkAmt); 
-    		}
-			//clear gloabalatk
+				std::cout << Game::getinstance().getUniversalAtk()->atkName << " hits the enemy!" << std::endl;
+				en.setHP(en.getHP() - Game::getinstance().getUniversalAtk()->atkAmt);
+			}
+
 			if (en.getHP() > 0) {
-				//if enemy alive then can atk
 				Game::getinstance().InitiateAttacks(p1, en, false);
 			}
 		}
+
+		++currentRound;
 	}
-	if (en.getHP() > 0) {
-		return std::make_unique<bool>(true);
-   }
-	return std::make_unique<bool>(false);
+
+	return std::make_unique<bool>(en.getHP() > 0);
+}
+void Map::executeAttack(Player& player, Enemy& enemy, bool playerIsAttacking) {
+	if (playerIsAttacking) {
+		// Player attacks enemy
+		Game::getinstance().InitiateAttacks(player, enemy, true);
+
+		int& fatigue = enemy.guageFatigue();
+		enemy.calculatePrec(enemy.getStamina(), fatigue, enemy.getMaxStamina(), enemy.getDex(), enemy.getInt());
+		enemy.calculatedodgeSkill(enemy.getSpd(), enemy.getInt(), enemy.getDex(), enemy.getPrec());
+
+		int dodgeRoll = rand() % 6 + 1;
+		if (Game::getinstance().performDodge(enemy.getdodgingSkill())) {
+			dodgeRoll = enemy.getDodge();
+		}
+
+		if (enemy.getDodge() == dodgeRoll) {
+			std::cout << enemy.getName() << " dodged the attack!" << std::endl;
+		}
+		else {
+			std::cout << enemy.getName() << " couldn't dodge the " << Game::getinstance().getUniversalAtk()->atkName << std::endl;
+			enemy.setHP(enemy.getHP() - Game::getinstance().getUniversalAtk()->atkAmt);
+		}
+	}
+	else {
+		// Enemy attacks player
+		Game::getinstance().InitiateAttacks(player, enemy, false);
+
+		int& fatigue = player.guageFatigue();
+		player.calculatePrec(player.getStamina(), fatigue, player.getMaxStamina(), player.getDex(), player.getInt());
+		player.calculatedodgeSkill(player.getSpd(), player.getInt(), player.getDex(), player.getPrec());
+
+		int dodgeRoll = rand() % 6 + 1;
+		if (Game::getinstance().performDodge(player.getdodgingSkill())) {
+			dodgeRoll = player.getDodge();
+		}
+
+		if (player.getDodge() == dodgeRoll) {
+			std::cout << player.getName() << " dodged the attack!" << std::endl;
+		}
+		else {
+			std::cout << player.getName() << " couldn't dodge the " << Game::getinstance().getUniversalAtk()->atkName << std::endl;
+			player.setHP(player.getHP() - Game::getinstance().getUniversalAtk()->atkAmt);
+		}
+	}
+}
+std::unique_ptr<bool> Map::DungeonBattle(Player& p1, Enemy& en) {
+	int currentRound = 1;
+	srand(time(NULL));
+
+	// Get passives
+	std::vector<Skills> EnemyPassiveSkills;
+	std::vector<Skills> PlayerPassiveSkills;
+
+	for (auto& skill : en.listofSkills) {
+		if (skill.getSkillType() == "Passive") {
+			EnemyPassiveSkills.push_back(skill);
+		}
+	}
+	for (auto& skill : p1.listofSkills) {
+		if (skill.getSkillType() == "Passive") {
+			PlayerPassiveSkills.push_back(skill);
+		}
+	}
+
+	std::cout << (p1.getSpd() <= en.getSpd() ? en.getName() + " is faster!\n" : "Your speed is greater\n");
+
+	while ((p1.getHP() > 0) && (en.getHP() > 0)) {
+		std::cout << "-------BATTLE ROUND " << currentRound << "------_" << std::endl;
+		std::cout << p1.getName() << "'s HP: " << p1.getHP() << std::endl;
+		std::cout << en.getName() << "'s HP: " << en.getHP() << std::endl;
+
+		if (p1.getSpd() <= en.getSpd()) {
+			executeAttack(p1, en, false);  // Enemy attacks first
+
+			if (p1.getHP() > 0) {
+				executeAttack(p1, en, true);  // Player attacks second
+			}
+		}
+		else {
+			executeAttack(p1, en, true);  // Player attacks first
+
+			if (en.getHP() > 0) {
+				executeAttack(p1, en, false);  // Enemy attacks second
+			}
+		}
+
+		++currentRound;
+	}
+
+	return std::make_unique<bool>(en.getHP() > 0);
 }
 /******************************************************************************************************
 GAME CLASS init,cleaner, getters and setters
 
 *******************************************************************************************************/
-
-Game::Game() {
+ 
+Game::Game():_globalatk(std::make_shared<AttackMod>()) {
 	/*MainMenu& master = MainMenu::getInstance();
 	master.display();*/
 	enemyList.clear();

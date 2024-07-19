@@ -108,13 +108,11 @@ void Enemy::implementStats(int loc) {
 	int currentLevel = getLvl();
 	setLvl(level);
 
-	int endurRoll = rand() % (getLvl() * 6) + 1;
-	int intelRoll = rand() % (getLvl() * 6) + 1;
-	int dexRoll = rand() % (getLvl() * 6) + 1;
-	setatkNum(intelRoll + 1);
-	if (getMP() == 0) {
-		setMP(intelRoll * currentLevel);
-	}
+	int endurRoll = ((rand() % 6+1)*(getLvl()));
+	int intelRoll = ((rand() % 6 + 1) * (getLvl()));
+	int dexRoll = ((rand() % 6 + 1) * (getLvl()));
+	//setatkNum(intelRoll + 1);
+	
 
 	if (currentLevel < level) {
 		//upgrade everything else
@@ -125,6 +123,9 @@ void Enemy::implementStats(int loc) {
 		setSpd(getSpd() * level);
 
 	}
+	if (getMP() <= 0) {
+		setMP(intelRoll * currentLevel);
+	}
 	setEnD(endurRoll);
 	setInt(intelRoll);
 	setDex(dexRoll);
@@ -133,8 +134,9 @@ void Enemy::implementStats(int loc) {
 	setMaxMp(getMP());
 	setStamina(calculateStamin(getDex(), getEnd(),6.33 ));//dex, endurance, ptWorth which is 6.33 for enemies
 	setMaxStamina(getStamina());
-	int fati = getFatigue();
+	int fati = 0;
 	setPrec(calculatePrec(getStamina(), fati, getMaxStamina(), getDex(), getInt()));
+	//setdodgingSkill(calculatedodgeSkill(getSpd(), getInt(), getDex(), getPrec()));
 
 }
 std::tuple<std::string, int> Enemy::attack(Skills& currSkill) {
