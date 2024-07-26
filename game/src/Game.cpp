@@ -274,70 +274,26 @@ void Map::loadPathway(int n) {//a list of which path has an enemy present
 	}
 }
 void Map::makeMove(int currLocation) {
-	if (currLocation == end) {
-		return;
-	}
-	if (currLocation == -1) {
+	if (currLocation == end || currLocation == -1) {
 		return;
 	}
 	makeMove(availableMoves(currLocation));
 
 }
 int Map::availableMoves(int a) {
-	srand(time(NULL));
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 	currentPlacement = a;
 
-	if (pathwayy[a]) {//this gets the .second of the map which is whether there is an enemy
-		//std::cout << "There is an enemy in the room" << std::endl;
+	if (pathwayy[a]) {
 		int listsize = Game::getinstance().enemyList.size();
-		int randomEnemy = rand() % listsize + 1;
-
-		if (randomEnemy >= listsize) {
-			randomEnemy -= 1;
-			
-		}
-
+		int randomEnemy = rand() % listsize;
 		Enemy newEnemy(Game::getinstance().enemyList[randomEnemy]);
 
 		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";
-
-
-		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
-		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
-		std::string battleChecker = "Group";
-		size_t found = newEnemy.getName().find(battleChecker);
-		if (found!=std::string::npos) {
-			std::unique_ptr<bool>GroupBattle(Player & p1, Enemy & en);
-		}
-		else {
-			std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
-		}
-		
-		
-
-		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
-
-		/*if (!(*battleResultPtr)) {
-			return -1;
-		}*/
-		//std::string profLvl = Game::getinstance().playersCurrentWeapon->getproficiencyLvl();
-		//int prof = Game::getinstance().playersCurrentWeapon->getproficiency();
-
-		//if (Game::getinstance().playerN.checkweaponProficiency(profLvl, prof)) {
-		//	if (profLvl == "Master") {
-		//		Game::getinstance().playersCurrentWeapon->setWeaponLvl(Game::getinstance().playersCurrentWeapon->getWeaponLvl() + 1); //lvl increase after prev is mastered
-		//	}
-
-		//	Game::getinstance().playersCurrentWeapon->setproficiencyLvl(profLvl);
-		//	Game::getinstance().playersCurrentWeapon->setproficiency(prof);
-		//	Game::getinstance().playersCurrentWeapon->setWeaponDmg(Game::getinstance().playersCurrentWeapon->getWeaponDmg() + 1);
-		//}
-		//std::cout << "You're achievement: +" << newEnemy.getGold() << " gold and +" << newEnemy.getXP() << " XP" << std::endl;
-		//totalXP += newEnemy.getXP();
-		//totalGold += newEnemy.getGold();
+		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
 	}
-	//InGameDecisions(std::cin);
-	std::vector<int>availableMoveList;
+
+	std::vector<int> availableMoveList;
 	std::cout << "The following pathways are available from here: ";
 	for (auto neighbor : mapp[a]) {
 		std::cout << "[ " << neighbor << " ";
@@ -345,12 +301,73 @@ int Map::availableMoves(int a) {
 	}
 	std::cout << "]";
 
-	int temp = inGameInputs(availableMoveList);
+	int temp = inGameInputs(availableMoveList);  // Assuming inGameInputs is defined somewhere
 	availableMoveList.clear();
 	nextPlacement = temp;
-	upDateTracker();
+	upDateTracker();  // Assuming upDateTracker is defined somewhere
+	
 	return temp;
 }
+
+//int Map::availableMoves(int a) {
+//	srand(time(NULL));
+//	currentPlacement = a;
+//
+//	if (pathwayy[a]) {//this gets the .second of the map which is whether there is an enemy
+//		//std::cout << "There is an enemy in the room" << std::endl;
+//		int listsize = Game::getinstance().enemyList.size();
+//		int randomEnemy = rand() % listsize + 1;
+//
+//		if (randomEnemy >= listsize) {
+//			randomEnemy -= 1;
+//			
+//		}
+//
+//		Enemy newEnemy(Game::getinstance().enemyList[randomEnemy]);
+//
+//		std::cout << "\nYou've run into a " << newEnemy.getName() << "\n";
+//
+//
+//		//std::unique_ptr<Player> playerPtr = std::make_unique<Player>(Game::getinstance().playerN);
+//		//std::unique_ptr<Enemy> newEnemyPtr = std::make_unique<Enemy>(newEnemy);
+//		std::unique_ptr<bool> battleResultPtr = DungeonBattle(Game::getinstance().playerN, newEnemy);
+//
+//		//std::cout << newEnemy.getName()<<" has appeared for battle" << std::endl;
+//
+//		/*if (!(*battleResultPtr)) {
+//			return -1;
+//		}*/
+//		//std::string profLvl = Game::getinstance().playersCurrentWeapon->getproficiencyLvl();
+//		//int prof = Game::getinstance().playersCurrentWeapon->getproficiency();
+//
+//		//if (Game::getinstance().playerN.checkweaponProficiency(profLvl, prof)) {
+//		//	if (profLvl == "Master") {
+//		//		Game::getinstance().playersCurrentWeapon->setWeaponLvl(Game::getinstance().playersCurrentWeapon->getWeaponLvl() + 1); //lvl increase after prev is mastered
+//		//	}
+//
+//		//	Game::getinstance().playersCurrentWeapon->setproficiencyLvl(profLvl);
+//		//	Game::getinstance().playersCurrentWeapon->setproficiency(prof);
+//		//	Game::getinstance().playersCurrentWeapon->setWeaponDmg(Game::getinstance().playersCurrentWeapon->getWeaponDmg() + 1);
+//		//}
+//		//std::cout << "You're achievement: +" << newEnemy.getGold() << " gold and +" << newEnemy.getXP() << " XP" << std::endl;
+//		//totalXP += newEnemy.getXP();
+//		//totalGold += newEnemy.getGold();
+//	}
+//	//InGameDecisions(std::cin);
+//	std::vector<int>availableMoveList;
+//	std::cout << "The following pathways are available from here: ";
+//	for (auto neighbor : mapp[a]) {
+//		std::cout << "[ " << neighbor << " ";
+//		availableMoveList.push_back(neighbor);
+//	}
+//	std::cout << "]";
+//
+//	int temp = inGameInputs(availableMoveList);
+//	availableMoveList.clear();
+//	nextPlacement = temp;
+//	upDateTracker();
+//	return temp;
+//}
 bool Game::isSkillActive(std::string& skillName){
 	for(auto&[key,atkskill]: _activeSkills){
 		if(atkskill.name ==skillName){
@@ -359,7 +376,6 @@ bool Game::isSkillActive(std::string& skillName){
 	}
 	return false;
 }
-
 bool Game::performDodge(double dodgeProbability) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -439,12 +455,13 @@ void Game::InitiateAttacks(Player& p1, Enemy& en, bool _isplayerAttk) {
 		//std::cout << "Regular attack";
 		atkamt = _skill->getatkAmt();
 		duration = _skill->getSkillEffectAmt();
+		battleCall.getUniversalAtk()->atkName = _skill->getSkillName();
 		battleCall.getUniversalAtk()->atkAmt = atkamt;
 		battleCall.getUniversalAtk()->effectAmt = duration;
 	}
 
+	name = battleCall.getUniversalAtk()->atkName;
 
-	battleCall.getUniversalAtk()->atkName = _skill->getSkillName();
 	if (atkType == "Stamina") {
 		if (_isplayerAttk) {
 			p1.setStamina(p1.getStamina() - _skill->getRequirementPayment());
@@ -463,8 +480,6 @@ void Game::InitiateAttacks(Player& p1, Enemy& en, bool _isplayerAttk) {
 	}
 
 	_skill = nullptr;
-	
-
 }
 void addPassiveSkills() {
 	//what does this do?
@@ -475,96 +490,6 @@ void addPassiveSkills() {
 	//if hp is less than 60 increase str and spd ->triggers once
 	
 }//passives
-std::unique_ptr<bool>Map::GroupBattle(Player& p1, Enemy& en) {
-	int currentRound = 1;
-	int dodgeRoll{ 0 };
-	// get passives
-	std::vector<Skills> EnemyPassiveSkills;
-	std::vector<Skills> PlayerPassiveSkills;
-
-	for (auto& skill : en.listofSkills) {
-		if (skill.getSkillType() == "Passive") {
-			EnemyPassiveSkills.push_back(skill);
-		}
-	}
-	for (auto& skill : p1.listofSkills) {
-		if (skill.getSkillType() == "Passive") {
-			PlayerPassiveSkills.push_back(skill);
-		}
-	}
-	//Process enemies
-	std::vector<Enemy>enemyGroup; 
-	int numofEnemies = rand() % 6 + 2; //if its +1 then theres a possibility to only have one enemy, we need 2 minimum
-	int individual_HP = en.getHP() / numofEnemies;
-	int individual_MP = en.getMP() / numofEnemies;
-	en.setHP(individual_HP);
-	en.setMP(individual_MP);
-
-	for (int i = 0; i < numofEnemies; ++i) {
-		enemyGroup.push_back(en);
-	}
-
-
-	std::cout << (p1.getSpd() <= en.getSpd() ? en.getName() + " is faster!\n" : "Your speed is greater\n");
-
-	while ((p1.getHP() > 0) && (en.getHP() > 0)) {
-		
-		if (p1.getSpd() <= en.getSpd()) {
-			Game::getinstance().InitiateAttacks(p1, en, false);
-
-			int& fatchecker = en.guageFatigue();
-			en.calculatePrec(en.getStamina(), fatchecker, en.getMaxStamina(), en.getDex(), en.getInt());
-			p1.calculatedodgeSkill(p1.getSpd(), p1.getInt(), p1.getDex(), p1.getPrec());
-
-			dodgeRoll = rand() % 6 + 1;
-			if (Game::getinstance().performDodge(p1.getdodgingSkill())) {
-				dodgeRoll = p1.getDodge();
-			}
-
-			if (p1.getDodge() == dodgeRoll) {
-				std::cout << p1.getName() << " dodged the attack!" << std::endl;
-			}
-			else {
-				std::cout << p1.getName() << " couldnt dodge the " << Game::getinstance().getUniversalAtk()->atkName << std::endl;
-				p1.setHP(p1.getHP() - Game::getinstance().getUniversalAtk()->atkAmt);
-			}
-
-			if (p1.getHP() > 0) {//if player is still alive then attack
-				Game::getinstance().InitiateAttacks(p1, en, true);
-			}
-		}
-		else {
-			if (en.getHP() > 0) {
-				Game::getinstance().InitiateAttacks(p1, en, true);
-			}
-
-			int& fatchecker = p1.guageFatigue();
-			p1.calculatePrec(p1.getStamina(), fatchecker, p1.getMaxStamina(), p1.getDex(), p1.getInt());
-			en.calculatedodgeSkill(en.getSpd(), en.getInt(), en.getDex(), en.getPrec());
-
-			dodgeRoll = rand() % 6 + 1;
-			if (Game::getinstance().performDodge(en.getdodgingSkill())) {
-				dodgeRoll = en.getDodge();
-			}
-
-			if (en.getDodge() == dodgeRoll) {
-				std::cout << "Enemy dodged the attack!" << std::endl;
-			}
-			else {
-				std::cout << Game::getinstance().getUniversalAtk()->atkName << " hits the enemy!" << std::endl;
-				en.setHP(en.getHP() - Game::getinstance().getUniversalAtk()->atkAmt);
-			}
-
-			if (en.getHP() > 0) {
-				Game::getinstance().InitiateAttacks(p1, en, false);
-			}
-		}
-
-		++currentRound;
-	}
-
-	return std::make_unique<bool>(en.getHP() > 0);
-}
 void Map::executeAttack(Player& player, Enemy& enemy, bool playerIsAttacking) {
 	if (playerIsAttacking) {
 		// Player attacks enemy
@@ -609,11 +534,11 @@ void Map::executeAttack(Player& player, Enemy& enemy, bool playerIsAttacking) {
 		}
 	}
 }
+
 std::unique_ptr<bool> Map::DungeonBattle(Player& p1, Enemy& en) {
 	int currentRound = 1;
-	srand(time(NULL));
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-	// Get passives
 	std::vector<Skills> EnemyPassiveSkills;
 	std::vector<Skills> PlayerPassiveSkills;
 
@@ -636,17 +561,17 @@ std::unique_ptr<bool> Map::DungeonBattle(Player& p1, Enemy& en) {
 		std::cout << en.getName() << "'s HP: " << en.getHP() << std::endl;
 
 		if (p1.getSpd() <= en.getSpd()) {
-			executeAttack(p1, en, false);  // Enemy attacks first
+			executeAttack(p1, en, false);
 
 			if (p1.getHP() > 0) {
-				executeAttack(p1, en, true);  // Player attacks second
+				executeAttack(p1, en, true);
 			}
 		}
 		else {
-			executeAttack(p1, en, true);  // Player attacks first
+			executeAttack(p1, en, true);
 
 			if (en.getHP() > 0) {
-				executeAttack(p1, en, false);  // Enemy attacks second
+				executeAttack(p1, en, false);
 			}
 		}
 
@@ -659,7 +584,7 @@ std::unique_ptr<bool> Map::DungeonBattle(Player& p1, Enemy& en) {
 GAME CLASS init,cleaner, getters and setters
 
 *******************************************************************************************************/
- 
+
 Game::Game():_globalatk(std::make_shared<AttackMod>()) {
 	/*MainMenu& master = MainMenu::getInstance();
 	master.display();*/
@@ -668,7 +593,7 @@ Game::Game():_globalatk(std::make_shared<AttackMod>()) {
 	//BossReq.push_back("Troll"); not used
 	uploadWorldMap();
 	turnByturn = false;
-
+	
 	
 }
 Game::~Game() {
@@ -1012,36 +937,6 @@ bool Game::play(Map& currentMap) {
 	//return false;
 	return true;
 }
-//Game::Game() : _globalatk(std::make_shared<AttackMod>()) {}
-
-/*void reduce(const std::string& obj, int duration, int amount, Enemy& en, std::shared_ptr<AttackMod>_gA) {
-	if (obj == "HP") {
-		if (duration == 0) {
-			std::cout << "removing " << amount << " from " << en.getHP() << std::endl;
-			_gA->effectAmt = 100;
-			_gA->atkAmt = amount;
-		}
-	}
-}*/
-/*void lessThan(const std::string& subj, int checker, int result, Enemy& en, std::shared_ptr<AttackMod>_gA) {
-	if (subj == "HP"){
-		if (result < 0) {
-			std::cout << "subtracting\n";
-			en.setHP(en.getHP() + result);
-			//effectamt
-			_gA->atkAmt = result;
-		}
-		else {
-			if (en.getHP() < checker) {
-				en.setHP(result);
-				_gA->atkAmt = result;
-			}
-			else {
-				std::cout << "Your opponent has too much health to complete \n";
-			}
-		}
-	}
-}*/
 void greaterThan(const std::string& subj, int checker, int result, Enemy& en, Player &p1, std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
 
 }
@@ -1054,67 +949,6 @@ void equalTo(const std::string& subj, int checker, int result, Enemy& en, Player
 	{"equal", equalTo},
 	{"reduce", reduce}
 };*/
-/*void reduce(const std::string& obj, int duration, int amount, Enemy& en, Player& p1, std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
-	// - 8 HP for 3 turns
- // - 3 HP for the remaining fight
-	if (obj == "HP") {
-		if (duration == 0) {
-			_gA->effectAmt = 100;//100 indicates until end of battle
-			_gA->atkAmt = amount;
-		}
-		else {
-			_gA->effectAmt = duration;
-			_gA->atkAmt = amount;
-		}
-	}
-}*/
-/*void lessThan(const std::string& subj, int checker, int result, Enemy& en, Player& p1, std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
-	//ex: if HP is less than 20 set HP to maxHP
-	//if HP is less than 15 set HP to 0
-	if (subj == "HP") {
-		if (result < 0) { //unknown
-			_gA->atkAmt = result;
-		}
-		else if (result == 50) {//increase own health
-			//hp goes to maxHP
-			if(_isp1atk){
-					if (p1.getHP() < checker) {
-					p1.setHP(p1.getMaxHP());
-					std::cout << p1.getName() << " recovered health" << std::endl;
-				}
-			}
-			else{
-				if (en.getHP() < checker) {
-					en.setHP(en.getMaxHP());
-					std::cout << en.getName() << " recovered health" << std::endl;
-				}
-			}
-			
-
-		}
-		else {//remove player health 
-		    if(_isp1atk){
-				if (en.getHP() < checker) {
-					_gA->effectAmt = 0;
-					_gA->atkAmt = checker;
-				}
-				else {
-				std::cout << "Your opponent has too much health to complete \n";
-				}
-			}
-			else{
-				if (p1.getHP() < checker) {
-					_gA->effectAmt = 0;
-					_gA->atkAmt = checker;
-				}
-				else {
-				std::cout << "Your opponent has too much health to complete \n";
-				}
-			}	
-		}
-	}
-}*/
-
 //
 void reduce(const std::string& obj,int checker,int duration, int amount,Enemy&en, Player&p1 , std::shared_ptr<AttackMod>_gA, bool _isp1atk) {
        // - 8 HP for 3 turns

@@ -1,10 +1,10 @@
 # ninja log v5
 27	1110	7426912827512409	game/CMakeFiles/game.dir/src/Skills.cpp.obj	4912f5a72cec3f44
-24	1226	7428915099292107	game/CMakeFiles/game.dir/src/Enemy.cpp.obj	7997c6a15b6a6be5
-55	2087	7429494383382574	game/CMakeFiles/game.dir/src/Player.cpp.obj	5ececfde6a6ba76f
-18	1684	7428915103822286	game/CMakeFiles/game.dir/src/Character.cpp.obj	f1bc8d83f9fdc44
-2821	3064	7430501904872366	game/game.lib	fa38300345b3f33e
+152	1585	7434938370817247	game/CMakeFiles/game.dir/src/Enemy.cpp.obj	7997c6a15b6a6be5
+163	2569	7434938380605582	game/CMakeFiles/game.dir/src/Player.cpp.obj	5ececfde6a6ba76f
+147	1991	7434938374878781	game/CMakeFiles/game.dir/src/Character.cpp.obj	f1bc8d83f9fdc44
+1981	2125	7435574284087665	game/game.lib	fa38300345b3f33e
 109	1728	7430501891903784	apps/CMakeFiles/main.dir/main.cpp.obj	5917f92aba86fc92
-85	2689	7430501901591882	game/CMakeFiles/game.dir/src/Game.cpp.obj	92a8d5ae5cc520a1
-92	2821	7430501902842181	game/CMakeFiles/game.dir/src/SQLCONN.cpp.obj	9f54abf2cde5909
-3065	3717	7430501911120913	bin/main.exe	8170297333710981
+18	1980	7435574283306903	game/CMakeFiles/game.dir/src/Game.cpp.obj	92a8d5ae5cc520a1
+172	3430	7434938389356429	game/CMakeFiles/game.dir/src/SQLCONN.cpp.obj	9f54abf2cde5909
+2125	2501	7435574288150154	bin/main.exe	8170297333710981

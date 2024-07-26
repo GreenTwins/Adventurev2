@@ -1,0 +1,4 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/cmake/share/cmake-3.29/Modules/CMakeDependentOption.cmake
+C:/Program Files/cmake/share/cmake-3.29/Modules/GNUInstallDirs.cmake
+C:/Users/aaron/source/repos/Adventure/adventurev2/clonedAdv/advpacket/build/_deps/googletest-src/CMakeLists.txt
